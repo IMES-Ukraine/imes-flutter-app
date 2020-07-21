@@ -1,4 +1,6 @@
 # IMES
+Спецификафия системы IMES mvp1.0
+
 ## BACKEND
 
 Backend представлен HTTP REST API и websocket
