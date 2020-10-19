@@ -32,7 +32,9 @@ IMES-MAIN API охватывает почти весь основной функ
 
 # DESIGN
 
-[Link to figma design file](https://www.figma.com/file/md4HekNIpdFN7fPQMHkhcP/IMES-tracker?node-id=0%3A1)
+[Link to figma design file 1 (Logos and other)](https://www.figma.com/file/md4HekNIpdFN7fPQMHkhcP/IMES-tracker?node-id=0%3A1)
+
+[Link to figma design file 2 (Main)](https://www.figma.com/file/P0NhIXZxjNCzLpZuqLKwWQ/IMES-app-(MVP)?node-id=0%3A1)
 
 
 
