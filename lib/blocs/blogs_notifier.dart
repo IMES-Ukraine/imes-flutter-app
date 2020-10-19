@@ -1,0 +1,78 @@
+import 'package:flutter/foundation.dart';
+
+import 'package:pharmatracker/models/blog.dart';
+
+import 'package:pharmatracker/resources/repository.dart';
+
+enum BlogsState {
+  LOADED,
+  ERROR,
+  LOADING,
+}
+
+enum BlogPage {
+  NEWS,
+  INFORMATION,
+}
+
+class BlogsNotifier with ChangeNotifier {
+  BlogsState _state;
+
+  int _total = 0;
+  int _lastPage = 0;
+  List<Blog> _blogs = [];
+  BlogPage _page = BlogPage.NEWS;
+
+  BlogsNotifier({BlogsState state = BlogsState.LOADING}) : _state = state;
+
+  int get total => _total;
+
+  BlogsState get state => _state;
+
+  List<Blog> get blogs => _blogs;
+
+  BlogPage get page => _page;
+
+  Future changePage(BlogPage page) async {
+    _page = page;
+    _state = BlogsState.LOADING;
+    notifyListeners();
+    return load();
+  }
+
+  Future load() async {
+    try {
+      final response = await Repository().api.blogs(type: page.index + 1);
+      if (response.statusCode == 200) {
+        final blogsPage = response.body.data;
+        _blogs = blogsPage.data;
+        _total = blogsPage.total;
+        _lastPage = blogsPage.currentPage;
+
+        _state = BlogsState.LOADED;
+        notifyListeners();
+      }
+    } catch (e) {
+      _state = BlogsState.ERROR;
+      debugPrint(e);
+      notifyListeners();
+    }
+  }
+
+  Future loadNext() async {
+//    _state = BlogsState.LOADING;
+//    notifyListeners();
+
+    final response = await Repository().api.blogs(page: ++_lastPage);
+    if (response.statusCode == 200) {
+      final blogsPage = response.body.data;
+      final blogs = _blogs.toSet()..addAll(blogsPage.data);
+      _blogs = blogs.toList();
+      _total = blogsPage.total;
+      _lastPage = blogsPage.currentPage;
+
+      _state = BlogsState.LOADED;
+      notifyListeners();
+    }
+  }
+}
