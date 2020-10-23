@@ -7,9 +7,10 @@ part 'test_variants.g.dart';
 class TestVariants {
   @JsonKey(name: 'correct_answer')
   final String correctAnswer;
+  final String type;
   final List<TestButton> buttons;
 
-  TestVariants({this.correctAnswer, this.buttons});
+  TestVariants({this.correctAnswer, this.type, this.buttons});
 
   factory TestVariants.fromJson(Map<String, dynamic> json) => _$TestVariantsFromJson(json);
   Map<String, dynamic> toJson() => _$TestVariantsToJson(this);

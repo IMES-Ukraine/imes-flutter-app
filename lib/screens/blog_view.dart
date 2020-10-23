@@ -134,7 +134,6 @@ class BlogViewPage extends HookWidget {
                                                       blogNotifier.blog.featuredImages[index].path),
                                                   fit: BoxFit.fitWidth,
                                                 ),
-                                                // imageProvider: NetworkImage(blogNotifier.blog.featuredImages[index].path),
                                                 initialScale: PhotoViewComputedScale.contained,
                                                 minScale: PhotoViewComputedScale.contained,
                                                 maxScale: PhotoViewComputedScale.covered * 2,
@@ -389,120 +388,6 @@ class BlogViewPage extends HookWidget {
                             ]),
                             const SizedBox(height: 32.0),
                           ],
-                          // SingleChildScrollView(
-                          //   child: ConstrainedBox(
-                          //     constraints: BoxConstraints(
-                          //         minHeight: viewportConstraints.maxHeight, minWidth: viewportConstraints.maxWidth),
-                          //     child: Column(
-                          //       mainAxisSize: MainAxisSize.max,
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       children: <Widget>[
-                          //         Padding(
-                          //           padding: const EdgeInsets.all(8.0),
-                          //           child: Text(
-                          //             blogNotifier.blog?.title ?? '',
-                          //             style: TextStyle(
-                          //               fontWeight: FontWeight.bold,
-                          //               fontSize: 22.0,
-                          //             ),
-                          //           ),
-                          //         ),
-                          //         Row(
-                          //           children: [
-                          //             Expanded(
-                          //               child: Padding(
-                          //                 padding: const EdgeInsets.all(8.0),
-                          //                 child: Text(''),
-                          //               ),
-                          //             ),
-                          //             Expanded(
-                          //               child: Padding(
-                          //                 padding: const EdgeInsets.all(8.0),
-                          //                 child: Text(
-                          //                     blogNotifier.blog?.publishedAt != null
-                          //                         ? DateFormat.yMMMMd('uk').format(blogNotifier.blog.publishedAt)
-                          //                         : '',
-                          //                     textAlign: TextAlign.end,
-                          //                     style: TextStyle(
-                          //                       color: Color(0xFF828282),
-                          //                       fontSize: 12.0,
-                          //                     )),
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //         if (blogNotifier.blog?.featuredImages?.isNotEmpty ?? false)
-                          //           ConstrainedBox(
-                          //             constraints: BoxConstraints(maxHeight: 200.0),
-                          //             child: PhotoViewGallery.builder(
-                          //               scrollPhysics: const BouncingScrollPhysics(),
-                          //               builder: (BuildContext context, int index) {
-                          //                 return PhotoViewGalleryPageOptions(
-                          //                   imageProvider: NetworkImage(blogNotifier.blog.featuredImages[index].path),
-                          //                   initialScale: PhotoViewComputedScale.contained,
-                          //                   minScale: PhotoViewComputedScale.contained,
-                          //                   maxScale: PhotoViewComputedScale.contained,
-                          //                   heroAttributes: PhotoViewHeroAttributes(
-                          //                       tag: 'featured_image_${blogNotifier.blog.featuredImages[index].id}'),
-                          //                 );
-                          //               },
-                          //               itemCount: blogNotifier.blog.featuredImages.length,
-                          //               backgroundDecoration: const BoxDecoration(
-                          //                 color: Colors.white,
-                          //               ),
-                          //               pageController: _pageController,
-                          //             ),
-                          //           ),
-                          //         // Padding(
-                          //         //   padding: const EdgeInsets.all(8.0),
-                          //         //   child: Text(
-                          //         //     blogNotifier.blog?.content ?? '',
-                          //         //     style: TextStyle(fontSize: 12.0),
-                          //         //   ),
-                          //         // ),
-                          //         ...blogNotifier.blog.content.map((e) {
-                          //           if (e.type == 'text') {
-                          //             return Padding(
-                          //               padding: const EdgeInsets.all(8.0),
-                          //               child: Column(
-                          //                 crossAxisAlignment: CrossAxisAlignment.start,
-                          //                 children: [
-                          //                   if (e.title != null)
-                          //                     Text(
-                          //                       e.title,
-                          //                       style: TextStyle(fontWeight: FontWeight.bold),
-                          //                     ),
-                          //                   const SizedBox(height: 8.0),
-                          //                   Text(e.content),
-                          //                 ],
-                          //               ),
-                          //             );
-                          //           } else {
-                          //             return const SizedBox();
-                          //           }
-                          //         }).toList(),
-                          //         if ((blogNotifier.blog?.action?.isNotEmpty ?? false))
-                          //           Center(
-                          //             child: Padding(
-                          //               padding: const EdgeInsets.all(16.0),
-                          //               child: OutlineButton(
-                          //                 child: Text(
-                          //                   'Читати ще',
-                          //                   style: TextStyle(fontWeight: FontWeight.bold),
-                          //                 ),
-                          //                 highlightedBorderColor: Theme.of(context).accentColor,
-                          //                 borderSide: BorderSide(color: Theme.of(context).accentColor),
-                          //                 textColor: Theme.of(context).accentColor,
-                          //                 onPressed: () async {
-                          //                   blogNotifier.read();
-                          //                 },
-                          //               ),
-                          //             ),
-                          //           ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                         ),
                       )
                     ],

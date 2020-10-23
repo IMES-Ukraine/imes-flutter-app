@@ -41,7 +41,7 @@ class TestNotifier with ChangeNotifier {
   Future postAnswer(int testId, List<String> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
-            data: answers.map((v) => TestAnswer(id: testId, variant: v)),
+            data: answers.map((v) => TestAnswer(id: testId, variant: v)).toList(),      
             seconds: duration.inSeconds,
           ),
         );

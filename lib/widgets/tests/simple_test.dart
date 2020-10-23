@@ -96,8 +96,9 @@ class SimpleTest extends HookWidget {
                             durationTimer.value,
                           )
                               .then((_) {
-                            Navigator.of(context).pop(test);
+                            Navigator.of(context).pop();
                           }).catchError((error) {
+                            print(error);
                             showDialog(
                               context: context,
                               builder: (context) {

@@ -61,7 +61,11 @@ class TestsPage extends StatelessWidget {
                           bonus: testsNotifier.tests[index]?.bonus ?? 0,
                           image: testsNotifier.tests[index].coverImage?.path ?? '',
                           onTap: () {
-                            Navigator.of(context).pushNamed('/tests/view', arguments: testsNotifier.tests[index].id);
+                            Navigator.of(context)
+                                .pushNamed('/tests/view', arguments: testsNotifier.tests[index].id)
+                                .then((_) {
+                              testsNotifier.remove(testsNotifier.tests[index]);
+                            });
                           },
                         );
                       },

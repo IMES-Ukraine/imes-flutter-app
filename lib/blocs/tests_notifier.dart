@@ -72,4 +72,10 @@ class TestsStateNotifier with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void remove(Test test) {
+    if (tests.remove(test)) {
+      notifyListeners();
+    }
+  }
 }

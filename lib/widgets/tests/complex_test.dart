@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
+import 'package:imes/widgets/tests/test_variant_card_button.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
 import 'package:imes/widgets/tests/test_vide_card.dart';
 import 'package:observable/observable.dart';
@@ -21,18 +25,28 @@ class ComplexTest extends HookWidget {
   Widget build(BuildContext context) {
     final durationTimer = useCountDownValueNotifier(context, Duration(seconds: test.duration));
     final state = useValueNotifier(ObservableMap());
+    final controller = useScrollController();
+    final step = useState(1);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          TestTitle(title: 'Тест сложный', duration: durationTimer),
-          TestCard(test: test),
-          ...test.complex.map((t) {
+    return CustomScrollView(
+      controller: controller,
+      slivers: [
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              TestTitle(title: 'Тест сложный', duration: durationTimer),
+              TestCard(test: test),
+            ],
+          ),
+        ),
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+          (context, index) {
             return Column(
               children: [
                 Divider(indent: 8.0, endIndent: 8.0),
                 Text(
-                  t.question,
+                  test.complex[index].question,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF00B7FF),
@@ -40,23 +54,49 @@ class ComplexTest extends HookWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (t.hasVideo) TestVideoCard(url: t.video.data),
-                if (t.answerType == 'variants')
+                if (test.complex[index].hasVideo) TestVideoCard(url: test.complex[index].video.data),
+                if (test.complex[index].answerType == 'variants')
                   HookBuilder(builder: (_) {
                     useObservable(state);
-                    return Column(
-                        children: t.variants.buttons.map((v) {
-                      return TestVariantFlatButton(
-                        variant: v.variant,
-                        title: v.title,
-                        selected: state.value[t.id] == v.variant,
-                        onTap: () {
-                          state.value[t.id] = v.variant;
-                        },
+                    if (test.complex[index].variants.type == 'text') {
+                      return Column(
+                          children: test.complex[index].variants.buttons.map((v) {
+                        return TestVariantFlatButton(
+                          variant: v.variant,
+                          title: v.title,
+                          selected: state.value[test.complex[index].id] == v.variant,
+                          onTap: () {
+                            state.value[test.complex[index].id] = v.variant;
+                          },
+                        );
+                      }).toList());
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Wrap(
+                          alignment: WrapAlignment.spaceBetween,
+                          runAlignment: WrapAlignment.spaceBetween,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: test.complex[index].variants.buttons.map((v) {
+                            return ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: (MediaQuery.of(context).size.width - 24.0) / 2.0),
+                              child: TestVariantCardButton(
+                                variant: v.variant,
+                                title: v.title,
+                                descr: v.description,
+                                imageUrl: v.file.path,
+                                selected: state.value[test.complex[index].id] == v.variant,
+                                onTap: () {
+                                  state.value[test.complex[index].id] = v.variant;
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       );
-                    }).toList());
+                    }
                   })
-                else if (t.answerType == 'text')
+                else if (test.complex[index].answerType == 'text')
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
@@ -66,11 +106,23 @@ class ComplexTest extends HookWidget {
                       maxLines: 5,
                     ),
                   ),
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: RaisedGradientButton(
+                    child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      step.value++;
+                      controller.animateTo(controller.position.maxScrollExtent + controller.position.viewportDimension,
+                          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+                    },
+                  ),
+                ),
               ],
             );
-          }).toList(),
-        ],
-      ),
+          },
+          childCount: step.value,
+        )),
+      ],
     );
   }
 }
