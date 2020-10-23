@@ -8,16 +8,14 @@ class ErrorResponse {
 
   ErrorResponse({this.error});
 
-
   @override
   String toString() {
-    return this.error;
+    return error;
   }
 
   static const fromJsonFactory = _$ErrorResponseFromJson;
 
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
-      _$ErrorResponseFromJson(json);
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 }

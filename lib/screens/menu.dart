@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:imes/resources/resources.dart';
 
-import 'package:imes/widgets/menu_item.dart';
-import 'package:imes/widgets/menu_app_bar.dart';
+import 'package:imes/widgets/menu/menu_item.dart';
+import 'package:imes/widgets/menu/menu_app_bar.dart';
 
 import 'package:imes/screens/support.dart';
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/analytics_notifier.dart';
 
-import 'package:imes/widgets/error_retry.dart';
-import 'package:imes/widgets/analytics_tile.dart';
-import 'package:imes/widgets/analytics_app_bar.dart';
+import 'package:imes/widgets/base/error_retry.dart';
+import 'package:imes/widgets/analytics/analytics_tile.dart';
+import 'package:imes/widgets/analytics/analytics_app_bar.dart';
 
 import 'package:provider/provider.dart';
 

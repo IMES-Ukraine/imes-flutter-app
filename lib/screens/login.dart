@@ -6,11 +6,11 @@ import 'package:imes/screens/register.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
 
-import 'package:imes/widgets/custom_checkbox.dart';
-import 'package:imes/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/base/custom_checkbox.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 
 import 'package:imes/blocs/login_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(hintText: '+380 (__) ___ __ __'),
                           textInputAction: TextInputAction.next,
                           inputFormatters: [
-                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {"#": RegExp(r'[0-9]')})
+                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {'#': RegExp(r'[0-9]')})
                           ],
                           // validator: (value) {
                           //   final emailRegex = RegExp(Utils.EMAIL_REGEXP);

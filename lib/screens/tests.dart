@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:imes/blocs/tests.dart';
-import 'package:imes/widgets/error_retry.dart';
-import 'package:imes/widgets/test_list_tile.dart';
-import 'package:imes/widgets/tests_app_bar.dart';
+import 'package:imes/blocs/tests_notifier.dart';
+import 'package:imes/widgets/base/error_retry.dart';
+import 'package:imes/widgets/tests/test_list_tile.dart';
+import 'package:imes/widgets/tests/tests_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class TestsPage extends StatelessWidget {

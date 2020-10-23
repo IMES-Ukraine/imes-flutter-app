@@ -4,15 +4,15 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:imes/blocs/register_notifier.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/confirm_code.dart';
-import 'package:imes/widgets/loading_lock.dart';
+import 'package:imes/widgets/base/loading_lock.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
 
-import 'package:imes/widgets/custom_checkbox.dart';
-import 'package:imes/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/base/custom_checkbox.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 
@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(hintText: '+380 (__) ___ __ __'),
                           textInputAction: TextInputAction.done,
                           inputFormatters: [
-                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {"#": RegExp(r'[0-9]')})
+                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {'#': RegExp(r'[0-9]')})
                           ],
                           // validator: (value) {
                           //   final emailRegex = RegExp(Utils.EMAIL_REGEXP);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:imes/widgets/error_retry.dart';
+import 'package:imes/widgets/base/error_retry.dart';
 
 import 'package:imes/blocs/history_notifier.dart';
 

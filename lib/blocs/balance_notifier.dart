@@ -21,15 +21,15 @@ class BalanceNotifier extends ChangeNotifier {
 
   String get type => _type;
 
-  onCommentChanged(String value) {
+  void onCommentChanged(String value) {
     _comment = value;
   }
 
-  onAmountChanged(String value) {
+  void onAmountChanged(String value) {
     _amount = int.parse(value);
   }
 
-  chooseType(String type) {
+  void chooseType(String type) {
     _type = type;
     notifyListeners();
   }

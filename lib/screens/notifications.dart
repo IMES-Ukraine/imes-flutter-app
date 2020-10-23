@@ -5,7 +5,7 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/notifications_notifier.dart';
 import 'package:imes/resources/resources.dart';
 
-import 'package:imes/widgets/error_retry.dart';
+import 'package:imes/widgets/base/error_retry.dart';
 
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/blog_view.dart';
@@ -105,7 +105,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             child: Container(
                               color: Colors.white,
                               child: ListTile(
-                                leading: notificationsNotifier.notifications[index].type == "NEWS"
+                                leading: notificationsNotifier.notifications[index].type == 'NEWS'
                                     ? CircleAvatar(
                                         child: Image.network(notificationsNotifier.notifications[index]?.image ?? ''),
                                       )

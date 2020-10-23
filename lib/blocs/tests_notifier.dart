@@ -1,4 +1,3 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
@@ -15,14 +14,13 @@ enum TestsState {
 }
 
 class TestsStateNotifier with ChangeNotifier {
-  TestsState _state;
-
-  int _total = 0;
-  int _lastPage = 0;
-  List<Test> _tests = [];
-  TestsPage _page = TestsPage.NEWS;
-
   TestsStateNotifier({TestsState state = TestsState.LOADING}) : _state = state;
+
+  int _lastPage = 0;
+  TestsPage _page = TestsPage.NEWS;
+  TestsState _state;
+  List<Test> _tests = [];
+  int _total = 0;
 
   int get total => _total;
 

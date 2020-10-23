@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:imes/widgets/bars_card.dart';
-import 'package:imes/widgets/bonus_button.dart';
+import 'package:imes/widgets/base/bars_card.dart';
+import 'package:imes/widgets/base/bonus_button.dart';
 
 class TestListTile extends StatelessWidget {
   final bool isFavourite;

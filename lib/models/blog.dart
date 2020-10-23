@@ -58,10 +58,10 @@ class Blog {
   });
 
   @override
-  bool operator ==(other) => other is Blog && other.id == this.id;
+  bool operator ==(other) => other is Blog && other.id == id;
 
   @override
-  int get hashCode => this.id.hashCode;
+  int get hashCode => id.hashCode;
 
   factory Blog.fromJson(Map<String, dynamic> json) => _$BlogFromJson(json);
 

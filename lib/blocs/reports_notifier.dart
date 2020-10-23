@@ -13,11 +13,11 @@ enum ReportsState {
 }
 
 class ReportsNotifier with ChangeNotifier {
-  ReportsState _state = ReportsState.NOT_ADDED;
-  int _count = 1;
   int _amount = 25;
+  int _count = 1;
   double _progress = 0;
   File _reportFile;
+  ReportsState _state = ReportsState.NOT_ADDED;
   TimeOfDay _timeOfDay = TimeOfDay.now();
 
   File get image => _reportFile;
@@ -46,17 +46,16 @@ class ReportsNotifier with ChangeNotifier {
     _state = ReportsState.UPLOADING;
     notifyListeners();
 
-    String reportIdString = '';
-    int reportId = DateTime.now().millisecondsSinceEpoch;
-    for (int i = 0; i < 8; i++) {
+    var reportIdString = '';
+    var reportId = DateTime.now().millisecondsSinceEpoch;
+    for (var i = 0; i < 8; i++) {
       reportIdString += '${reportId % 10}';
       reportId = reportId ~/ 10;
     }
 
     final resultId = int.parse(reportIdString);
-    final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('bills/${resultId.toRadixString(16)}.jpg');
-    final StorageUploadTask task = firebaseStorageRef.putFile(_reportFile);
+    final firebaseStorageRef = FirebaseStorage.instance.ref().child('bills/${resultId.toRadixString(16)}.jpg');
+    final task = firebaseStorageRef.putFile(_reportFile);
     task.events.listen((event) {
       _progress = event.snapshot.bytesTransferred / event.snapshot.totalByteCount;
       notifyListeners();
@@ -67,9 +66,9 @@ class ReportsNotifier with ChangeNotifier {
       return value.toString();
     }
 
-    final String hourLabel = _addLeadingZeroIfNeeded(_timeOfDay.hour);
-    final String minuteLabel = _addLeadingZeroIfNeeded(_timeOfDay.minute);
-    final String creationTime = '$hourLabel:$minuteLabel';
+    final hourLabel = _addLeadingZeroIfNeeded(_timeOfDay.hour);
+    final minuteLabel = _addLeadingZeroIfNeeded(_timeOfDay.minute);
+    final creationTime = '$hourLabel:$minuteLabel';
 
     print(creationTime);
 
@@ -82,24 +81,24 @@ class ReportsNotifier with ChangeNotifier {
         );
   }
 
-  chooseTime(TimeOfDay value) {
+  void chooseTime(TimeOfDay value) {
     _timeOfDay = value;
     notifyListeners();
   }
 
-  chooseAmount(int value) {
+  void chooseAmount(int value) {
     _amount = value;
     notifyListeners();
   }
 
-  incrementCount() {
+  void incrementCount() {
     if (_count < 100) {
       _count = _count + 1;
       notifyListeners();
     }
   }
 
-  decrementCount() {
+  void decrementCount() {
     if (_count > 1) {
       _count = _count - 1;
       notifyListeners();

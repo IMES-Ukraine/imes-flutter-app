@@ -11,8 +11,6 @@ enum TestState {
 }
 
 class TestNotifier with ChangeNotifier {
-  String selectedVarint;
-
   TestState _state;
 
   Test _test;
@@ -40,15 +38,10 @@ class TestNotifier with ChangeNotifier {
     return _test?.duration ?? 0;
   }
 
-  void select(String variant) {
-    selectedVarint = variant;
-    notifyListeners();
-  }
-
-  Future postAnswer(int testId, String testVariant, Duration duration) async {
+  Future postAnswer(int testId, List<String> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
-            data: [TestAnswer(id: testId, variant: testVariant)],
+            data: answers.map((v) => TestAnswer(id: testId, variant: v)),
             seconds: duration.inSeconds,
           ),
         );

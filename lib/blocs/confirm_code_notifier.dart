@@ -26,9 +26,7 @@ class ConfirmCodeNotifier with ChangeNotifier {
         _receivePort?.close();
         _timerIsolate?.kill(priority: Isolate.immediate);
       }
-    }, onDone: () {
-      print("done!");
-    });
+    }, onDone: () {});
   }
 
   static void _sendAgainTimer(SendPort sendPort) {

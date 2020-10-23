@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imes/models/test.dart';
-import 'package:imes/widgets/bars_card.dart';
-import 'package:imes/widgets/bonus_button.dart';
+import 'package:imes/widgets/base/bars_card.dart';
+import 'package:imes/widgets/base/bonus_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TestCard extends StatelessWidget {

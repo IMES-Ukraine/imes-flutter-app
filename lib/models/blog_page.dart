@@ -28,5 +28,6 @@ class BlogPage extends Pageable {
 
   factory BlogPage.fromJson(Map<String, dynamic> json) => _$BlogPageFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$BlogPageToJson(this);
 }

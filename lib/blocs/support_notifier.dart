@@ -10,7 +10,11 @@ enum SupportState {
 class SupportNotifier with ChangeNotifier {
   SupportState _state = SupportState.LOADING;
 
+  SupportState get state => _state;
+
   Future load(int userId) async {
-    final userDocument = Firestore.instance.collection('sessions').document('$userId');
+    final userDocument = FirebaseFirestore.instance.collection('sessions').doc('$userId');
+    _state = SupportState.LOADED;
+    notifyListeners();
   }
 }

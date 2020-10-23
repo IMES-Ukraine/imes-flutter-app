@@ -4,9 +4,9 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/home.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:provider/provider.dart';
 
 class SetupPasswordPage extends StatefulHookWidget {

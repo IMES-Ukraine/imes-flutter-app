@@ -8,8 +8,8 @@ import 'package:octo_image/octo_image.dart';
 import 'package:imes/blocs/blog_notifier.dart';
 import 'package:imes/resources/resources.dart';
 
-import 'package:imes/widgets/error_retry.dart';
-import 'package:imes/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/base/error_retry.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';

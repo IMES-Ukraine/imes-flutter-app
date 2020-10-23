@@ -44,10 +44,10 @@ class UserNotifier with ChangeNotifier {
       final storage = FlutterSecureStorage();
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
 
-      final FirebaseAuth auth = FirebaseAuth.instance;
+      final auth = FirebaseAuth.instance;
       final authResult = await auth.signInWithCustomToken(response.body.user.firebaseToken);
-      final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-      final String token = await _firebaseMessaging.getToken();
+      final _firebaseMessaging = FirebaseMessaging();
+      final token = await _firebaseMessaging.getToken();
       final result = await Repository().api.submitToken(token: token);
       _firebaseMessaging.onTokenRefresh.listen((newToken) {
         Repository().api.submitToken(token: newToken);
@@ -85,11 +85,10 @@ class UserNotifier with ChangeNotifier {
         _user = profileResponse.body.data.user;
         _state = AuthState.AUTHENTICATED;
 
-        final FirebaseAuth auth = FirebaseAuth.instance;
-        // final authResult = await auth.signInWithCustomToken(token: response.body.user.firebaseToken);
+        final auth = FirebaseAuth.instance;
         final authResult = await auth.signInWithCustomToken(profileResponse.body.data.user.firebaseToken);
-        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-        final String token = await _firebaseMessaging.getToken();
+        final _firebaseMessaging = FirebaseMessaging();
+        final token = await _firebaseMessaging.getToken();
         final result = await Repository().api.submitToken(token: token);
         _firebaseMessaging.onTokenRefresh.listen((newToken) {
           Repository().api.submitToken(token: newToken);

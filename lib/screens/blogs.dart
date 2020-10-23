@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
 
-import 'package:imes/widgets/error_retry.dart';
-import 'package:imes/widgets/blog_tile.dart';
-import 'package:imes/widgets/blogs_app_bar.dart';
+import 'package:imes/widgets/base/error_retry.dart';
+import 'package:imes/widgets/blogs/blog_tile.dart';
+import 'package:imes/widgets/blogs/blogs_app_bar.dart';
 
 import 'package:provider/provider.dart';
 

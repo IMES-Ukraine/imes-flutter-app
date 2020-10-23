@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:imes/widgets/notifications_button.dart';
+import 'package:imes/widgets/base/notifications_button.dart';
 
 class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -19,7 +19,7 @@ class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.all(8.0),
               child: AnimatedDefaultTextStyle(
                 duration: Duration(milliseconds: 200),
-                style: Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0),
+                style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0),
                 child: Text(
                   'Меню',
                 ),

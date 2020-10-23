@@ -1,16 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/reports_notifier.dart';
 import 'package:imes/resources/resources.dart';
 
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
 
 import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 
 class ReportsPage extends StatelessWidget {
+  final picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,9 +52,9 @@ class ReportsPage extends StatelessWidget {
                         children: <Widget>[
                           FlatButton.icon(
                             onPressed: () async {
-                              final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                              final image = await picker.getImage(source: ImageSource.gallery);
                               if (image != null) {
-                                reportsNotifier.chooseImage(image);
+                                reportsNotifier.chooseImage(File(image.path));
                               }
                             },
                             icon: Icon(Icons.photo, color: Color(0xFF828282)),
@@ -63,9 +67,9 @@ class ReportsPage extends StatelessWidget {
                           ),
                           FlatButton.icon(
                             onPressed: () async {
-                              final image = await ImagePicker.pickImage(source: ImageSource.camera);
+                              final image = await picker.getImage(source: ImageSource.camera);
                               if (image != null) {
-                                reportsNotifier.chooseImage(image);
+                                reportsNotifier.chooseImage(File(image.path));
                               }
                             },
                             icon: Icon(Icons.photo_camera, color: Color(0xFF828282)),
@@ -174,7 +178,7 @@ class ReportsPage extends StatelessWidget {
                                           decoration: BoxDecoration(border: Border.all(color: Color(0xFFBDBDBD))),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text("${reportsNotifier.count}"),
+                                            child: Text('${reportsNotifier.count}'),
                                           )),
 //                                    ConstrainedBox(
 //                                        constraints: BoxConstraints(maxWidth: 52.0, maxHeight: 32.0),

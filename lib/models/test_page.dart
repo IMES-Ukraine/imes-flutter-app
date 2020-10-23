@@ -22,9 +22,10 @@ class TestPage extends Pageable {
           to: to,
           total: total,
           lastPage: lastPage,
-//          perPage: perPage,
+          //  perPage: perPage,
         );
 
   factory TestPage.fromJson(Map<String, dynamic> json) => _$TestPageFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$TestPageToJson(this);
 }

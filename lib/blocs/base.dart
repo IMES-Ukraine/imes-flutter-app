@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:imes/models/analytics.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:state_notifier/state_notifier.dart';

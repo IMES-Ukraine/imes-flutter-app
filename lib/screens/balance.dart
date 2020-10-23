@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/resources.dart';
 
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
-import 'package:imes/widgets/notifications_button.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/notifications_button.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/balance_notifier.dart';
@@ -36,7 +36,7 @@ class _BalancePageState extends State<BalancePage> {
     return ChangeNotifierProvider(
       create: (_) {
         final balanceNotifier = BalanceNotifier();
-        final int balance = Provider.of<UserNotifier>(context).user?.balance ?? 0;
+        final balance = Provider.of<UserNotifier>(context).user?.balance ?? 0;
         balanceNotifier.onAmountChanged(balance.toString());
         return balanceNotifier;
       },
@@ -163,7 +163,7 @@ class _BalancePageState extends State<BalancePage> {
                                               child: Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                             child: TextField(
-                                              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                               controller: _balanceController,
                                               keyboardType: TextInputType.numberWithOptions(signed: true),
                                               decoration: null,

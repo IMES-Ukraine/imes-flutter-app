@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:imes/blocs/tests.dart';
+import 'package:imes/blocs/tests_notifier.dart';
 
-import 'package:imes/widgets/notifications_button.dart';
+import 'package:imes/widgets/base/notifications_button.dart';
 
 import 'package:provider/provider.dart';
 
@@ -28,8 +28,8 @@ class TestsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: AnimatedDefaultTextStyle(
                   duration: Duration(milliseconds: 200),
                   style: Provider.of<TestsStateNotifier>(context).page == TestsPage.NEWS
-                      ? Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
-                      : Theme.of(context).textTheme.body1.copyWith(fontSize: 17.0),
+                      ? Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
+                      : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
                   child: Text(
                     'Нові'.toUpperCase(),
                   ),
@@ -45,8 +45,8 @@ class TestsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: AnimatedDefaultTextStyle(
                   duration: Duration(milliseconds: 200),
                   style: Provider.of<TestsStateNotifier>(context).page == TestsPage.INFORMATION
-                      ? Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
-                      : Theme.of(context).textTheme.body1.copyWith(fontSize: 17.0),
+                      ? Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
+                      : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
                   child: Text(
                     'Популярні'.toUpperCase(),
                   ),

@@ -9,25 +9,18 @@ part 'analytics_page.g.dart';
 class AnalyticsPage extends Pageable {
   List<Analytics> data;
 
-  AnalyticsPage(
-      {int currentPage,
-        this.data,
-        int from,
-        int to,
-        int total,
-        int lastPage,
-        int perPage})
+  AnalyticsPage({int currentPage, this.data, int from, int to, int total, int lastPage, int perPage})
       : super(
-    currentPage: currentPage,
-    from: from,
-    to: to,
-    total: total,
-    lastPage: lastPage,
+          currentPage: currentPage,
+          from: from,
+          to: to,
+          total: total,
+          lastPage: lastPage,
 //    perPage: perPage,
-  );
+        );
 
-  factory AnalyticsPage.fromJson(Map<String, dynamic> json) =>
-      _$AnalyticsPageFromJson(json);
+  factory AnalyticsPage.fromJson(Map<String, dynamic> json) => _$AnalyticsPageFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$AnalyticsPageToJson(this);
 }

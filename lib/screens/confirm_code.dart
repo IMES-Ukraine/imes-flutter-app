@@ -6,10 +6,10 @@ import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/setup_password.dart';
-import 'package:imes/widgets/custom_alert_dialog.dart';
-import 'package:imes/widgets/custom_dialog.dart';
-import 'package:imes/widgets/loading_lock.dart';
-import 'package:imes/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/loading_lock.dart';
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 

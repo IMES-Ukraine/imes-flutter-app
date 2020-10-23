@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:imes/widgets/bonus_button.dart';
+import 'package:imes/widgets/base/bonus_button.dart';
 
-import 'package:timeago/timeago.dart' as timeago;
 
 class BlogListTile extends StatelessWidget {
   const BlogListTile({

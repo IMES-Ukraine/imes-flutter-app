@@ -1,4 +1,4 @@
-import "dart:async";
+import 'dart:async';
 import 'package:chopper/chopper.dart';
 
 import 'package:imes/models/basic_response.dart';
@@ -68,7 +68,7 @@ abstract class RestClient extends ChopperService {
     @Query('count') int count = 10,
   });
 
-  @Delete(path: "/api/v1/notifications/{id}")
+  @Delete(path: '/api/v1/notifications/{id}')
   Future<Response> deleteNotification(@Path('id') num id);
 
   @Post(path: '/api/v1/profile/withdraw')

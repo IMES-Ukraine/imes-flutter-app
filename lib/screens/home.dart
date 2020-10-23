@@ -1,9 +1,6 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:imes/helpers/bottom_icons.dart';
 import 'package:imes/screens/blogs.dart';
-import 'package:imes/screens/analytics.dart';
-import 'package:imes/screens/report.dart';
 import 'package:imes/screens/balance.dart';
 import 'package:imes/screens/menu.dart';
 import 'package:imes/screens/blog_view.dart';
@@ -81,14 +78,14 @@ class _HomePageState extends State<HomePage> {
       create: (_) {
         final homeNotifier = HomeNotifier(controller: _pageController);
         final userNotifier = Provider.of<UserNotifier>(context);
-        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+        final _firebaseMessaging = FirebaseMessaging();
         _firebaseMessaging.requestNotificationPermissions();
         _firebaseMessaging.configure(onMessage: (message) {
           debugPrint('onMessage: $message');
           userNotifier.increaseNotificationsCount();
           final data = message['data'];
           if (data != null) {
-            final int newBalance = int.parse(data['balance']);
+            final newBalance = int.parse(data['balance']);
             if (newBalance != null) {
               userNotifier.updateBalance(newBalance);
             }

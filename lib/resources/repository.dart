@@ -32,7 +32,7 @@ class Repository {
     return _instance;
   }
 
-  create() {
+  void create() {
     final converter = JsonSerializableConverter({
       BasicResponse: BasicResponse.fromJsonFactory,
       LoginResponse: LoginResponse.fromJsonFactory,
@@ -69,13 +69,13 @@ class Repository {
     final token = await storage.read(key: '__AUTH_TOKEN_');
     return applyHeader(
       request,
-      "Authorization",
-      "Bearer $token",
+      'Authorization',
+      'Bearer $token',
     );
   }
 }
 
-typedef T JsonFactory<T>(Map<String, dynamic> json);
+typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
 
 class JsonSerializableConverter extends JsonConverter {
   final Map<Type, JsonFactory> factories;
@@ -116,6 +116,7 @@ class JsonSerializableConverter extends JsonConverter {
   // all objects should implements toJson method
   Request convertRequest(Request request) => super.convertRequest(request);
 
+  @override
   Response convertError<ResultType, Item>(Response response) {
     // use [JsonConverter] to decode json
     final jsonRes = super.convertError(response);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:imes/widgets/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
 
 class ErrorRetry extends StatelessWidget {
   final String text;

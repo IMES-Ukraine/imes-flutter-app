@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:imes/widgets/notifications_button.dart';
+import 'package:imes/widgets/base/notifications_button.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -80,7 +80,7 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final num seconds = elapsed / 1000;
     final num minutes = seconds / 60;
     final num hours = minutes / 60;
-    final int days = hours ~/ 24;
+    final num days = hours ~/ 24;
     final num months = days / 30;
     final num years = days / 365;
 

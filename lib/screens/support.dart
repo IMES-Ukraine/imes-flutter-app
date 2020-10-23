@@ -113,7 +113,7 @@ class _SupportPageState extends State<SupportPage> {
 
                           final documentRef = sessionDocumentRef
                               .collection('messages')
-                              .document(DateTime.now().millisecondsSinceEpoch.toString());
+                              .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
                           final result = await FirebaseFirestore.instance.runTransaction((tx) async {
                             await tx.set(documentRef, {
