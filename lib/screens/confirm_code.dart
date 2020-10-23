@@ -67,7 +67,7 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                     return CustomAlertDialog(
                                       content: CustomDialog(
                                         icon: Icons.close,
-                                        color: Color(0xFFFF5B5E),
+                                        color: Theme.of(context).errorColor,
                                         text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                       ),
                                     );
@@ -78,7 +78,9 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                   builder: (context) {
                                     return CustomAlertDialog(
                                       content: CustomDialog(
-                                          icon: Icons.close, color: Color(0xFFFF5B5E), text: error.toString()),
+                                          icon: Icons.close,
+                                          color: Theme.of(context).errorColor,
+                                          text: error.toString()),
                                     );
                                   });
                             }
@@ -88,7 +90,7 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                       const SizedBox(height: 16.0),
                       Text(
                         'На номер ${widget.phoneNumber} було відправлено SMS з кодом',
-                        style: TextStyle(fontSize: 12.0, color: Color(0xFF828282)),
+                        style: TextStyle(fontSize: 12.0, color: Color(0xFF828282)), // TODO: extract colors to theme
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16.0),
@@ -114,7 +116,7 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Color(0xFFFF5B5E),
+                                              color: Theme.of(context).errorColor,
                                               text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                             ),
                                           );
@@ -125,7 +127,9 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                         builder: (context) {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
-                                                icon: Icons.close, color: Color(0xFFFF5B5E), text: error.toString()),
+                                                icon: Icons.close,
+                                                color: Theme.of(context).errorColor,
+                                                text: error.toString()),
                                           );
                                         });
                                   }
@@ -135,7 +139,8 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                       const SizedBox(height: 16.0),
                       Text(
                         'Відправити повторно ${timerState.value.inSeconds} с',
-                        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: Color(0xFF00B7FF)),
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),
                         textAlign: TextAlign.center,
                       ),
                     ],

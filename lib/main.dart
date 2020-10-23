@@ -95,17 +95,19 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           fontFamily: 'Montserrat',
-          primaryColor: Color(0xFF00B7FF),
-          accentColor: Color(0xFF00B7FF),
-          scaffoldBackgroundColor: Color(0xFFF7F7F9),
+          primaryColor: const Color(0xFF00B7FF),
+          accentColor: const Color(0xFF00D7FF),
+          scaffoldBackgroundColor: const Color(0xFFF7F7F9),
+          errorColor: const Color(0xFFFF5C8E),
+          dividerColor: const Color(0xFFE0E0E0),
           appBarTheme: AppBarTheme(
               color: Colors.white,
               // elevation: 0.0,
               iconTheme: IconThemeData(
-                color: Color(0xFF00B7FF),
+                color: const Color(0xFF00B7FF),
               ),
               actionsIconTheme: IconThemeData(
-                color: Color(0xFF00B7FF),
+                color: const Color(0xFF00B7FF),
               )),
         ),
         home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),

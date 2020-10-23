@@ -95,7 +95,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             actionExtentRatio: 0.15,
                             secondaryActions: <Widget>[
                               IconSlideAction(
-                                color: Colors.red,
+                                color: Theme.of(context).errorColor,
                                 icon: Icons.delete,
                                 onTap: () {
                                   notificationsNotifier.delete(index);
@@ -114,7 +114,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                         height: 40,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          gradient: LinearGradient(colors: [Color(0xFF12EC34), Color(0xFF00D0D0)]),
+                                          gradient: LinearGradient(colors: [
+                                            Color(0xFF12EC34),
+                                            Color(0xFF00D0D0)
+                                          ]), // TODO: extract colors to theme
                                         ),
                                         child: _getIcon(notificationsNotifier.notifications[index].type),
                                       ),

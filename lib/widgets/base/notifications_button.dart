@@ -16,7 +16,7 @@ class NotificationsButton extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 Icons.notifications,
-                color: Color(0xFFDADADA),
+                color: Theme.of(context).dividerColor,
               ),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => NotificationsPage()),
@@ -28,7 +28,8 @@ class NotificationsButton extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 padding: const EdgeInsets.all(4.0),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFF10DE50)),
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: Color(0xFF10DE50)), // TODO: extract color to theme
                 child: Text(
                   '${userNotifier.notificationsCount}',
                   style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: Colors.white),

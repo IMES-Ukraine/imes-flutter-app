@@ -37,7 +37,7 @@ class TestTitle extends HookWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('${Utils.formatDuration(duration.value)}',
                     style: TextStyle(
-                      color: Color(0xFF32E1C0),
+                      color: Color(0xFF32E1C0), // TODO: extract colorto theme
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     )),

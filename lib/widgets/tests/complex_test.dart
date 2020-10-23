@@ -49,7 +49,7 @@ class ComplexTest extends HookWidget {
                   test.complex[index].question,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color(0xFF00B7FF),
+                    color: Theme.of(context).accentColor,
                     fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -65,6 +65,11 @@ class ComplexTest extends HookWidget {
                           variant: v.variant,
                           title: v.title,
                           selected: state.value[test.complex[index].id] == v.variant,
+                          selectedColor: index < step.value - 1
+                              ? state.value[test.complex[index].id] == test.complex[index].variants.correctAnswer
+                                  ? Theme.of(context).errorColor
+                                  : Color(0xFF4CF99E) // TODO: extract color to theme
+                              : null,
                           onTap: index < step.value - 1
                               ? null
                               : () {
@@ -87,6 +92,11 @@ class ComplexTest extends HookWidget {
                                 descr: v.description,
                                 imageUrl: v.file.path,
                                 selected: state.value[test.complex[index].id] == v.variant,
+                                selectedColor: index < step.value - 1
+                                    ? state.value[test.complex[index].id] == test.complex[index].variants.correctAnswer
+                                        ? Theme.of(context).errorColor
+                                        : Color(0xFF4CF99E) // TODO: extract color to theme
+                                    : null,
                                 onTap: index < step.value - 1
                                     ? null
                                     : () {

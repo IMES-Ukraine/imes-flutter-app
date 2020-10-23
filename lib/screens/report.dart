@@ -40,7 +40,7 @@ class ReportsPage extends StatelessWidget {
                               Text(
                                 'Додати чек',
                                 style: TextStyle(
-                                  color: Color(0xFF828282),
+                                  color: Color(0xFF828282), // TODO: extract colors to theme
                                 ),
                               ),
                             ],
@@ -57,11 +57,11 @@ class ReportsPage extends StatelessWidget {
                                 reportsNotifier.chooseImage(File(image.path));
                               }
                             },
-                            icon: Icon(Icons.photo, color: Color(0xFF828282)),
+                            icon: Icon(Icons.photo, color: Color(0xFF828282)), // TODO: extract colors to theme
                             label: Text(
                               'Бібліотека',
                               style: TextStyle(
-                                color: Color(0xFF828282),
+                                color: Color(0xFF828282), // TODO: extract colors to theme
                               ),
                             ),
                           ),
@@ -72,11 +72,11 @@ class ReportsPage extends StatelessWidget {
                                 reportsNotifier.chooseImage(File(image.path));
                               }
                             },
-                            icon: Icon(Icons.photo_camera, color: Color(0xFF828282)),
+                            icon: Icon(Icons.photo_camera, color: Color(0xFF828282)), // TODO: extract colors to theme
                             label: Text(
                               'Зробити фото',
                               style: TextStyle(
-                                color: Color(0xFF828282),
+                                color: Color(0xFF828282), // TODO: extract colors to theme
                               ),
                             ),
                           ),
@@ -175,7 +175,8 @@ class ReportsPage extends StatelessWidget {
                                         onPressed: () => reportsNotifier.decrementCount(),
                                       ),
                                       Container(
-                                          decoration: BoxDecoration(border: Border.all(color: Color(0xFFBDBDBD))),
+                                          decoration:
+                                              BoxDecoration(border: Border.all(color: Theme.of(context).dividerColor)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text('${reportsNotifier.count}'),
@@ -237,7 +238,7 @@ class ReportsPage extends StatelessWidget {
                                         content: CustomDialog(
                                           icon: Icons.close,
                                           text: 'Виникла помилка. Повторіть будь ласка',
-                                          color: Color(0xFFFF5B5E),
+                                          color: Theme.of(context).errorColor,
                                         ),
                                       );
                                     });

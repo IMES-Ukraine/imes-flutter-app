@@ -7,6 +7,7 @@ class TestVariantCardButton extends StatelessWidget {
   final String title;
   final String descr;
   final String imageUrl;
+  final Color selectedColor;
   final bool selected;
   final VoidCallback onTap;
 
@@ -16,20 +17,22 @@ class TestVariantCardButton extends StatelessWidget {
     @required this.title,
     @required this.descr,
     @required this.imageUrl,
+    this.selectedColor,
     this.selected = false,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final defaultSelectedColor = selectedColor ?? Theme.of(context).accentColor;
     return Card(
       margin: const EdgeInsets.all(8.0),
       elevation: 2.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
-        side: BorderSide(color: selected ? Color(0xFF4CF99E) : Color(0xFFE0E0E0)),
+        side: BorderSide(color: selected ? defaultSelectedColor : Theme.of(context).dividerColor),
       ),
-      shadowColor: selected ? Color(0xFF4CF99E) : Color(0xFFE0E0E0),
+      shadowColor: selected ? defaultSelectedColor : Theme.of(context).dividerColor,
       child: InkWell(
         onTap: onTap,
         child: Column(children: [
@@ -38,8 +41,8 @@ class TestVariantCardButton extends StatelessWidget {
             child: Row(children: [
               Container(
                 decoration: BoxDecoration(
-                  color: selected ? Color(0xFF4CF99E) : Colors.white,
-                  border: Border.all(color: selected ? Color(0xFF4CF99E) : Color(0xFFE0E0E0)),
+                  color: selected ? defaultSelectedColor : Colors.white,
+                  border: Border.all(color: selected ? defaultSelectedColor : Theme.of(context).dividerColor),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Padding(
@@ -47,7 +50,7 @@ class TestVariantCardButton extends StatelessWidget {
                   child: Text(
                     variant,
                     style: TextStyle(
-                      color: selected ? Colors.white : Color(0xFFE0E0E0),
+                      color: selected ? Colors.white : Theme.of(context).dividerColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

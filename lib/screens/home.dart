@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
             bottomNavigationBar: BottomNavigationBar(
 //                backgroundColor: const Color(0xFFE9EAEC),
                 selectedItemColor: themeData.primaryColor,
-                unselectedItemColor: const Color(0xFFA1A1A1),
+                unselectedItemColor: const Color(0xFFA1A1A1), // TODO: extract colors to theme
                 type: BottomNavigationBarType.fixed,
                 unselectedFontSize: 10.0,
                 selectedFontSize: 10.0,

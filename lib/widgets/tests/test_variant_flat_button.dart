@@ -5,6 +5,7 @@ class TestVariantFlatButton extends StatelessWidget {
   final String title;
   final Color color;
   final bool selected;
+  final bool resolved;
   final Color selectedColor;
   final VoidCallback onTap;
 
@@ -12,14 +13,18 @@ class TestVariantFlatButton extends StatelessWidget {
     Key key,
     @required this.variant,
     @required this.title,
-    this.color = const Color(0xFFE0E0E0),
-    this.selectedColor = const Color(0xFF00B7FF),
     this.selected = false,
+    this.resolved = false,
+    this.color,
+    this.selectedColor,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final defaultColor = color ?? Theme.of(context).dividerColor;
+    final defaultSelectedColor = selectedColor ?? Theme.of(context).accentColor;
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -29,18 +34,18 @@ class TestVariantFlatButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4.0),
                 color: Colors.white,
                 border: Border.all(
-                  color: selected ? selectedColor : color,
+                  color: selected ? defaultSelectedColor : defaultColor,
                 )),
             child: Row(
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: selected ? selectedColor : Colors.white,
+                    color: selected ? defaultSelectedColor : Colors.white,
                     border: Border(
                       right: BorderSide(
                         width: 1.0,
                         style: BorderStyle.solid,
-                        color: selected ? selectedColor : color,
+                        color: selected ? defaultSelectedColor : defaultColor,
                       ),
                     ),
                   ),
@@ -49,7 +54,7 @@ class TestVariantFlatButton extends StatelessWidget {
                     child: Text(
                       variant,
                       style: TextStyle(
-                        color: selected ? Colors.white : color,
+                        color: selected ? Colors.white : defaultColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

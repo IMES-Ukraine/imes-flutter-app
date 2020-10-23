@@ -53,21 +53,23 @@ class _SupportPageState extends State<SupportPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Bubble(
                               style: BubbleStyle(
-                                  nip: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
-                                      ? BubbleNip.rightTop
-                                      : BubbleNip.leftTop,
-                                  alignment: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
-                                      ? Alignment.topRight
-                                      : Alignment.topLeft,
-                                  color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
-                                      ? Color(0xFF10DE50)
-                                      : Color(0xFFE5E6EA)),
+                                nip: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
+                                    ? BubbleNip.rightTop
+                                    : BubbleNip.leftTop,
+                                alignment: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
+                                    ? Alignment.topRight
+                                    : Alignment.topLeft,
+                                color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
+                                    ? Color(0xFF10DE50) // TODO: extract colors to theme
+                                    : Color(0xFFE5E6EA), // TODO: extract colors to theme
+                              ),
                               child: Text(
                                 snapshot.data?.docs[index]?.data()['content'] ?? '',
                                 style: TextStyle(
-                                    color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
-                                        ? Colors.white
-                                        : Colors.black),
+                                  color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             ),
                           );
@@ -79,7 +81,7 @@ class _SupportPageState extends State<SupportPage> {
               child: Container(
                 padding: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFC8C7CC)),
+                  border: Border.all(color: Theme.of(context).dividerColor),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: Row(
@@ -95,7 +97,7 @@ class _SupportPageState extends State<SupportPage> {
                     InkWell(
                       child: Container(
                         padding: const EdgeInsets.all(4.0),
-                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF8A8A8F)),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).dividerColor),
                         child: const Icon(Icons.send, size: 13, color: Colors.white),
                       ),
                       onTap: () async {

@@ -16,7 +16,7 @@ class ErrorRetry extends StatelessWidget {
         children: <Widget>[
           CustomDialog(
             icon: Icons.close,
-            color: Color(0xFFFF5B5E),
+            color: Theme.of(context).errorColor,
             text: text,
           ),
           OutlineButton(
@@ -28,9 +28,6 @@ class ErrorRetry extends StatelessWidget {
             borderSide: BorderSide(color: Theme.of(context).accentColor),
             textColor: Theme.of(context).accentColor,
             onPressed: onTap,
-//                () {
-//              historyNotifier.load();
-//            },
           ),
         ],
       ),

@@ -10,7 +10,7 @@ class RaisedGradientButton extends StatelessWidget {
   const RaisedGradientButton({
     Key key,
     @required this.child,
-    this.gradient = const LinearGradient(colors: [Color(0xFF00D8FF), Color(0xFF00B7FF)]),
+    this.gradient,
     this.width = double.infinity,
     this.height = 50.0,
     this.onPressed,
@@ -18,15 +18,20 @@ class RaisedGradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultGradient =
+        gradient ?? LinearGradient(colors: [Theme.of(context).accentColor, Theme.of(context).primaryColor]);
+
     return Container(
       width: width,
       height: 50.0,
       decoration: BoxDecoration(
-        gradient: onPressed != null ? gradient : LinearGradient(colors: [Colors.grey[400], Colors.grey]),
+        gradient: onPressed != null
+            ? defaultGradient
+            : LinearGradient(colors: [Colors.grey[400], Colors.grey]), // TODO: extraact colors to theme
         borderRadius: BorderRadius.circular(5.0),
         boxShadow: [
           BoxShadow(
-            color: onPressed != null ? Color(0xFF2F80ED) : Colors.grey[400],
+            color: onPressed != null ? Color(0xFF2F80ED) : Colors.grey[400], // TODO: extract color to theme
             offset: Offset(0.0, 3.0),
             blurRadius: 5.0,
           ),

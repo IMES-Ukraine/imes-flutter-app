@@ -76,7 +76,7 @@ class TestCard extends StatelessWidget {
               },
               child: Container(
                 width: double.infinity,
-                color: Colors.lightBlue,
+                color: Theme.of(context).accentColor,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(

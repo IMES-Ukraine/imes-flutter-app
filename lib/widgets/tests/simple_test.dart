@@ -45,7 +45,7 @@ class SimpleTest extends HookWidget {
             child: Text(test.question,
                 style: TextStyle(
                   fontSize: 12.0,
-                  color: Color(0xFFA1A1A1),
+                  color: Color(0xFFA1A1A1), // TODO: extract color to theme
                 )),
           ),
           Divider(indent: 8.0, endIndent: 8.0),
@@ -105,7 +105,7 @@ class SimpleTest extends HookWidget {
                                 return CustomAlertDialog(
                                   content: CustomDialog(
                                     icon: Icons.close,
-                                    color: Color(0xFFFF5B5E),
+                                    color: Theme.of(context).errorColor,
                                     text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                   ),
                                 );

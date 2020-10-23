@@ -102,7 +102,7 @@ class BlogViewPage extends HookWidget {
                                                 : '',
                                             textAlign: TextAlign.end,
                                             style: TextStyle(
-                                              color: Color(0xFF828282),
+                                              color: Color(0xFF828282), // TODO: extract colors to theme
                                               fontSize: 12.0,
                                             )),
                                       ),
@@ -248,7 +248,9 @@ class BlogViewPage extends HookWidget {
                                                 const SizedBox(width: 16.0),
                                                 Text(
                                                   'ПОПУЛЯРНОЕ',
-                                                  style: TextStyle(color: Color(0xFF828282), fontSize: 16.0),
+                                                  style: TextStyle(
+                                                      color: Color(0xFF828282),
+                                                      fontSize: 16.0), // TODO: extract colors to theme
                                                 ),
                                               ],
                                             ),
@@ -368,8 +370,10 @@ class BlogViewPage extends HookWidget {
                                       height: 8.0,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        border: Border.all(color: Color(0xFFE0E0E0)),
-                                        color: _indicatorState.value == index ? Color(0xFFA1A1A1) : Color(0xFFE0E0E0),
+                                        border: Border.all(color: Theme.of(context).dividerColor),
+                                        color: _indicatorState.value == index
+                                            ? Color(0xFFA1A1A1) // TODO: extract colors to theme
+                                            : Color(0xFFE0E0E0), // TODO: extract colors to theme
                                       ),
                                     ),
                                   ),

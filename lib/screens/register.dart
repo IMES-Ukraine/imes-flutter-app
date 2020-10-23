@@ -80,7 +80,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: RichText(
                                     text: TextSpan(
                                       text: 'Я згоден з ',
-                                      style: TextStyle(fontSize: 11.0, color: Color(0xFF828282)),
+                                      style: TextStyle(
+                                          fontSize: 11.0, color: Color(0xFF828282)), // TODO: extract colors to theme
                                       children: [
                                         TextSpan(
                                             text: 'Умовами',
@@ -113,7 +114,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: RichText(
                                     text: TextSpan(
                                       text: 'Я підтверджую, що я лікар ',
-                                      style: TextStyle(fontSize: 11.0, color: Color(0xFF828282)),
+                                      style: TextStyle(
+                                          fontSize: 11.0, color: Color(0xFF828282)), // TODO: extract colors to theme
                                     ),
                                   ),
                                 ),
@@ -128,7 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               'ПІДТВЕРДИТИ',
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
                             ),
-                            gradient: LinearGradient(colors: [Color(0xFF00D8FF), Color(0xFF00B7FF)]),
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
                               if (_formState.currentState.validate()) {
@@ -139,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         return CustomAlertDialog(
                                           content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Color(0xFFFF5B5E),
+                                              color: Theme.of(context).errorColor,
                                               text: 'Приймить умови користування'),
                                         );
                                       });
@@ -152,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         return CustomAlertDialog(
                                           content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Color(0xFFFF5B5E),
+                                              color: Theme.of(context).errorColor,
                                               text: 'Підтвердіть, що Ви лікар'),
                                         );
                                       });
@@ -175,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Color(0xFFFF5B5E),
+                                              color: Theme.of(context).errorColor,
                                               text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                             ),
                                           );
@@ -186,7 +187,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         builder: (context) {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
-                                                icon: Icons.close, color: Color(0xFFFF5B5E), text: error.toString()),
+                                                icon: Icons.close,
+                                                color: Theme.of(context).errorColor,
+                                                text: error.toString()),
                                           );
                                         });
                                   }

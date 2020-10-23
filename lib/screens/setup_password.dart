@@ -80,7 +80,6 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                           'Далі',
                           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
-                        gradient: LinearGradient(colors: [Color(0xFF00D8FF), Color(0xFF00B7FF)]),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
                           if (_formState.currentState.validate()) {
@@ -95,7 +94,7 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                                     return CustomAlertDialog(
                                       content: CustomDialog(
                                         icon: Icons.close,
-                                        color: Color(0xFFFF5B5E),
+                                        color: Theme.of(context).errorColor,
                                         text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                       ),
                                     );
