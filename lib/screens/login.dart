@@ -30,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final MaskTextInputFormatter _phoneFormatter =
+      MaskTextInputFormatter(mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
+
   final FocusNode _loginFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
@@ -62,19 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                           focusNode: _loginFocusNode,
                           controller: _loginController,
                           keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(hintText: '+380 (__) ___ __ __'),
+                          decoration: InputDecoration(hintText: '+38 (___) ___ __ __'),
                           textInputAction: TextInputAction.next,
-                          inputFormatters: [
-                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {'#': RegExp(r'[0-9]')})
-                          ],
-                          // validator: (value) {
-                          //   final emailRegex = RegExp(Utils.EMAIL_REGEXP);
-                          //   if (value.trim().isEmpty || !emailRegex.hasMatch(value)) {
-                          //     return 'Невірна електронна пошта';
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // },
+                          inputFormatters: [_phoneFormatter],
                           onFieldSubmitted: (value) {
                             FocusScope.of(context).requestFocus(_passwordFocusNode);
                           },
@@ -166,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                 } else {
                                   userNotifier
                                       .login(
-                                    _loginController.text,
+                                    _phoneFormatter.getUnmaskedText(),
                                     _passwordController.text,
                                   )
                                       .catchError((error) {

@@ -29,8 +29,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formState = GlobalKey();
   final TextEditingController _loginController = TextEditingController();
-
   final FocusNode _loginFocusNode = FocusNode();
+  final MaskTextInputFormatter _phoneFormatter =
+      MaskTextInputFormatter(mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
 
   @override
   Widget build(BuildContext context) {
@@ -61,22 +62,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           focusNode: _loginFocusNode,
                           controller: _loginController,
                           keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(hintText: '+380 (__) ___ __ __'),
+                          decoration: InputDecoration(hintText: '+38 (___) ___ __ __'),
                           textInputAction: TextInputAction.done,
-                          inputFormatters: [
-                            MaskTextInputFormatter(mask: '+380 (##) ### ## ##', filter: {'#': RegExp(r'[0-9]')})
-                          ],
-                          // validator: (value) {
-                          //   final emailRegex = RegExp(Utils.EMAIL_REGEXP);
-                          //   if (value.trim().isEmpty || !emailRegex.hasMatch(value)) {
-                          //     return 'Невірна електронна пошта';
-                          //   } else {
-                          //     return null;
-                          //   }
-                          // },
-                          // onFieldSubmitted: (value) {
-                          //   _loginFocusNode.unfocus();
-                          // },
+                          inputFormatters: [_phoneFormatter],
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -170,11 +158,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                       });
                                   return;
                                 }
-                                userNotifier.auth(_loginController.text).then((value) {
+                                userNotifier.auth(_phoneFormatter.getUnmaskedText()).then((value) {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                       builder: (context) => ConfirmCodePage(
-                                        phoneNumber: _loginController.text,
+                                        phoneNumber: _phoneFormatter.getUnmaskedText(),
                                       ),
                                     ),
                                   );
