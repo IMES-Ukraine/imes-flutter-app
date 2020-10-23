@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/blog.dart';
+import 'package:imes/models/blog.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 enum BlogsState {
   LOADED,
@@ -54,8 +54,8 @@ class BlogsNotifier with ChangeNotifier {
       }
     } catch (e) {
       _state = BlogsState.ERROR;
-      debugPrint(e);
       notifyListeners();
+      rethrow;
     }
   }
 

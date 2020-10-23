@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 

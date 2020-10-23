@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pharmatracker/models/pageable.dart';
-import 'package:pharmatracker/models/test.dart';
+import 'package:imes/models/pageable.dart';
+import 'package:imes/models/test.dart';
 
 part 'test_page.g.dart';
 

@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pharmatracker/models/cover_image.dart';
-import 'package:pharmatracker/models/featured_image.dart';
-import 'package:pharmatracker/models/test_options.dart';
-import 'package:pharmatracker/models/test_variants.dart';
+import 'package:imes/models/cover_image.dart';
+import 'package:imes/models/featured_image.dart';
+import 'package:imes/models/test_options.dart';
+import 'package:imes/models/test_variants.dart';
 
 part 'test.g.dart';
 
@@ -44,6 +44,14 @@ class Test {
     this.complex,
     this.question,
   });
+
+  bool get hasToLearn => options.indexWhere((element) => element.type == 'to_learn') != -1;
+  bool get hasDescription => options.indexWhere((element) => element.type == 'description') != -1;
+  bool get hasVideo => options.indexWhere((element) => element.type == 'video') != -1;
+
+  TestOptions get toLearn => options.singleWhere((element) => element.type == 'to_learn');
+  TestOptions get description => options.singleWhere((element) => element.type == 'description');
+  TestOptions get video => options.singleWhere((element) => element.type == 'video');
 
   factory Test.fromJson(Map<String, dynamic> json) => _$TestFromJson(json);
   Map<String, dynamic> toJson() => _$TestToJson(this);

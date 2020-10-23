@@ -1,54 +1,38 @@
 {
   "project_info": {
-    "project_number": "150670604014",
-    "firebase_url": "https://tlogic-aed50.firebaseio.com",
-    "project_id": "tlogic-aed50",
-    "storage_bucket": "tlogic-aed50.appspot.com"
+    "project_number": "811852451922",
+    "firebase_url": "https://imes-v1.firebaseio.com",
+    "project_id": "imes-v1",
+    "storage_bucket": "imes-v1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:150670604014:android:dcf0c585896c6f10",
+        "mobilesdk_app_id": "1:811852451922:android:b5ec7211e244be9c484f8b",
         "android_client_info": {
-          "package_name": "ua.com.pharmatracker.pharmatracker"
+          "package_name": "pro.imes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "150670604014-0nggfvv0n23ke5gov4qv8cgri4qff28e.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ua.com.pharmatracker.pharmatracker",
-            "certificate_hash": "947cdac8fdb03ab6975b7732bbb4b5c1c69f84d1"
-          }
-        },
-        {
-          "client_id": "150670604014-61qdtbnv9phvf3igg31fif2pqhtjbtdh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ua.com.pharmatracker.pharmatracker",
-            "certificate_hash": "17e7b32824a4f1d382c3a4741cf29310f8cdf57b"
-          }
-        },
-        {
-          "client_id": "150670604014-prh1tbbcnakngjb9lnb8buia77djv4tl.apps.googleusercontent.com",
+          "client_id": "811852451922-qm9jh30ufinoll5fbmq3ofhjv50cjvur.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA3ZRJdaLzp7JA7zYyhZor9RqoS_qc7yLo"
+          "current_key": "AIzaSyC36vXNG2CflqASKk-2d31WK0rbZI8qX_8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "150670604014-prh1tbbcnakngjb9lnb8buia77djv4tl.apps.googleusercontent.com",
+              "client_id": "811852451922-qm9jh30ufinoll5fbmq3ofhjv50cjvur.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "150670604014-fhmn8nhhlqh37kjgorkverk6u78k3rlc.apps.googleusercontent.com",
+              "client_id": "811852451922-jme3oqvq5avvekbm87ipqjgcgnh2vsoj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.ua.pharmatracker.pharmatracker"

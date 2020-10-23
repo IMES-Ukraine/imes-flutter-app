@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/blocs/reports_notifier.dart';
+import 'package:imes/blocs/reports_notifier.dart';
+import 'package:imes/resources/resources.dart';
 
-import 'package:pharmatracker/widgets/custom_dialog.dart';
-import 'package:pharmatracker/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/custom_dialog.dart';
+import 'package:imes/widgets/custom_alert_dialog.dart';
 
 import 'package:image_picker/image_picker.dart';
 
@@ -31,7 +32,7 @@ class ReportsPage extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Image.asset('assets/camera.png'),
+                              Image.asset(Images.camera),
                               Text(
                                 'Додати чек',
                                 style: TextStyle(
@@ -101,7 +102,7 @@ class ReportsPage extends StatelessWidget {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset('assets/weight_icon.png'),
+                                    child: Image.asset(Images.weightIcon),
                                   ),
                                   Expanded(child: Text('Вибрати дозування')),
                                   Padding(
@@ -138,7 +139,7 @@ class ReportsPage extends StatelessWidget {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset('assets/clock.png'),
+                                  child: Image.asset(Images.clock),
                                 ),
                                 Expanded(child: Text('Час')),
                                 FlatButton(
@@ -160,7 +161,7 @@ class ReportsPage extends StatelessWidget {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset('assets/bottle.png'),
+                                    child: Image.asset(Images.bottle),
                                   ),
                                   Expanded(child: Text('Кількість')),
                                   Row(

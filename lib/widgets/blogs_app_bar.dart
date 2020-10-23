@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/blocs/blogs_notifier.dart';
+import 'package:imes/blocs/blogs_notifier.dart';
 
-import 'package:pharmatracker/widgets/notifications_button.dart';
+import 'package:imes/widgets/notifications_button.dart';
 
 import 'package:provider/provider.dart';
 
@@ -31,7 +31,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ? Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
                       : Theme.of(context).textTheme.body1.copyWith(fontSize: 17.0),
                   child: Text(
-                    'Новини',
+                    'Новини'.toUpperCase(),
                   ),
                 ),
               ),
@@ -48,7 +48,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ? Theme.of(context).textTheme.body1.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
                       : Theme.of(context).textTheme.body1.copyWith(fontSize: 17.0),
                   child: Text(
-                    'Інформація',
+                    'Інформація'.toUpperCase(),
                   ),
                 ),
               ),

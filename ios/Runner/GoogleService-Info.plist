@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>150670604014-fhmn8nhhlqh37kjgorkverk6u78k3rlc.apps.googleusercontent.com</string>
+	<string>811852451922-f79e91jacdqi50oso9tuhbqrgrijlglc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.150670604014-fhmn8nhhlqh37kjgorkverk6u78k3rlc</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>150670604014-61qdtbnv9phvf3igg31fif2pqhtjbtdh.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.811852451922-f79e91jacdqi50oso9tuhbqrgrijlglc</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAQutXUKdHi5T6R2-DDapVFI4KxkaRK84A</string>
+	<string>AIzaSyB2bgjAnVw0Ydh-HQW5QZDjespk6kpdN5s</string>
 	<key>GCM_SENDER_ID</key>
-	<string>150670604014</string>
+	<string>811852451922</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ua.pharmatracker.pharmatracker</string>
+	<string>pro.imes</string>
 	<key>PROJECT_ID</key>
-	<string>tlogic-aed50</string>
+	<string>imes-v1</string>
 	<key>STORAGE_BUCKET</key>
-	<string>tlogic-aed50.appspot.com</string>
+	<string>imes-v1.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:150670604014:ios:a75e8af59fde7cc1c8a5ff</string>
+	<string>1:811852451922:ios:3e909d1b25d2ec07484f8b</string>
 	<key>DATABASE_URL</key>
-	<string>https://tlogic-aed50.firebaseio.com</string>
+	<string>https://imes-v1.firebaseio.com</string>
 </dict>
 </plist>

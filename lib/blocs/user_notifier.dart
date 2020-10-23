@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/user.dart';
+import 'package:imes/models/user.dart' as local;
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,17 +18,17 @@ enum AuthState {
 
 class UserNotifier with ChangeNotifier {
   AuthState _state = AuthState.NOT_AUTHENTICATED;
-  User _user;
+  local.User _user;
 
   int _notifications = 0;
 
-  UserNotifier({AuthState state, User user})
+  UserNotifier({AuthState state, local.User user})
       : _user = user,
         _state = state;
 
   AuthState get state => _state;
 
-  User get user => _user;
+  local.User get user => _user;
 
   int get notificationsCount => _notifications;
 
@@ -45,7 +45,7 @@ class UserNotifier with ChangeNotifier {
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
 
       final FirebaseAuth auth = FirebaseAuth.instance;
-      final authResult = await auth.signInWithCustomToken(token: response.body.user.firebaseToken);
+      final authResult = await auth.signInWithCustomToken(response.body.user.firebaseToken);
       final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
       final String token = await _firebaseMessaging.getToken();
       final result = await Repository().api.submitToken(token: token);
@@ -77,27 +77,34 @@ class UserNotifier with ChangeNotifier {
 
     final response = await Repository().auth.verify(phone: phone, code: code, deviceId: '123', deviceName: 'name');
     if (response.statusCode == 200) {
-      _user = response.body.user;
-      _state = AuthState.AUTHENTICATED;
-
       final storage = FlutterSecureStorage();
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
 
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      // final authResult = await auth.signInWithCustomToken(token: response.body.user.firebaseToken);
-      final authResult = await auth.signInWithCustomToken(token: response.body.token);
-      final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-      final String token = await _firebaseMessaging.getToken();
-      final result = await Repository().api.submitToken(token: token);
-      _firebaseMessaging.onTokenRefresh.listen((newToken) {
-        Repository().api.submitToken(token: newToken);
-      });
+      final profileResponse = await Repository().api.profile();
+      if (profileResponse.statusCode == 200) {
+        _user = profileResponse.body.data.user;
+        _state = AuthState.AUTHENTICATED;
 
-      notifyListeners();
+        final FirebaseAuth auth = FirebaseAuth.instance;
+        // final authResult = await auth.signInWithCustomToken(token: response.body.user.firebaseToken);
+        final authResult = await auth.signInWithCustomToken(profileResponse.body.data.user.firebaseToken);
+        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+        final String token = await _firebaseMessaging.getToken();
+        final result = await Repository().api.submitToken(token: token);
+        _firebaseMessaging.onTokenRefresh.listen((newToken) {
+          Repository().api.submitToken(token: newToken);
+        });
+
+        notifyListeners();
+      }
     }
   }
 
-  void updateUser(User user) {
+  Future<void> setupPwd(String pwd) async {
+    final response = await Repository().api.submitPassword(pwd);
+  }
+
+  void updateUser(local.User user) {
     _user = user;
     notifyListeners();
   }

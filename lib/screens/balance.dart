@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pharmatracker/helpers/utils.dart';
+import 'package:imes/helpers/utils.dart';
+import 'package:imes/resources/resources.dart';
 
-import 'package:pharmatracker/widgets/custom_dialog.dart';
-import 'package:pharmatracker/widgets/custom_alert_dialog.dart';
-import 'package:pharmatracker/widgets/notifications_button.dart';
+import 'package:imes/widgets/custom_dialog.dart';
+import 'package:imes/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/notifications_button.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
-import 'package:pharmatracker/blocs/balance_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/blocs/balance_notifier.dart';
 
 import 'package:provider/provider.dart';
 
@@ -301,7 +302,7 @@ class _BalancePageState extends State<BalancePage> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(left: 32.0, bottom: 8.0, top: 8.0),
-                                child: Image.asset('assets/history.png'),
+                                child: Image.asset(Images.history),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0, bottom: 8.0, top: 8.0),

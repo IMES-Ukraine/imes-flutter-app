@@ -1,16 +1,17 @@
 import "dart:async";
 import 'package:chopper/chopper.dart';
 
-import 'package:pharmatracker/models/basic_response.dart';
-import 'package:pharmatracker/models/login_response.dart';
-import 'package:pharmatracker/models/blogs_response.dart';
-import 'package:pharmatracker/models/blog_response.dart';
-import 'package:pharmatracker/models/analytics_response.dart';
-import 'package:pharmatracker/models/notifications_response.dart';
-import 'package:pharmatracker/models/profile_response.dart';
-import 'package:pharmatracker/models/test_answer_data.dart';
-import 'package:pharmatracker/models/tests_response.dart';
-import 'package:pharmatracker/models/withdraw_history_response.dart';
+import 'package:imes/models/basic_response.dart';
+import 'package:imes/models/login_response.dart';
+import 'package:imes/models/blogs_response.dart';
+import 'package:imes/models/blog_response.dart';
+import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/notifications_response.dart';
+import 'package:imes/models/profile_response.dart';
+import 'package:imes/models/test_answer_data.dart';
+import 'package:imes/models/test_response.dart';
+import 'package:imes/models/tests_response.dart';
+import 'package:imes/models/withdraw_history_response.dart';
 
 part 'api.chopper.dart';
 
@@ -29,6 +30,12 @@ abstract class RestClient extends ChopperService {
 
   @Get(path: '/api/v1/profile')
   Future<Response<ProfileResponse>> profile();
+
+  @multipart
+  @Post(path: '/api/v1/profile/password')
+  Future<Response<ProfileResponse>> submitPassword(
+    @Field('password') String password,
+  );
 
   @Get(path: '/api/v1/blog')
   Future<Response<BlogsResponse>> blogs({
@@ -91,6 +98,9 @@ abstract class RestClient extends ChopperService {
     @Query('count') int count = 10,
     @Query('type') int type = 1,
   });
+
+  @Get(path: '/api/v1/tests/{id}')
+  Future<Response<TestResponse>> test(@Path('id') num id);
 
   @Post(path: '/api/v1/tests/submit')
   Future<Response> submitTests(@Body() TestAnswerData data);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/widgets/notifications_button.dart';
+import 'package:imes/widgets/notifications_button.dart';
 
 class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override

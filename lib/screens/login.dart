@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:pharmatracker/screens/register.dart';
+import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/register.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:pharmatracker/widgets/custom_dialog.dart';
-import 'package:pharmatracker/widgets/custom_alert_dialog.dart';
+import 'package:imes/widgets/custom_dialog.dart';
+import 'package:imes/widgets/custom_alert_dialog.dart';
 
-import 'package:pharmatracker/widgets/custom_checkbox.dart';
-import 'package:pharmatracker/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/custom_checkbox.dart';
+import 'package:imes/widgets/raised_gradient_button.dart';
 
-import 'package:pharmatracker/blocs/login_notifier.dart';
-import 'package:pharmatracker/blocs/user_notifier.dart';
+import 'package:imes/blocs/login_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
 
-import 'package:pharmatracker/helpers/utils.dart';
+import 'package:imes/helpers/utils.dart';
 
 import 'package:chopper/chopper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Image.asset('assets/login_logo.png'),
+                          child: Image.asset(Images.loginLogo),
                         ),
                         const SizedBox(height: 16.0),
                         Text('Введіть номер', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
@@ -206,7 +207,8 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage()));
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage()));
                                   },
                                   child:
                                       Text('Зарегистрировать', style: TextStyle(color: Theme.of(context).accentColor))),

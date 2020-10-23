@@ -1,6 +1,6 @@
 import "dart:async";
 import 'package:chopper/chopper.dart';
-import 'package:pharmatracker/models/login_response.dart';
+import 'package:imes/models/login_response.dart';
 
 part 'auth.chopper.dart';
 

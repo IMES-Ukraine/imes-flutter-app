@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pharmatracker/models/test_answer.dart';
+import 'package:imes/models/test_answer.dart';
 
 part 'test_answer_data.g.dart';
 

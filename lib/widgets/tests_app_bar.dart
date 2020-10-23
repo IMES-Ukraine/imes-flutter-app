@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/blocs/tests.dart';
+import 'package:imes/blocs/tests.dart';
 
-import 'package:pharmatracker/widgets/notifications_button.dart';
+import 'package:imes/widgets/notifications_button.dart';
 
 import 'package:provider/provider.dart';
 

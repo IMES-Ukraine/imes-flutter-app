@@ -27,6 +27,13 @@ class _$RestClient extends RestClient {
     return client.send<ProfileResponse, ProfileResponse>($request);
   }
 
+  Future<Response<ProfileResponse>> submitPassword(String password) {
+    final $url = 'https://echo.myftp.org/api/v1/profile/password';
+    final $body = {'password': password};
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<ProfileResponse, ProfileResponse>($request);
+  }
+
   Future<Response<BlogsResponse>> blogs(
       {int page = 0, int count = 10, int type = 1}) {
     final $url = 'https://echo.myftp.org/api/v1/blog';
@@ -124,6 +131,12 @@ class _$RestClient extends RestClient {
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<TestsResponse, TestsResponse>($request);
+  }
+
+  Future<Response<TestResponse>> test(num id) {
+    final $url = 'https://echo.myftp.org/api/v1/tests/${id}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<TestResponse, TestResponse>($request);
   }
 
   Future<Response> submitTests(TestAnswerData data) {

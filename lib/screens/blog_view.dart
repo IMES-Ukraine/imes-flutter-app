@@ -5,10 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 
-import 'package:pharmatracker/blocs/blog_notifier.dart';
+import 'package:imes/blocs/blog_notifier.dart';
+import 'package:imes/resources/resources.dart';
 
-import 'package:pharmatracker/widgets/error_retry.dart';
-import 'package:pharmatracker/widgets/raised_gradient_button.dart';
+import 'package:imes/widgets/error_retry.dart';
+import 'package:imes/widgets/raised_gradient_button.dart';
 
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -39,11 +40,7 @@ class BlogViewPage extends HookWidget {
     }, [_indicatorState]);
 
     return ChangeNotifierProvider(
-      create: (_) {
-        final blogNotifier = BlogNotifier();
-        blogNotifier.load(_id);
-        return blogNotifier;
-      },
+      create: (_) => BlogNotifier()..load(_id),
       child: Consumer<BlogNotifier>(builder: (context, blogNotifier, _) {
         return Scaffold(
             appBar: AppBar(
@@ -208,23 +205,23 @@ class BlogViewPage extends HookWidget {
                                     const SizedBox(width: 16.0),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset('assets/facebook.png'),
+                                      child: Image.asset(Images.facebook),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset('assets/telegram.png'),
+                                      child: Image.asset(Images.telegram),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset('assets/whatsup.png'),
+                                      child: Image.asset(Images.whatsup),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset('assets/messenger.png'),
+                                      child: Image.asset(Images.messenger),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset('assets/viber.png'),
+                                      child: Image.asset(Images.viber),
                                     ),
                                   ],
                                 ),
@@ -249,7 +246,7 @@ class BlogViewPage extends HookWidget {
                                             padding: const EdgeInsets.only(left: 16.0),
                                             child: Row(
                                               children: [
-                                                Image.asset('assets/union.png'),
+                                                Image.asset(Images.union),
                                                 const SizedBox(width: 16.0),
                                                 Text(
                                                   'ПОПУЛЯРНОЕ',
@@ -348,13 +345,13 @@ class BlogViewPage extends HookWidget {
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  if (item.post.featuredImages != null)
+                                                  if (item.post.coverImage != null)
                                                     OctoImage.fromSet(
+                                                      height: 100,
                                                       octoSet: OctoSet.blurHash(
                                                         'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
                                                       ),
-                                                      image: CachedNetworkImageProvider(
-                                                          item.post.featuredImages.first.path),
+                                                      image: CachedNetworkImageProvider(item.post.coverImage.path),
                                                     ),
                                                   Padding(
                                                     padding: const EdgeInsets.all(8.0),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/widgets/error_retry.dart';
+import 'package:imes/widgets/error_retry.dart';
 
-import 'package:pharmatracker/blocs/history_notifier.dart';
+import 'package:imes/blocs/history_notifier.dart';
 
-import 'package:pharmatracker/widgets/history_tile.dart';
+import 'package:imes/widgets/history_tile.dart';
 
 import 'package:provider/provider.dart';
 

@@ -1,9 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmatracker/screens/login.dart';
-import 'package:pharmatracker/screens/home.dart';
+import 'package:imes/screens/login.dart';
+import 'package:imes/screens/home.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
-import 'package:pharmatracker/helpers/timeago_ua_messages.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/timeago_ua_messages.dart';
 
 import 'package:provider/provider.dart';
 
@@ -12,16 +13,20 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'package:pharmatracker/models/user.dart';
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/models/user.dart' as local;
+import 'package:imes/resources/repository.dart';
 
 import 'package:flutter_stetho/flutter_stetho.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:pedantic/pedantic.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   timeago.setLocaleMessages('ua', UaMessages());
 
@@ -39,20 +44,21 @@ void main() async {
 //  final FirebaseStorage storage = FirebaseStorage(
 //      app: app, storageBucket: 'gs://tlogic-aed50.appspot.com/');
 
-  Stetho.initialize();
+  unawaited(Stetho.initialize());
+
   final storage = FlutterSecureStorage();
   final token = await storage.read(key: '__AUTH_TOKEN_');
 
-  User user;
+  local.User user;
   if (token != null) {
     try {
       final response = await Repository().api.profile();
       if (response.statusCode == 200) {
         user = response.body.data.user;
-        final FirebaseAuth auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(token: response.body.data.user.firebaseToken);
-        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-        final String token = await _firebaseMessaging.getToken();
+        final auth = FirebaseAuth.instance;
+        final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
+        final _firebaseMessaging = FirebaseMessaging();
+        final token = await _firebaseMessaging.getToken();
         final result = await Repository().api.submitToken(token: token);
         _firebaseMessaging.onTokenRefresh.listen((newToken) {
           Repository().api.submitToken(token: newToken);

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pharmatracker/blocs/home_notifier.dart';
+import 'package:imes/blocs/home_notifier.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
-import 'package:pharmatracker/blocs/notifications_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/blocs/notifications_notifier.dart';
+import 'package:imes/resources/resources.dart';
 
-import 'package:pharmatracker/widgets/error_retry.dart';
+import 'package:imes/widgets/error_retry.dart';
 
-import 'package:pharmatracker/screens/support.dart';
-import 'package:pharmatracker/screens/blog_view.dart';
+import 'package:imes/screens/support.dart';
+import 'package:imes/screens/blog_view.dart';
 
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -174,15 +175,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 24),
         ));
       case 'WITHDRAW':
-        return Image.asset('assets/reply.png');
+        return Image.asset(Images.reply);
       case 'MESSAGE':
-        return Image.asset('assets/settings.png');
+        return Image.asset(Images.settings);
       case 'SUPPORT':
-        return Image.asset('assets/headphones.png');
+        return Image.asset(Images.headphones);
       case 'DEFAULT':
-        return Image.asset('assets/hamburger.png');
+        return Image.asset(Images.hamburger);
       default:
-        return Image.asset('assets/hamburger.png');
+        return Image.asset(Images.hamburger);
     }
   }
 }

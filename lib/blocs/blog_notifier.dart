@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/blog.dart';
+import 'package:imes/models/blog.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 

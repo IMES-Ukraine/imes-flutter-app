@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:bubble/bubble.dart';
 
@@ -25,9 +25,9 @@ class _SupportPageState extends State<SupportPage> {
           children: <Widget>[
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance
+                  stream: FirebaseFirestore.instance
                       .collection('sessions')
-                      .document('${userNotifier.user.username}')
+                      .doc('${userNotifier.user.username}')
                       .collection('messages')
                       .orderBy('time', descending: true)
                       .snapshots(),
@@ -35,7 +35,7 @@ class _SupportPageState extends State<SupportPage> {
                     return ListView.builder(
                         reverse: true,
                         controller: _scrollController,
-                        itemCount: snapshot.data?.documents?.length ?? 1,
+                        itemCount: snapshot.data?.docs?.length ?? 1,
                         itemBuilder: (context, index) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Center(
@@ -53,19 +53,19 @@ class _SupportPageState extends State<SupportPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Bubble(
                               style: BubbleStyle(
-                                  nip: snapshot.data?.documents[index]?.data['fromUser'] ?? false
+                                  nip: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
                                       ? BubbleNip.rightTop
                                       : BubbleNip.leftTop,
-                                  alignment: snapshot.data?.documents[index]?.data['fromUser'] ?? false
+                                  alignment: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
                                       ? Alignment.topRight
                                       : Alignment.topLeft,
-                                  color: snapshot.data?.documents[index]?.data['fromUser'] ?? false
+                                  color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
                                       ? Color(0xFF10DE50)
                                       : Color(0xFFE5E6EA)),
                               child: Text(
-                                snapshot.data?.documents[index]?.data['content'] ?? '',
+                                snapshot.data?.docs[index]?.data()['content'] ?? '',
                                 style: TextStyle(
-                                    color: snapshot.data?.documents[index]?.data['fromUser'] ?? false
+                                    color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
                                         ? Colors.white
                                         : Colors.black),
                               ),
@@ -99,34 +99,28 @@ class _SupportPageState extends State<SupportPage> {
                         child: const Icon(Icons.send, size: 13, color: Colors.white),
                       ),
                       onTap: () async {
-                        if(_textEditingController.text.trim().isNotEmpty) {
+                        if (_textEditingController.text.trim().isNotEmpty) {
                           final sessionDocumentRef =
-                          Firestore.instance.collection('sessions').document('${userNotifier.user.username}');
+                              FirebaseFirestore.instance.collection('sessions').doc('${userNotifier.user.username}');
                           final docSnapshot = await sessionDocumentRef.get();
                           if (!docSnapshot.exists) {
-                            await sessionDocumentRef.setData({'unreadCount': 1});
+                            await sessionDocumentRef.set({'unreadCount': 1});
                           } else {
-                            var unreadCount = docSnapshot.data['unreadCount'];
+                            var unreadCount = docSnapshot.data()['unreadCount'];
                             unreadCount++;
-                            sessionDocumentRef.updateData({'unreadCount': unreadCount});
+                            sessionDocumentRef.update({'unreadCount': unreadCount});
                           }
 
                           final documentRef = sessionDocumentRef
                               .collection('messages')
-                              .document(DateTime
-                              .now()
-                              .millisecondsSinceEpoch
-                              .toString());
+                              .document(DateTime.now().millisecondsSinceEpoch.toString());
 
-                          final result = await Firestore.instance.runTransaction((tx) async {
+                          final result = await FirebaseFirestore.instance.runTransaction((tx) async {
                             await tx.set(documentRef, {
                               'content': _textEditingController.text,
                               'fromUser': true,
                               'isRead': false,
-                              'time': DateTime
-                                  .now()
-                                  .millisecondsSinceEpoch
-                                  .toString(),
+                              'time': DateTime.now().millisecondsSinceEpoch.toString(),
                             });
                           });
 

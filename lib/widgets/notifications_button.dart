@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/screens/notifications.dart';
-import 'package:pharmatracker/blocs/user_notifier.dart';
+import 'package:imes/screens/notifications.dart';
+import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:provider/provider.dart';
 

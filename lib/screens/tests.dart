@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pharmatracker/blocs/tests.dart';
-import 'package:pharmatracker/widgets/error_retry.dart';
-import 'package:pharmatracker/widgets/test_list_tile.dart';
-import 'package:pharmatracker/widgets/tests_app_bar.dart';
+import 'package:imes/blocs/tests.dart';
+import 'package:imes/widgets/error_retry.dart';
+import 'package:imes/widgets/test_list_tile.dart';
+import 'package:imes/widgets/tests_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class TestsPage extends StatelessWidget {
@@ -61,7 +61,7 @@ class TestsPage extends StatelessWidget {
                           bonus: testsNotifier.tests[index]?.bonus ?? 0,
                           image: testsNotifier.tests[index].coverImage?.path ?? '',
                           onTap: () {
-                            Navigator.of(context).pushNamed('/tests/view', arguments: testsNotifier.tests[index]);
+                            Navigator.of(context).pushNamed('/tests/view', arguments: testsNotifier.tests[index].id);
                           },
                         );
                       },

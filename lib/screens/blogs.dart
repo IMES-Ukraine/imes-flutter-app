@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:pharmatracker/blocs/blogs_notifier.dart';
+import 'package:imes/blocs/blogs_notifier.dart';
 
-import 'package:pharmatracker/widgets/error_retry.dart';
-import 'package:pharmatracker/widgets/blog_tile.dart';
-import 'package:pharmatracker/widgets/blogs_app_bar.dart';
+import 'package:imes/widgets/error_retry.dart';
+import 'package:imes/widgets/blog_tile.dart';
+import 'package:imes/widgets/blogs_app_bar.dart';
 
 import 'package:provider/provider.dart';
 
@@ -62,9 +62,10 @@ class BlogsPage extends StatelessWidget {
                         title: blogsNotifier.blogs[index]?.title ?? '',
                         points: blogsNotifier.blogs[index]?.learningBonus ?? 0,
                         // text: blogsNotifier.blogs[index]?.content ?? '',
-                        image: blogsNotifier.blogs[index]?.coverImages?.isNotEmpty ?? false
-                            ? blogsNotifier.blogs[index].coverImages.first.path
-                            : '',
+                        image: blogsNotifier.blogs[index]?.coverImage?.path ?? '',
+                        // image: blogsNotifier.blogs[index]?.coverImages?.isNotEmpty ?? false
+                        //     ? blogsNotifier.blogs[index].coverImages.first.path
+                        //     : '',
                         onTap: () {
                           Navigator.of(context).pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
                         },

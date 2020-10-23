@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imes/resources/resources.dart';
 
 class BonusButton extends StatelessWidget {
   final int points;
@@ -25,11 +26,15 @@ class BonusButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Image.asset('assets/blog_heart.png'),
+              Image.asset(Images.blogHeart),
               const SizedBox(width: 8.0),
               Text(
                 '$points',
-                style: TextStyle(fontWeight: FontWeight.bold, color: themeData.primaryColor, fontSize: 20.0),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: themeData.primaryColor,
+                  fontSize: 20.0,
+                ),
               ),
             ],
           ),

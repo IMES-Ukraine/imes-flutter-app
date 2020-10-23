@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:imes/resources/resources.dart';
 
-import 'package:pharmatracker/widgets/menu_item.dart';
-import 'package:pharmatracker/widgets/menu_app_bar.dart';
+import 'package:imes/widgets/menu_item.dart';
+import 'package:imes/widgets/menu_app_bar.dart';
 
-import 'package:pharmatracker/screens/support.dart';
+import 'package:imes/screens/support.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +25,7 @@ class MenuPage extends StatelessWidget {
             children: <Widget>[
               MenuItem(
                 icon: Image.asset(
-                  'assets/headphones.png',
+                  Images.headphones,
                   color: Colors.white,
                 ),
                 text: 'Підтримка',
@@ -36,19 +37,19 @@ class MenuPage extends StatelessWidget {
               ),
               MenuItem(
                 icon: Image.asset(
-                  'assets/info.png',
+                  Images.info,
                   color: Colors.white,
                 ),
                 text: 'Інструкція',
                 onTap: () async {
                   if (await canLaunch('https://pharmatracker.com.ua/PharmaTracker.pdf')) {
-                  launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
+                    launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
                   }
                 },
               ),
               MenuItem(
                 icon: Image.asset(
-                  'assets/rules.png',
+                  Images.rules,
                   color: Colors.white,
                 ),
                 text: 'Правила користування',

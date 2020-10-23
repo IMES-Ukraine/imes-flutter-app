@@ -2,21 +2,22 @@ import 'dart:io';
 
 import 'package:chopper/chopper.dart';
 import 'package:http/io_client.dart';
-import 'package:pharmatracker/models/tests_response.dart';
-import 'package:pharmatracker/resources/api.dart';
+import 'package:imes/models/test_response.dart';
+import 'package:imes/models/tests_response.dart';
+import 'package:imes/resources/api.dart';
 
-import 'package:pharmatracker/models/basic_response.dart';
-import 'package:pharmatracker/models/login_response.dart';
-import 'package:pharmatracker/models/blogs_response.dart';
-import 'package:pharmatracker/models/blog_response.dart';
-import 'package:pharmatracker/models/profile_response.dart';
-import 'package:pharmatracker/models/analytics_response.dart';
-import 'package:pharmatracker/models/notifications_response.dart';
-import 'package:pharmatracker/models/withdraw_history_response.dart';
-import 'package:pharmatracker/models/error_response.dart';
+import 'package:imes/models/basic_response.dart';
+import 'package:imes/models/login_response.dart';
+import 'package:imes/models/blogs_response.dart';
+import 'package:imes/models/blog_response.dart';
+import 'package:imes/models/profile_response.dart';
+import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/notifications_response.dart';
+import 'package:imes/models/withdraw_history_response.dart';
+import 'package:imes/models/error_response.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pharmatracker/resources/auth.dart';
+import 'package:imes/resources/auth.dart';
 
 class Repository {
   static final Repository _instance = Repository._internal();
@@ -42,6 +43,7 @@ class Repository {
       AnalyticsResponse: AnalyticsResponse.fromJsonFactory,
       WithdrawHistoryResponse: WithdrawHistoryResponse.fromJsonFactory,
       TestsResponse: TestsResponse.fromJsonFactory,
+      TestResponse: TestResponse.fromJsonFactory,
     });
     final httpClient = HttpClient();
     httpClient.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);

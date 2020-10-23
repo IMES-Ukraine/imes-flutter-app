@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/analytics.dart';
+import 'package:imes/models/analytics.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 enum AnalyticsState {
   LOADED,

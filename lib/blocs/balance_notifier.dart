@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/user.dart';
+import 'package:imes/models/user.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 enum BalanceState {
   WITHDRAW,

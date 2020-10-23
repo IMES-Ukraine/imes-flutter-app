@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pharmatracker/models/test.dart';
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/models/test.dart';
+import 'package:imes/resources/repository.dart';
 
 enum TestsPage {
   NEWS,

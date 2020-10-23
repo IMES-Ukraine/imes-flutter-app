@@ -1,23 +1,23 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:pharmatracker/helpers/bottom_icons.dart';
-import 'package:pharmatracker/screens/blogs.dart';
-import 'package:pharmatracker/screens/analytics.dart';
-import 'package:pharmatracker/screens/report.dart';
-import 'package:pharmatracker/screens/balance.dart';
-import 'package:pharmatracker/screens/menu.dart';
-import 'package:pharmatracker/screens/blog_view.dart';
-import 'package:pharmatracker/screens/balance_history.dart';
-import 'package:pharmatracker/screens/support.dart';
-import 'package:pharmatracker/screens/test_view.dart';
-import 'package:pharmatracker/screens/tests.dart';
+import 'package:imes/helpers/bottom_icons.dart';
+import 'package:imes/screens/blogs.dart';
+import 'package:imes/screens/analytics.dart';
+import 'package:imes/screens/report.dart';
+import 'package:imes/screens/balance.dart';
+import 'package:imes/screens/menu.dart';
+import 'package:imes/screens/blog_view.dart';
+import 'package:imes/screens/balance_history.dart';
+import 'package:imes/screens/support.dart';
+import 'package:imes/screens/test_view.dart';
+import 'package:imes/screens/tests.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:pharmatracker/blocs/user_notifier.dart';
-import 'package:pharmatracker/blocs/home_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/blocs/home_notifier.dart';
 
-import 'package:pharmatracker/helpers/size_config.dart';
+import 'package:imes/helpers/size_config.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -174,7 +174,8 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                ReportsPage(),
+                // ReportsPage(),
+                SupportPage(),
                 Navigator(
                   key: _balanceNavigatorKey,
                   initialRoute: '/',
@@ -225,36 +226,11 @@ class _HomePageState extends State<HomePage> {
                 currentIndex: homeNotifier.currentPage,
                 onTap: homeNotifier.changePage,
                 items: [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      title: Text(
-                        'Головна',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                  BottomNavigationBarItem(
-                      icon: Icon(MyFlutterApp.test), //Image.asset('assets/tests.png'),
-                      title: Text(
-                        'Дослідження',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                  BottomNavigationBarItem(
-                      icon: Icon(MyFlutterApp.chat), //Image.asset('assets/chat.png'),
-                      title: Text(
-                        'Чат',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                  BottomNavigationBarItem(
-                      icon: Icon(MyFlutterApp.clients), //Image.asset('assets/clients.png'),
-                      title: Text(
-                        'Пацієнти',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                  BottomNavigationBarItem(
-                      icon: Icon(MyFlutterApp.menu), //Image.asset('assets/menu.png'),
-                      title: Text(
-                        'Меню',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
+                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Головна'),
+                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.test), label: 'Дослідження'),
+                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.chat), label: 'Чат'),
+                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.clients), label: 'Пацієнти'),
+                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.menu), label: 'Меню'),
                 ]),
           ),
         );

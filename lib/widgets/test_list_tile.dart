@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:pharmatracker/widgets/bonus_button.dart';
+import 'package:imes/widgets/bars_card.dart';
+import 'package:imes/widgets/bonus_button.dart';
 
 class TestListTile extends StatelessWidget {
   final bool isFavourite;
@@ -54,14 +55,16 @@ class TestListTile extends StatelessWidget {
                       ),
                     ),
                     Divider(color: Colors.white, thickness: 2.0, height: 2.0, indent: 16.0, endIndent: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: BonusButton(points: bonus),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          BarsCard(),
+                          const SizedBox(width: 24.0),
+                          BonusButton(points: bonus),
+                        ],
+                      ),
                     ),
                   ],
                 ),

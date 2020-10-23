@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:pharmatracker/models/withdraw_history.dart';
+import 'package:imes/models/withdraw_history.dart';
 
-import 'package:pharmatracker/resources/repository.dart';
+import 'package:imes/resources/repository.dart';
 
 enum HistoryState {
   LOADED,
