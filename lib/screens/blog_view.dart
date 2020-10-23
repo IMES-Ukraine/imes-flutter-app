@@ -194,35 +194,37 @@ class BlogViewPage extends HookWidget {
                             Padding(
                               padding: const EdgeInsets.all(32.0),
                               child: Center(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'ПОДЕЛИТЬСЯ',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
-                                    ),
-                                    const SizedBox(width: 16.0),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset(Images.facebook),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset(Images.telegram),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset(Images.whatsup),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset(Images.messenger),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image.asset(Images.viber),
-                                    ),
-                                  ],
+                                child: FittedBox(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'ПОДЕЛИТЬСЯ',
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                                      ),
+                                      const SizedBox(width: 16.0),
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.asset(Images.facebook),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.asset(Images.telegram),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.asset(Images.whatsup),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.asset(Images.messenger),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.asset(Images.viber),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -233,9 +235,6 @@ class BlogViewPage extends HookWidget {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: Theme.of(context).primaryColor, width: 2.0),
-                                      // boxShadow: [
-                                      //   BoxShadow(color: Theme.of(context).primaryColor, blurRadius: 4),
-                                      // ],
                                     ),
                                     child: Column(
                                       children: [
@@ -255,23 +254,6 @@ class BlogViewPage extends HookWidget {
                                             ),
                                           ),
                                         ),
-                                        // Row(
-                                        //   children: [
-                                        //     ListView.separated(
-                                        //         itemBuilder: (context, index) {
-                                        //           return Padding(
-                                        //             padding: const EdgeInsets.all(8.0),
-                                        //             child: Text(blogNotifier.popular[index].title),
-                                        //           );
-                                        //         },
-                                        //         separatorBuilder: (context, index) {
-                                        //           if (index == 0) return const SizedBox();
-                                        //           if (index == blogNotifier.popular.length - 1) return const SizedBox();
-                                        //           return Divider();
-                                        //         },
-                                        //         itemCount: blogNotifier.popular.length),
-                                        //   ],
-                                        // ),
                                         ...blogNotifier.popular.map((e) {
                                           return InkWell(
                                             onTap: () {
@@ -322,7 +304,7 @@ class BlogViewPage extends HookWidget {
                                       ),
                                       onPressed: () {
                                         _indicatorScrollController.animateTo(
-                                          (_indicatorScrollController.position.maxScrollExtent - 32) * 2,
+                                          _indicatorScrollController.position.maxScrollExtent,
                                           duration: const Duration(milliseconds: 500),
                                           curve: Curves.easeInOut,
                                         );
@@ -341,25 +323,33 @@ class BlogViewPage extends HookWidget {
                                           width: MediaQuery.of(context).size.width / 2 - 8.0,
                                           child: Card(
                                               margin: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  if (item.post.coverImage != null)
-                                                    OctoImage.fromSet(
-                                                      height: 100,
-                                                      octoSet: OctoSet.blurHash(
-                                                        'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).pushNamed(
+                                                    '/blogs/view',
+                                                    arguments: item.recommendedId,
+                                                  );
+                                                },
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    if (item.post.coverImage != null)
+                                                      OctoImage.fromSet(
+                                                        height: 100,
+                                                        octoSet: OctoSet.blurHash(
+                                                          'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                                        ),
+                                                        image: CachedNetworkImageProvider(item.post.coverImage.path),
                                                       ),
-                                                      image: CachedNetworkImageProvider(item.post.coverImage.path),
-                                                    ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      item.post.title,
-                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
-                                                    ),
-                                                  )
-                                                ],
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        item.post.title,
+                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
                                               )),
                                         ),
                                       )

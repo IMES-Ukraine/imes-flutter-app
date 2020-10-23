@@ -14,12 +14,12 @@ import 'package:imes/widgets/tests/test_vide_card.dart';
 import 'package:observable/observable.dart';
 
 class ComplexTest extends HookWidget {
-  final Test test;
-
   ComplexTest({
     Key key,
     @required this.test,
   });
+
+  final Test test;
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +65,11 @@ class ComplexTest extends HookWidget {
                           variant: v.variant,
                           title: v.title,
                           selected: state.value[test.complex[index].id] == v.variant,
-                          onTap: () {
-                            state.value[test.complex[index].id] = v.variant;
-                          },
+                          onTap: index < step.value - 1
+                              ? null
+                              : () {
+                                  state.value[test.complex[index].id] = v.variant;
+                                },
                         );
                       }).toList());
                     } else {
@@ -75,7 +77,6 @@ class ComplexTest extends HookWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Wrap(
                           alignment: WrapAlignment.spaceBetween,
-                          runAlignment: WrapAlignment.spaceBetween,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: test.complex[index].variants.buttons.map((v) {
                             return ConstrainedBox(
@@ -86,9 +87,11 @@ class ComplexTest extends HookWidget {
                                 descr: v.description,
                                 imageUrl: v.file.path,
                                 selected: state.value[test.complex[index].id] == v.variant,
-                                onTap: () {
-                                  state.value[test.complex[index].id] = v.variant;
-                                },
+                                onTap: index < step.value - 1
+                                    ? null
+                                    : () {
+                                        state.value[test.complex[index].id] = v.variant;
+                                      },
                               ),
                             );
                           }).toList(),
@@ -106,21 +109,30 @@ class ComplexTest extends HookWidget {
                       maxLines: 5,
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: RaisedGradientButton(
-                    child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    onPressed: () {
-                      step.value++;
-                      controller.animateTo(controller.position.maxScrollExtent + controller.position.viewportDimension,
-                          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-                    },
-                  ),
-                ),
+                HookBuilder(builder: (context) {
+                  useObservable(state);
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: RaisedGradientButton(
+                      child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      onPressed: state.value[test.complex[index].id] != null && index == step.value - 1
+                          ? () {
+                              if (step.value < test.complex.length) {
+                                step.value++;
+                                controller.animateTo(
+                                    controller.position.maxScrollExtent + controller.position.viewportDimension,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeIn);
+                              }
+                            }
+                          : null,
+                    ),
+                  );
+                }),
               ],
             );
           },
-          childCount: step.value,
+          childCount: step.value, // < test.complex.length ? step.value : test.complex.length - 1,
         )),
       ],
     );

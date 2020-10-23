@@ -42,19 +42,15 @@ class BlogListTile extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   child,
-                  // Container(
-                  //   constraints: BoxConstraints(
-                  //     minWidth: double.infinity,
-                  //     maxHeight: image.isNotEmpty ? 200.0 : double.infinity,
-                  //   ),
-                  //   decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(image), fit: BoxFit.fitWidth)),
-                  // ),
-                  IconButton(
-                      icon: Icon(
-                        isFavourite ? Icons.favorite : Icons.favorite_border,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {}),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                        icon: Icon(
+                          isFavourite ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {}),
+                  ),
                 ],
               ),
               fit: BoxFit.fitWidth,

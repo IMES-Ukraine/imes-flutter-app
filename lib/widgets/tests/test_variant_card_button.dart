@@ -43,7 +43,7 @@ class TestVariantCardButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
                     variant,
                     style: TextStyle(
@@ -59,15 +59,16 @@ class TestVariantCardButton extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              Expanded(child: Text(descr, style: TextStyle(fontSize: 8.0))),
-              Expanded(
-                  child: OctoImage(
-                image: CachedNetworkImageProvider(imageUrl),
-                placeholderBuilder: OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
-                fit: BoxFit.scaleDown,
-              ))
-            ]),
+            child: IntrinsicHeight(
+              child: Row(children: [
+                Expanded(child: Text(descr, style: TextStyle(fontSize: 8.0))),
+                Expanded(
+                    child: OctoImage(
+                  image: CachedNetworkImageProvider(imageUrl),
+                  fit: BoxFit.cover,
+                ))
+              ]),
+            ),
           ),
         ]),
       ),
