@@ -12,9 +12,7 @@ class Images {
   static const String hamburger = 'assets/hamburger.png';
   static const String bottle = 'assets/bottle.png';
   static const String reply = 'assets/reply.png';
-  static const String tests = 'assets/tests.png';
   static const String history = 'assets/history.png';
-  static const String menu = 'assets/menu.png';
   static const String messenger = 'assets/messenger.png';
   static const String weightIcon = 'assets/weight_icon.png';
   static const String whatsup = 'assets/whatsup.png';
@@ -23,6 +21,4 @@ class Images {
   static const String union = 'assets/union.png';
   static const String facebook = 'assets/facebook.png';
   static const String camera = 'assets/camera.png';
-  static const String chat = 'assets/chat.png';
-  static const String clients = 'assets/clients.png';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 
 import 'package:imes/widgets/menu/menu_item.dart';
@@ -24,21 +25,23 @@ class MenuPage extends StatelessWidget {
             crossAxisCount: 3,
             children: <Widget>[
               MenuItem(
-                icon: Image.asset(
-                  Images.headphones,
-                  color: Colors.white,
+                icon: Icon(
+                  CustomIcons.settings,
+                  size: 40.0,
+                  color: Theme.of(context).primaryColor,
                 ),
-                text: 'Підтримка',
+                text: 'Налаштування',
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SupportPage()),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(builder: (context) => SupportPage()),
+                  // );
                 },
               ),
               MenuItem(
-                icon: Image.asset(
-                  Images.info,
-                  color: Colors.white,
+                icon: Icon(
+                  CustomIcons.information,
+                  size: 40.0,
+                  color: Theme.of(context).primaryColor,
                 ),
                 text: 'Інструкція',
                 onTap: () async {
@@ -48,9 +51,10 @@ class MenuPage extends StatelessWidget {
                 },
               ),
               MenuItem(
-                icon: Image.asset(
-                  Images.rules,
-                  color: Colors.white,
+                icon: Icon(
+                  CustomIcons.rules,
+                  size: 40.0,
+                  color: Theme.of(context).primaryColor,
                 ),
                 text: 'Правила користування',
                 onTap: () async {
@@ -61,9 +65,22 @@ class MenuPage extends StatelessWidget {
               ),
               MenuItem(
                 icon: Icon(
+                  CustomIcons.support,
+                  size: 40.0,
+                  color: Theme.of(context).primaryColor,
+                ),
+                text: 'Підтримка',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SupportPage()),
+                  );
+                },
+              ),
+              MenuItem(
+                icon: Icon(
                   Icons.exit_to_app,
-                  color: Colors.white,
-                  size: 25,
+                  size: 40.0,
+                  color: Theme.of(context).primaryColor,
                 ),
                 text: 'Вийти',
                 onTap: () {

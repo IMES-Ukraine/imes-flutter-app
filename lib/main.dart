@@ -100,9 +100,10 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xFFF7F7F9),
           errorColor: const Color(0xFFFF5C8E),
           dividerColor: const Color(0xFFE0E0E0),
+          canvasColor: const Color(0xFFF2F2F2),
           appBarTheme: AppBarTheme(
               color: Colors.white,
-              // elevation: 0.0,
+              elevation: 4.0,
               iconTheme: IconThemeData(
                 color: const Color(0xFF00B7FF),
               ),

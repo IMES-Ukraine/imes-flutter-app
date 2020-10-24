@@ -292,7 +292,8 @@ class BlogViewPage extends HookWidget {
                                       ),
                                       onPressed: () {
                                         _indicatorScrollController.animateTo(
-                                          0,
+                                          _indicatorScrollController.offset -
+                                              _indicatorScrollController.position.viewportDimension,
                                           duration: const Duration(milliseconds: 500),
                                           curve: Curves.easeInOut,
                                         );
@@ -306,7 +307,8 @@ class BlogViewPage extends HookWidget {
                                       ),
                                       onPressed: () {
                                         _indicatorScrollController.animateTo(
-                                          _indicatorScrollController.position.maxScrollExtent,
+                                          _indicatorScrollController.offset +
+                                              _indicatorScrollController.position.viewportDimension,
                                           duration: const Duration(milliseconds: 500),
                                           curve: Curves.easeInOut,
                                         );
@@ -314,48 +316,51 @@ class BlogViewPage extends HookWidget {
                                 ],
                               ),
                               SingleChildScrollView(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 scrollDirection: Axis.horizontal,
                                 controller: _indicatorScrollController,
                                 physics: PageScrollPhysics(),
-                                child: Row(
-                                  children: blogNotifier.blog.recommended
-                                      .map<Widget>(
-                                        (item) => SizedBox(
-                                          width: MediaQuery.of(context).size.width / 2 - 8.0,
-                                          child: Card(
-                                              margin: const EdgeInsets.all(8.0),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.of(context).pushNamed(
-                                                    '/blogs/view',
-                                                    arguments: item.recommendedId,
-                                                  );
-                                                },
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    if (item.post.coverImage != null)
-                                                      OctoImage.fromSet(
-                                                        height: 100,
-                                                        octoSet: OctoSet.blurHash(
-                                                          'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                child: IntrinsicHeight(
+                                  child: Row(
+                                    children: blogNotifier.blog.recommended
+                                        .where((o) => o.post != null)
+                                        .map<Widget>(
+                                          (item) => SizedBox(
+                                            width: MediaQuery.of(context).size.width / 2.0,
+                                            height: double.infinity,
+                                            child: Card(
+                                                margin: const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.of(context).pushNamed(
+                                                      '/blogs/view',
+                                                      arguments: item.recommendedId,
+                                                    );
+                                                  },
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      if (item.post.coverImage != null)
+                                                        OctoImage.fromSet(
+                                                          height: 100,
+                                                          octoSet: OctoSet.blurHash(
+                                                            'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                                          ),
+                                                          image: CachedNetworkImageProvider(item.post.coverImage.path),
                                                         ),
-                                                        image: CachedNetworkImageProvider(item.post.coverImage.path),
-                                                      ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        item.post.title,
-                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )),
-                                        ),
-                                      )
-                                      .toList(),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Text(
+                                                          item.post.title,
+                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 16.0),

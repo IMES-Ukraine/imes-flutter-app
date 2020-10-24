@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Utils {
   static const String EMAIL_REGEXP =
       r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
@@ -26,5 +28,9 @@ class Utils {
     var twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     var twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return '${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
+  static double clamp01(double val) {
+    return min(1.0, max(0.0, val));
   }
 }

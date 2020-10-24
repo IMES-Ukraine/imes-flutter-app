@@ -16,9 +16,7 @@ void main() {
     expect(true, File(Images.hamburger).existsSync());
     expect(true, File(Images.bottle).existsSync());
     expect(true, File(Images.reply).existsSync());
-    expect(true, File(Images.tests).existsSync());
     expect(true, File(Images.history).existsSync());
-    expect(true, File(Images.menu).existsSync());
     expect(true, File(Images.messenger).existsSync());
     expect(true, File(Images.weightIcon).existsSync());
     expect(true, File(Images.whatsup).existsSync());
@@ -27,7 +25,5 @@ void main() {
     expect(true, File(Images.union).existsSync());
     expect(true, File(Images.facebook).existsSync());
     expect(true, File(Images.camera).existsSync());
-    expect(true, File(Images.chat).existsSync());
-    expect(true, File(Images.clients).existsSync());
   });
 }

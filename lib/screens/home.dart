@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:imes/helpers/bottom_icons.dart';
+import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/screens/blogs.dart';
 import 'package:imes/screens/balance.dart';
 import 'package:imes/screens/menu.dart';
@@ -223,11 +223,11 @@ class _HomePageState extends State<HomePage> {
                 currentIndex: homeNotifier.currentPage,
                 onTap: homeNotifier.changePage,
                 items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Головна'),
-                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.test), label: 'Дослідження'),
-                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.chat), label: 'Чат'),
-                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.clients), label: 'Пацієнти'),
-                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.menu), label: 'Меню'),
+                  BottomNavigationBarItem(icon: Icon(CustomIcons.home), label: 'Головна'),
+                  BottomNavigationBarItem(icon: Icon(CustomIcons.test), label: 'Дослідження'),
+                  BottomNavigationBarItem(icon: Icon(CustomIcons.chat), label: 'Чат'),
+                  BottomNavigationBarItem(icon: Icon(CustomIcons.clients), label: 'Пацієнти'),
+                  BottomNavigationBarItem(icon: Icon(CustomIcons.menu), label: 'Меню'),
                 ]),
           ),
         );

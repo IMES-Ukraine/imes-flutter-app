@@ -27,6 +27,7 @@ class BlogListTile extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
         onTap: onTap,

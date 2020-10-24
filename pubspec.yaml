@@ -14,7 +14,7 @@ description: A new PharmaTracker application.
 version: 1.0.0+11
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.11.0-213.0.dev <2.12.0"
 
 dependencies:
   flutter:
@@ -128,6 +128,6 @@ flutter:
           weight: 800
         - asset: fonts/Montserrat-Black.ttf
           weight: 900
-    - family: MyFlutterApp
+    - family: CustomIcons
       fonts:
-        - asset: fonts/bottom_icons.ttf
+        - asset: fonts/CustomIcons.ttf

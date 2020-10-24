@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 
 class BonusButton extends StatelessWidget {
@@ -26,7 +27,7 @@ class BonusButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Image.asset(Images.blogHeart),
+              Image.asset(Images.blogHeart, color: themeData.primaryColor),
               const SizedBox(width: 8.0),
               Text(
                 '$points',
