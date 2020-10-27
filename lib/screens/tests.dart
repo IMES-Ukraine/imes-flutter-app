@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:imes/blocs/tests_notifier.dart';
+import 'package:imes/widgets/base/alert_container.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/error_retry.dart';
 import 'package:imes/widgets/tests/test_list_tile.dart';
 import 'package:imes/widgets/tests/tests_app_bar.dart';
@@ -61,10 +64,57 @@ class TestsPage extends StatelessWidget {
                           bonus: testsNotifier.tests[index]?.bonus ?? 0,
                           image: testsNotifier.tests[index].coverImage?.path ?? '',
                           onTap: () {
-                            Navigator.of(context)
-                                .pushNamed('/tests/view', arguments: testsNotifier.tests[index].id)
-                                .then((_) {
-                              testsNotifier.remove(testsNotifier.tests[index]);
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Почати тест?',
+                                            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                          child: CustomFlatButton(
+                                              text: 'ПОЇХАЛИ',
+                                              color: Theme.of(context).primaryColor,
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              }),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                          child: CustomFlatButton(
+                                              text: 'Я ЩЕ ПОЧИТАЮ',
+                                              color: Theme.of(context).primaryColor,
+                                              onPressed: () {
+                                                Navigator.of(context).pop(false);
+                                              }),
+                                        ),
+                                        const SizedBox(height: 16.0),
+                                        AlertContainer(
+                                          child: Text(
+                                            'Внимание!\n\nУбедитесь, что Вы готовы к участию в данном исследовании, так как количество попыток ограничено',
+                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).then((value) {
+                              if (value) {
+                                Navigator.of(context)
+                                    .pushNamed('/tests/view', arguments: testsNotifier.tests[index].id)
+                                    .then((_) {
+                                  testsNotifier.remove(testsNotifier.tests[index]);
+                                });
+                              }
                             });
                           },
                         );

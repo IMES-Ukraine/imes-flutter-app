@@ -1,4 +1,6 @@
 import 'package:imes/models/user_basic_info.dart';
+import 'package:imes/models/user_financial_info.dart';
+import 'package:imes/models/user_special_info.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
@@ -22,6 +24,10 @@ class User {
   final String messagingToken;
   @JsonKey(name: 'basic_information')
   final UserBasicInfo basicInfo;
+  @JsonKey(name: 'specialized_information')
+  final UserSpecializedInfo specialInfo;
+  @JsonKey(name: 'financial_information')
+  final UserFinancialInfo financialInfo;
 
   User({
     this.id,
@@ -37,6 +43,8 @@ class User {
     this.firebaseToken,
     this.messagingToken,
     this.basicInfo,
+    this.specialInfo,
+    this.financialInfo,
   });
 
   User copyWith({
@@ -53,6 +61,8 @@ class User {
     final String firebaseToken,
     final String messagingToken,
     final UserBasicInfo basicInfo,
+    final UserSpecializedInfo specialInfo,
+    final UserFinancialInfo financialInfo,
   }) {
     return User(
       id: id ?? this.id,
@@ -68,6 +78,8 @@ class User {
       firebaseToken: firebaseToken ?? this.firebaseToken,
       messagingToken: messagingToken ?? this.messagingToken,
       basicInfo: basicInfo ?? this.basicInfo,
+      specialInfo: specialInfo ?? this.specialInfo,
+      financialInfo: financialInfo ?? this.financialInfo,
     );
   }
 

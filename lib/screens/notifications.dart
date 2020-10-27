@@ -179,10 +179,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ));
       case 'WITHDRAW':
         return Image.asset(Images.reply);
-      case 'MESSAGE':
-        return Image.asset(Images.settings);
-      case 'SUPPORT':
-        return Image.asset(Images.headphones);
+      // case 'MESSAGE':
+      // return Image.asset(Images.settings);
+      // case 'SUPPORT':
+      // return Image.asset(Images.headphones);
       case 'DEFAULT':
         return Image.asset(Images.hamburger);
       default:

@@ -139,10 +139,10 @@ class _$RestClient extends RestClient {
     return client.send<TestResponse, TestResponse>($request);
   }
 
-  Future<Response> submitTests(TestAnswerData data) {
+  Future<Response<SubmitTestResponse>> submitTests(TestAnswerData data) {
     final $url = 'https://echo.myftp.org/api/v1/tests/submit';
     final $body = data;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<dynamic, dynamic>($request);
+    return client.send<SubmitTestResponse, SubmitTestResponse>($request);
   }
 }

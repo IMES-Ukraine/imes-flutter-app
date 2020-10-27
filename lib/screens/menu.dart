@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
-import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/rules.dart';
+import 'package:imes/screens/settings.dart';
 
 import 'package:imes/widgets/menu/menu_item.dart';
 import 'package:imes/widgets/menu/menu_app_bar.dart';
@@ -32,9 +33,9 @@ class MenuPage extends StatelessWidget {
                 ),
                 text: 'Налаштування',
                 onTap: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(builder: (context) => SupportPage()),
-                  // );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  );
                 },
               ),
               MenuItem(
@@ -58,9 +59,12 @@ class MenuPage extends StatelessWidget {
                 ),
                 text: 'Правила користування',
                 onTap: () async {
-                  if (await canLaunch('https://pharmatracker.com.ua/rules')) {
-                    launch('https://pharmatracker.com.ua/rules');
-                  }
+                  // if (await canLaunch('https://pharmatracker.com.ua/rules')) {
+                  //   launch('https://pharmatracker.com.ua/rules');
+                  // }
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RulesPage()),
+                  );
                 },
               ),
               MenuItem(

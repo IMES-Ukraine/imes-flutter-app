@@ -8,6 +8,7 @@ import 'package:imes/models/blog_response.dart';
 import 'package:imes/models/analytics_response.dart';
 import 'package:imes/models/notifications_response.dart';
 import 'package:imes/models/profile_response.dart';
+import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_answer_data.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
@@ -103,5 +104,5 @@ abstract class RestClient extends ChopperService {
   Future<Response<TestResponse>> test(@Path('id') num id);
 
   @Post(path: '/api/v1/tests/submit')
-  Future<Response> submitTests(@Body() TestAnswerData data);
+  Future<Response<SubmitTestResponse>> submitTests(@Body() TestAnswerData data);
 }
