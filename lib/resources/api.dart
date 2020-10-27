@@ -105,4 +105,7 @@ abstract class RestClient extends ChopperService {
 
   @Post(path: '/api/v1/tests/submit')
   Future<Response<SubmitTestResponse>> submitTests(@Body() TestAnswerData data);
+
+  @Post(path: '/api/v1/profile/verify')
+  Future<Response<ProfileResponse>> submitProfile(@Body() Map<String, dynamic> data);
 }

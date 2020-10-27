@@ -145,4 +145,11 @@ class _$RestClient extends RestClient {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<SubmitTestResponse, SubmitTestResponse>($request);
   }
+
+  Future<Response<ProfileResponse>> submitProfile(Map<String, dynamic> data) {
+    final $url = 'https://echo.myftp.org/api/v1/profile/verify';
+    final $body = data;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<ProfileResponse, ProfileResponse>($request);
+  }
 }

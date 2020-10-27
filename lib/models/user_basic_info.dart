@@ -5,9 +5,15 @@ part 'user_basic_info.g.dart';
 
 @JsonSerializable()
 class UserBasicInfo {
+  final String phone;
+  final String name;
+  final String email;
   final CoverImage avatar;
 
   UserBasicInfo({
+    this.phone,
+    this.name,
+    this.email,
     this.avatar,
   });
 

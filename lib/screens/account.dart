@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:imes/extensions/color.dart';
 
 class AccountPage extends StatelessWidget {
+  static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,7 @@ class AccountPage extends StatelessWidget {
                   Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(
-                      '${userNotifier.user.name ?? 'Ім\'я'} ${userNotifier.user.name ?? 'Прізвище'}',
+                      userNotifier.user?.basicInfo?.name ?? 'Ім\'я Прізвище',
                       style: TextStyle(
                         color: Theme.of(context).dividerColor.darken(20),
                       ),
@@ -48,7 +50,7 @@ class AccountPage extends StatelessWidget {
                         Icon(Icons.phone, color: Theme.of(context).primaryColor, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          userNotifier.user.phone ?? '',
+                          userNotifier.user?.basicInfo?.phone ?? '',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -59,7 +61,7 @@ class AccountPage extends StatelessWidget {
                         Icon(Icons.mail_outline, color: Theme.of(context).primaryColor, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          userNotifier.user.email ?? '',
+                          userNotifier.user?.basicInfo?.email ?? '',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -95,7 +97,27 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.schedule ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Column(
+                    children: List.generate(3, (index) {
+                          final s = userNotifier.user?.specialInfo?.schedule?.elementAt(index);
+                          return Row(
+                            children: [
+                              for (var i = 0; i < days.length; i++)
+                                Row(
+                                  children: [
+                                    Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
+                                        style: TextStyle(
+                                            color: s?.days?.contains(i) ?? false ? Colors.black : Color(0xFFBDBDBD))),
+                                  ],
+                                ),
+                              Expanded(
+                                child: Text(s?.time ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          );
+                        })?.toList() ??
+                        [],
+                  ),
                   Divider(),
                   Text('Посада', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),

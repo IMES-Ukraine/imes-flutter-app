@@ -1,4 +1,5 @@
 import 'package:imes/models/cover_image.dart';
+import 'package:imes/models/user_schedule.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_special_info.g.dart';
@@ -8,7 +9,7 @@ class UserSpecializedInfo {
   final String specification;
   final String qualification;
   final String workplace;
-  final String schedule;
+  final List<UserSchedule> schedule;
   final String position;
   final String licenseNumber;
   final String studyPeriod;

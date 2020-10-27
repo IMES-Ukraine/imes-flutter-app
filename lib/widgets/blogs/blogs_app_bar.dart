@@ -47,13 +47,13 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${userNotifier.user.name ?? 'Ім\'я'} ${userNotifier.user.name ?? 'Прізвище'}',
+                                  userNotifier?.user?.basicInfo?.name ?? 'Ім\'я Прізвище',
                                   style: TextStyle(
                                     color: Theme.of(context).dividerColor.darken(20),
                                   ),
                                 ),
                                 Text(
-                                  userNotifier.user.work ?? 'Спеціалізація',
+                                  userNotifier.user?.specialInfo?.specification ?? 'Спеціалізація',
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,

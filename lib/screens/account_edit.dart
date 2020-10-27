@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/utils.dart';
+import 'package:imes/hooks/observable.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:observable/observable.dart';
 import 'package:provider/provider.dart';
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
+  final workingDaysInitial = {0: [], 1: [], 2: []};
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +23,26 @@ class AccountEditPage extends HookWidget {
         ),
         body: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
           return HookBuilder(builder: (context) {
-            final nameController = useTextEditingController(text: userNotifier.user.name);
-            final phoneController = useTextEditingController(text: userNotifier.user.phone);
-            final postController = useTextEditingController(text: userNotifier.user.email);
+            final step = useState(
+              userNotifier.user.specialInfo == null
+                  ? 0
+                  : userNotifier.user.financialInfo == null
+                      ? 1
+                      : 2,
+            );
+
+            final workingDays = userNotifier.user?.specialInfo?.schedule?.isNotEmpty ?? false
+                ? userNotifier.user.specialInfo.schedule
+                    .map((e) => useValueNotifier(ObservableList.from(e.days)))
+                    .toList()
+                : workingDaysInitial.entries.map((e) => useValueNotifier(ObservableList.from(e.value))).toList();
+            final workingDaysControllers = userNotifier.user?.specialInfo?.schedule?.isNotEmpty ?? false
+                ? userNotifier.user.specialInfo.schedule.map((e) => useTextEditingController(text: e.time)).toList()
+                : workingDaysInitial.entries.map((e) => useTextEditingController()).toList();
+
+            final nameController = useTextEditingController(text: userNotifier.user?.basicInfo?.name);
+            final phoneController = useTextEditingController(text: userNotifier.user?.basicInfo?.phone);
+            final postController = useTextEditingController(text: userNotifier.user?.basicInfo?.email);
 
             final specificationController =
                 useTextEditingController(text: userNotifier.user?.specialInfo?.specification);
@@ -33,6 +56,7 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specialInfo?.additionalQualification);
 
             final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInfo?.card);
+            // final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInfo?.exp);
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -101,7 +125,7 @@ class AccountEditPage extends HookWidget {
                           ]),
                         )),
                       ])),
-                  if (userNotifier.user.specialInfo == null)
+                  if (step.value == 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                       child: RaisedGradientButton(
@@ -109,16 +133,18 @@ class AccountEditPage extends HookWidget {
                           'ДАЛІ',
                           style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          step.value = 1;
+                        },
                       ),
                     ),
                   Card(
                     margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                     clipBehavior: Clip.antiAlias,
                     child: IgnorePointer(
-                      ignoring: userNotifier.user.specialInfo == null,
+                      ignoring: step.value == 0,
                       child: Container(
-                        foregroundDecoration: userNotifier.user.specialInfo == null
+                        foregroundDecoration: step.value == 0
                             ? BoxDecoration(color: Theme.of(context).canvasColor.withOpacity(0.8))
                             : null,
                         child: ExpansionTile(
@@ -168,40 +194,53 @@ class AccountEditPage extends HookWidget {
                             Divider(),
                             Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                             const SizedBox(height: 8.0),
-                            Column(
-                              children: List.generate(3, (index) {
-                                return Row(
-                                  children: [
-                                    for (var i = 0; i < days.length; i++)
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
-                                                style: TextStyle(color: Color(0xFFBDBDBD))),
-                                          ),
-                                        ],
-                                      ),
-                                    Expanded(
-                                      child: TextField(
-                                        // controller: workPlaceController,
-                                        decoration: InputDecoration(
-                                          isDense: true,
-                                          // labelText: 'Місце роботи',
-                                          // labelStyle: TextStyle(fontSize: 12.0),
-                                          contentPadding: EdgeInsets.zero,
+                            HookBuilder(builder: (context) {
+                              return Column(
+                                children: List.generate(3, (index) {
+                                  useObservable(workingDays[index]);
+                                  return Row(
+                                    children: [
+                                      for (var i = 0; i < days.length; i++)
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                if (workingDays[index].value.contains(i)) {
+                                                  workingDays[index].value.removeWhere((element) => element == i);
+                                                } else {
+                                                  workingDays[index].value.add(i);
+                                                }
+                                              },
+                                              child: Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
+                                                  style: TextStyle(
+                                                      color: workingDays[index].value.contains(i)
+                                                          ? Colors.black
+                                                          : Color(0xFFBDBDBD))),
+                                            ),
+                                          ],
                                         ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          MaskTextInputFormatter(mask: '##:## - ##:##', filter: {'#': RegExp(r'[0-9]')})
-                                        ],
-                                        style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: workingDaysControllers[index],
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            // labelText: 'Місце роботи',
+                                            // labelStyle: TextStyle(fontSize: 12.0),
+                                            contentPadding: EdgeInsets.zero,
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            MaskTextInputFormatter(
+                                                mask: '##:## - ##:##', filter: {'#': RegExp(r'[0-9]')})
+                                          ],
+                                          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ),
+                                    ],
+                                  );
+                                }),
+                              );
+                            }),
                             const SizedBox(height: 8.0),
                             Divider(),
                             TextField(
@@ -280,7 +319,7 @@ class AccountEditPage extends HookWidget {
                       ),
                     ),
                   ),
-                  if (userNotifier.user.financialInfo == null)
+                  if (step.value == 1)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                       child: RaisedGradientButton(
@@ -288,16 +327,18 @@ class AccountEditPage extends HookWidget {
                           'ДАЛІ',
                           style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          step.value = 2;
+                        },
                       ),
                     ),
                   Card(
                       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                       clipBehavior: Clip.antiAlias,
                       child: IgnorePointer(
-                        ignoring: userNotifier.user.financialInfo == null,
+                        ignoring: step.value == 1,
                         child: Container(
-                          foregroundDecoration: userNotifier.user.financialInfo == null
+                          foregroundDecoration: step.value == 1
                               ? BoxDecoration(color: Theme.of(context).canvasColor.withOpacity(0.8))
                               : null,
                           child: ExpansionTile(
@@ -367,16 +408,59 @@ class AccountEditPage extends HookWidget {
                           ),
                         ),
                       )),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: RaisedGradientButton(
-                      child: Text(
-                        'ЗАВЕРШИТИ',
-                        style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
+                  if (step.value == 2)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: RaisedGradientButton(
+                        child: Text(
+                          'ЗАВЕРШИТИ',
+                          style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
+                        ),
+                        onPressed: () {
+                          final result = Map<String, dynamic>();
+                          result['basic_information'] = {
+                            'name': nameController.text,
+                            'email': postController.text,
+                            'phone': phoneController.text,
+                          };
+
+                          final resultSchedule = [];
+                          for (var i = 0; i < workingDaysControllers.length; i++) {
+                            resultSchedule.add({'days': workingDays[i].value, 'time': workingDaysControllers[i].text});
+                          }
+
+                          result['specialized_information'] = {
+                            'specification': specificationController.text,
+                            'qualification': qualificationController.text,
+                            'workplace': workPlaceController.text,
+                            'position': positionController.text,
+                            'licenseNumber': licenseController.text,
+                            'studyPeriod': studyPeriodController.text,
+                            'additionalQualification': additionalQualificationController.text,
+                            'schedule': resultSchedule,
+                          };
+
+                          userNotifier
+                              .submitProfile(result)
+                              .then((value) => Navigator.of(context).pop())
+                              .catchError((error) {
+                            print(error);
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomAlertDialog(
+                                  content: CustomDialog(
+                                    icon: Icons.close,
+                                    color: Theme.of(context).errorColor,
+                                    text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                  ),
+                                );
+                              },
+                            );
+                          });
+                        },
                       ),
-                      onPressed: () {},
                     ),
-                  ),
                 ],
               ),
             );
