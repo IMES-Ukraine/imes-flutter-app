@@ -81,7 +81,7 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
                         onPressed: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
+                          FocusScope.of(context).unfocus();
                           if (_formState.currentState.validate()) {
                             userNotifier.setupPwd(passwordController.text).then((value) {
                               Navigator.of(context).pushReplacement(

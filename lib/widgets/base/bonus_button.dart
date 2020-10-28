@@ -27,7 +27,7 @@ class BonusButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Image.asset(Images.blogHeart, color: themeData.primaryColor),
+              Icon(CustomIcons.blog_heart, color: themeData.primaryColor),
               const SizedBox(width: 8.0),
               Text(
                 '$points',

@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 class RaisedGradientButton extends StatelessWidget {
   final Widget child;
   final Gradient gradient;
-  final double width;
-  final double height;
+  // final double width;
+  // final double height;
+  final EdgeInsets padding;
   final Function onPressed;
 
   const RaisedGradientButton({
     Key key,
     @required this.child,
     this.gradient,
-    this.width = double.infinity,
-    this.height = 50.0,
+    this.padding = const EdgeInsets.all(8.0),
+    // this.width = double.infinity,
+    // this.height = 50.0,
     this.onPressed,
   }) : super(key: key);
 
@@ -22,8 +24,8 @@ class RaisedGradientButton extends StatelessWidget {
         gradient ?? LinearGradient(colors: [Theme.of(context).accentColor, Theme.of(context).primaryColor]);
 
     return Container(
-      width: width,
-      height: 50.0,
+      // width: width,
+      // height: 50.0,
       decoration: BoxDecoration(
         gradient: onPressed != null
             ? defaultGradient
@@ -42,7 +44,10 @@ class RaisedGradientButton extends StatelessWidget {
         child: InkWell(
             onTap: onPressed,
             child: Center(
-              child: child,
+              child: Padding(
+                padding: padding,
+                child: child,
+              ),
             )),
       ),
     );

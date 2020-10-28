@@ -108,6 +108,13 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future submitProfile(Map<String, dynamic> data) async {
+    final response = await Repository().api.submitProfile(data);
+    if (response.statusCode == 200) {
+      updateUser(response.body.data.user);
+    }
+  }
+
   Future updateProfile() async {
     final response = await Repository().api.profile();
     if (response.statusCode == 200) {

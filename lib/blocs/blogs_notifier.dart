@@ -33,14 +33,14 @@ class BlogsNotifier with ChangeNotifier {
 
   BlogPage get page => _page;
 
-  Future changePage(BlogPage page) async {
+  Future<void> changePage(BlogPage page) async {
     _page = page;
     _state = BlogsState.LOADING;
     notifyListeners();
     return load();
   }
 
-  Future load() async {
+  Future<void> load() async {
     try {
       final response = await Repository().api.blogs(type: page.index + 1);
       if (response.statusCode == 200) {
@@ -59,7 +59,7 @@ class BlogsNotifier with ChangeNotifier {
     }
   }
 
-  Future loadNext() async {
+  Future<void> loadNext() async {
 //    _state = BlogsState.LOADING;
 //    notifyListeners();
 

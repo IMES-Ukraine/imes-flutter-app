@@ -15,6 +15,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class BlogViewPage extends HookWidget {
   BlogViewPage(this._id);

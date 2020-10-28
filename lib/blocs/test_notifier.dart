@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/models/test_answer.dart';
 import 'package:imes/models/test_answer_data.dart';
+import 'package:imes/models/user.dart';
 import 'package:imes/resources/repository.dart';
 
 enum TestState {
@@ -38,12 +39,23 @@ class TestNotifier with ChangeNotifier {
     return _test?.duration ?? 0;
   }
 
-  Future postAnswer(int testId, List<String> answers, Duration duration) async {
+  Future<User> postAnswer(int testId, List<String> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
-            data: answers.map((v) => TestAnswer(id: testId, variant: v)).toList(),      
+            data: answers.map((v) => TestAnswer(id: testId, variant: v)).toList(),
             seconds: duration.inSeconds,
           ),
         );
+    return response.body.data.user;
+  }
+
+  Future<User> postAnswers(List<TestAnswer> answers, Duration duration) async {
+    final response = await Repository().api.submitTests(
+          TestAnswerData(
+            data: answers,
+            seconds: duration.inSeconds,
+          ),
+        );
+    return response.body.data.user;
   }
 }

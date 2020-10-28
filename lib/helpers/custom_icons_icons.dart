@@ -12,6 +12,10 @@
 ///       - asset: fonts/CustomIcons.ttf
 ///
 /// 
+/// * Iconic, Copyright (C) 2012 by P.J. Onori
+///         Author:    P.J. Onori
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://somerandomdude.com/work/iconic/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -22,13 +26,15 @@ class CustomIcons {
   static const _kFontPkg = null;
 
   static const IconData home = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData minus = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData clients = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData menu = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData blogHeart = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData settings = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData information = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData rules = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData support = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData plus = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData test = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chat = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData blog_heart = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

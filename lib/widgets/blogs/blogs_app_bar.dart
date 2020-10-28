@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/account.dart';
 
 import 'package:imes/widgets/base/notifications_button.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
@@ -14,7 +16,7 @@ import 'package:imes/extensions/color.dart';
 
 class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(200.0);
+  Size get preferredSize => Size.fromHeight(216.0);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +47,13 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${userNotifier.user.name ?? 'Ім\'я'} ${userNotifier.user.name ?? 'Прізвище'}',
+                                  userNotifier?.user?.basicInfo?.name ?? 'Ім\'я Прізвище',
                                   style: TextStyle(
                                     color: Theme.of(context).dividerColor.darken(20),
                                   ),
                                 ),
                                 Text(
-                                  userNotifier.user.work ?? 'Спеціалізація',
+                                  userNotifier.user?.specialInfo?.specification ?? 'Спеціалізація',
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
@@ -71,12 +73,13 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 children: [
-                                  ImageIcon(
-                                    AssetImage(Images.blogHeart),
+                                  Icon(
+                                    CustomIcons.blog_heart,
                                     color: userNotifier.user.balance > 0
                                         ? Theme.of(context).primaryColor
                                         : Theme.of(context).dividerColor,
                                   ),
+                                  const SizedBox(width: 8.0),
                                   Text('${userNotifier.user.balance ?? 0}',
                                       style: TextStyle(
                                         fontSize: 20.0,
@@ -94,7 +97,39 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                 ),
-                Container(height: 32.0),
+                Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        RaisedGradientButton(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.account_circle, color: Colors.white),
+                              const SizedBox(width: 8.0),
+                              Text('АКАУНТ',
+                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                            ],
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountPage()));
+                          },
+                        ),
+                        RaisedGradientButton(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                          child: Row(
+                            children: [
+                              Icon(CustomIcons.blog_heart, color: Colors.white),
+                              const SizedBox(width: 8.0),
+                              Text('БАЛАНС',
+                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                            ],
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
+                    )),
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.all(8.0),

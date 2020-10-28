@@ -2,9 +2,16 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:imes/blocs/test_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
+import 'package:imes/models/test_answer.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
@@ -12,6 +19,7 @@ import 'package:imes/widgets/tests/test_variant_card_button.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
 import 'package:imes/widgets/tests/test_vide_card.dart';
 import 'package:observable/observable.dart';
+import 'package:provider/provider.dart';
 
 class ComplexTest extends HookWidget {
   ComplexTest({
@@ -134,6 +142,75 @@ class ComplexTest extends HookWidget {
                                       controller.position.maxScrollExtent + controller.position.viewportDimension,
                                       duration: const Duration(milliseconds: 500),
                                       curve: Curves.easeIn);
+                                } else {
+                                  final testNotifier = context.read<TestNotifier>();
+                                  final userNotifier = context.read<UserNotifier>();
+                                  testNotifier
+                                      .postAnswers(
+                                    state.value.entries.map((e) => TestAnswer(id: e.key, variant: e.value)).toList(),
+                                    durationTimer.value,
+                                  )
+                                      .then((user) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => CustomAlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    'Ви пройшли тест!',
+                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  const SizedBox(height: 16.0),
+                                                  Text(
+                                                    '${test.bonus} балів',
+                                                    style: TextStyle(
+                                                      fontSize: 23.0,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFF4CF99E),
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  Text(
+                                                    'зараховано на баланс',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFF4CF99E),
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  Divider(indent: 8.0, endIndent: 8.0),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                    child: CustomFlatButton(
+                                                        text: 'OK',
+                                                        color: Theme.of(context).primaryColor,
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        }),
+                                                  ),
+                                                ],
+                                              ),
+                                            )).then((_) {
+                                      userNotifier.updateUser(user);
+                                      Navigator.of(context).pop();
+                                    });
+                                  }).catchError((error) {
+                                    print(error);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CustomAlertDialog(
+                                          content: CustomDialog(
+                                            icon: Icons.close,
+                                            color: Theme.of(context).errorColor,
+                                            text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  });
                                 }
                               }
                             : null,
