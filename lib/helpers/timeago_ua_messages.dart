@@ -8,7 +8,7 @@ class UaMessages implements timeago.LookupMessages {
   String prefixFromNow() => 'через';
 
   @override
-  String suffixAgo() => 'назад';
+  String suffixAgo() => 'тому';
 
   @override
   String suffixFromNow() => '';

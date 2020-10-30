@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
@@ -151,25 +152,46 @@ class BlogViewPage extends HookWidget {
                                       ),
                                     ),
                                   ...blogNotifier.blog.content.map((e) {
-                                    if (e.type == 'text') {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            if (e.title != null)
-                                              Text(
-                                                e.title,
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                    return HookBuilder(
+                                      builder: (context) {
+                                        final hasDoneRead = useState(false);
+                                        if (e.type == 'text') {
+                                          return VisibilityDetector(
+                                            key: ValueKey<String>(e.title),
+                                            onVisibilityChanged: (info) {
+                                              if (info.visibleFraction == 1 && !hasDoneRead.value) {
+                                                Repository()
+                                                    .api
+                                                    .readBlogBlock(
+                                                      blogId: blogNotifier.blog.id,
+                                                      blockIndex: blogNotifier.blog.content.indexOf(e),
+                                                    )
+                                                    .then((_) {
+                                                  hasDoneRead.value = true;
+                                                }).catchError((error) => print(error));
+                                              }
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  if (e.title != null)
+                                                    Text(
+                                                      e.title,
+                                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                                    ),
+                                                  const SizedBox(height: 8.0),
+                                                  Text(e.content),
+                                                ],
                                               ),
-                                            const SizedBox(height: 8.0),
-                                            Text(e.content),
-                                          ],
-                                        ),
-                                      );
-                                    } else {
-                                      return const SizedBox();
-                                    }
+                                            ),
+                                          );
+                                        } else {
+                                          return const SizedBox();
+                                        }
+                                      },
+                                    );
                                   }).toList(),
                                   // if ((blogNotifier.blog?.action?.isNotEmpty ?? false))
                                   Center(

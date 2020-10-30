@@ -1,6 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
+import 'package:imes/models/cover_image.dart';
 
 import 'package:imes/models/user.dart' as local;
+import 'package:imes/models/user_basic_info.dart';
+import 'package:imes/models/user_special_info.dart';
 
 import 'package:imes/resources/repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,6 +26,8 @@ enum AuthState {
 class UserNotifier with ChangeNotifier {
   AuthState _state = AuthState.NOT_AUTHENTICATED;
   local.User _user;
+
+  StreamSubscription<String> _tokenRefreshSubscription;
 
   int _notifications = 0;
 
@@ -49,7 +58,7 @@ class UserNotifier with ChangeNotifier {
       final _firebaseMessaging = FirebaseMessaging();
       final token = await _firebaseMessaging.getToken();
       final result = await Repository().api.submitToken(token: token);
-      _firebaseMessaging.onTokenRefresh.listen((newToken) {
+      _tokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((newToken) {
         Repository().api.submitToken(token: newToken);
       });
 
@@ -75,7 +84,21 @@ class UserNotifier with ChangeNotifier {
     _state = AuthState.VERIFYING;
     notifyListeners();
 
-    final response = await Repository().auth.verify(phone: phone, code: code, deviceId: '123', deviceName: 'name');
+    String deviceId;
+    String deviceName;
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      deviceId = androidInfo.androidId;
+      deviceName = androidInfo.model;
+    } else if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      deviceId = iosInfo.identifierForVendor;
+      deviceName = iosInfo.utsname.machine;
+    } else {}
+
+    final response =
+        await Repository().auth.verify(phone: phone, code: code, deviceId: deviceId, deviceName: deviceName);
     if (response.statusCode == 200) {
       final storage = FlutterSecureStorage();
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
@@ -122,6 +145,10 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  void updateEducationDocument(CoverImage doc) {
+    // _user = _user.specializedInformation.educationDocument = doc;
+  }
+
   void updateBalance(int newBalance) {
     _user = _user.copyWith(balance: newBalance);
     notifyListeners();
@@ -146,7 +173,36 @@ class UserNotifier with ChangeNotifier {
     _state = AuthState.NOT_AUTHENTICATED;
     final storage = FlutterSecureStorage();
     await storage.delete(key: '__AUTH_TOKEN_');
+    _tokenRefreshSubscription.cancel();
     Repository().create();
     notifyListeners();
+  }
+
+  Future<void> uploadEducationDocument(String path) async {
+    final response = await Repository().api.uploadEducationDoc(path);
+    if (response.statusCode == 200) {
+      if (user.specializedInformation != null) {
+        _user = user.copyWith(
+          specializedInformation: user.specializedInformation.copyWith(
+            educationDocument: response.body.data,
+          ),
+        );
+      } else {
+        _user = user.copyWith(specializedInformation: UserSpecializedInfo(educationDocument: response.body.data));
+      }
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadProfilePicture(String path) async {
+    final response = await Repository().api.uploadProfileImage(path);
+    if (response.statusCode == 200) {
+      if (_user.basicInformation != null) {
+        _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.body.data));
+      } else {
+        _user.copyWith(basicInformation: UserBasicInfo(avatar: response.body.data));
+      }
+      notifyListeners();
+    }
   }
 }

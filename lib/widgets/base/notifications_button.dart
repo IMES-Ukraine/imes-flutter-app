@@ -13,23 +13,21 @@ class NotificationsButton extends StatelessWidget {
         alignment: Alignment.topRight,
         children: <Widget>[
           Center(
-            child: IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: Theme.of(context).dividerColor,
-              ),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => NotificationsPage()),
-              ),
+              child: IconButton(
+            icon: Icon(
+              Icons.notifications,
+              color: Theme.of(context).dividerColor,
             ),
-          ),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => NotificationsPage()),
+            ),
+          )),
           if (userNotifier.notificationsCount > 0)
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 padding: const EdgeInsets.all(4.0),
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Color(0xFF10DE50)), // TODO: extract color to theme
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
                 child: Text(
                   '${userNotifier.notificationsCount}',
                   style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: Colors.white),

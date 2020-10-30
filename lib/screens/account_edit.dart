@@ -1,10 +1,13 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -13,6 +16,7 @@ import 'package:provider/provider.dart';
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
+
   final workingDaysInitial = {0: [], 1: [], 2: []};
 
   @override
@@ -24,40 +28,48 @@ class AccountEditPage extends HookWidget {
         body: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
           return HookBuilder(builder: (context) {
             final step = useState(
-              userNotifier.user.specialInfo == null
+              userNotifier.user.specializedInformation == null
                   ? 0
-                  : userNotifier.user.financialInfo == null
+                  : userNotifier.user.financialInformation == null
                       ? 1
                       : 2,
             );
 
-            final workingDays = userNotifier.user?.specialInfo?.schedule?.isNotEmpty ?? false
-                ? userNotifier.user.specialInfo.schedule
+            final workingDays = userNotifier.user?.specializedInformation?.schedule?.isNotEmpty ?? false
+                ? userNotifier.user.specializedInformation.schedule
                     .map((e) => useValueNotifier(ObservableList.from(e.days)))
                     .toList()
                 : workingDaysInitial.entries.map((e) => useValueNotifier(ObservableList.from(e.value))).toList();
-            final workingDaysControllers = userNotifier.user?.specialInfo?.schedule?.isNotEmpty ?? false
-                ? userNotifier.user.specialInfo.schedule.map((e) => useTextEditingController(text: e.time)).toList()
+            final workingDaysControllers = userNotifier.user?.specializedInformation?.schedule?.isNotEmpty ?? false
+                ? userNotifier.user.specializedInformation.schedule
+                    .map((e) => useTextEditingController(text: e.time))
+                    .toList()
                 : workingDaysInitial.entries.map((e) => useTextEditingController()).toList();
 
-            final nameController = useTextEditingController(text: userNotifier.user?.basicInfo?.name);
-            final phoneController = useTextEditingController(text: userNotifier.user?.basicInfo?.phone);
-            final postController = useTextEditingController(text: userNotifier.user?.basicInfo?.email);
+            final nameController = useTextEditingController(text: userNotifier.user?.basicInformation?.name);
+            final phoneController = useTextEditingController(text: userNotifier.user?.basicInformation?.phone);
+            final postController = useTextEditingController(text: userNotifier.user?.basicInformation?.email);
 
             final specificationController =
-                useTextEditingController(text: userNotifier.user?.specialInfo?.specification);
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.specification);
             final qualificationController =
-                useTextEditingController(text: userNotifier.user?.specialInfo?.qualification);
-            final workPlaceController = useTextEditingController(text: userNotifier.user?.specialInfo?.workplace);
-            final positionController = useTextEditingController(text: userNotifier.user?.specialInfo?.position);
-            final licenseController = useTextEditingController(text: userNotifier.user?.specialInfo?.licenseNumber);
-            final studyPeriodController = useTextEditingController(text: userNotifier.user?.specialInfo?.studyPeriod);
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.qualification);
+            final workPlaceController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
+            final positionController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
+            final licenseController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.licenseNumber);
+            final studyPeriodController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.studyPeriod);
             final additionalQualificationController =
-                useTextEditingController(text: userNotifier.user?.specialInfo?.additionalQualification);
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.additionalQualification);
 
-            final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInfo?.card);
-            final cardExpController = useTextEditingController(text: userNotifier.user?.financialInfo?.exp);
-            final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInfo?.ccv);
+            final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInformation?.card);
+            final cardExpController = useTextEditingController(text: userNotifier.user?.financialInformation?.exp);
+            final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInformation?.ccv);
+
+            final selectedAvatar = useState<String>();
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -65,10 +77,64 @@ class AccountEditPage extends HookWidget {
                   Card(
                       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                       child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: OctoCircleAvatar(
-                            url: userNotifier.user?.basicInfo?.avatar?.path,
+                        InkResponse(
+                          onTap: () async {
+                            var path = await showDialog(
+                                context: context,
+                                builder: (context) => CustomAlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                child: CustomFlatButton(
+                                                    text: 'КАМЕРА',
+                                                    color: Theme.of(context).primaryColor,
+                                                    onPressed: () async {
+                                                      final image =
+                                                          await ImagePicker().getImage(source: ImageSource.camera);
+                                                      Navigator.of(context).pop(image?.path);
+                                                    }),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                child: CustomFlatButton(
+                                                    text: 'ГАЛЕРЕЯ',
+                                                    color: Theme.of(context).primaryColor,
+                                                    onPressed: () async {
+                                                      final image =
+                                                          await ImagePicker().getImage(source: ImageSource.gallery);
+                                                      Navigator.of(context).pop(image?.path);
+                                                    }),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                            userNotifier.uploadProfilePicture(path).then((_) {}).catchError((error) {
+                              print(error);
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlertDialog(
+                                    content: CustomDialog(
+                                      icon: Icons.close,
+                                      color: Theme.of(context).errorColor,
+                                      text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                    ),
+                                  );
+                                },
+                              );
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: OctoCircleAvatar(
+                              url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
+                            ),
                           ),
                         ),
                         Expanded(
@@ -271,12 +337,36 @@ class AccountEditPage extends HookWidget {
                             Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                             const SizedBox(height: 8.0),
                             InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                final result = await FilePicker.platform.pickFiles();
+                                if (result != null) {
+                                  userNotifier
+                                      .uploadEducationDocument(result.files.single.path)
+                                      .then((_) {})
+                                      .catchError((error) {
+                                    print(error);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CustomAlertDialog(
+                                          content: CustomDialog(
+                                            icon: Icons.close,
+                                            color: Theme.of(context).errorColor,
+                                            text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  });
+                                }
+                              },
                               child: Row(
                                 children: [
                                   Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 20.0),
                                   const SizedBox(width: 8.0),
-                                  Text(userNotifier.user?.specialInfo?.educationDocument?.fileName ?? 'Разместить',
+                                  Text(
+                                      userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
+                                          'Разместить',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).primaryColor,
@@ -418,7 +508,7 @@ class AccountEditPage extends HookWidget {
                           style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
                         ),
                         onPressed: () {
-                          final result = Map<String, dynamic>();
+                          final result = <String, dynamic>{};
                           result['basic_information'] = {
                             'name': nameController.text,
                             'email': postController.text,
@@ -435,9 +525,9 @@ class AccountEditPage extends HookWidget {
                             'qualification': qualificationController.text,
                             'workplace': workPlaceController.text,
                             'position': positionController.text,
-                            'licenseNumber': licenseController.text,
-                            'studyPeriod': studyPeriodController.text,
-                            'additionalQualification': additionalQualificationController.text,
+                            'license_number': licenseController.text,
+                            'study_pseriod': studyPeriodController.text,
+                            'additional_qualification': additionalQualificationController.text,
                             'schedule': resultSchedule,
                           };
 

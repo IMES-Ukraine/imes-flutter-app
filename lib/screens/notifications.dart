@@ -3,7 +3,7 @@ import 'package:imes/blocs/home_notifier.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/notifications_notifier.dart';
-import 'package:imes/resources/resources.dart';
+import 'package:imes/helpers/custom_icons_icons.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 
@@ -15,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:timeago/timeago.dart' as timeago;
+
 class NotificationsPage extends StatefulWidget {
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
@@ -25,19 +27,49 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final userNotifier = Provider.of<UserNotifier>(context);
+      final userNotifier = Provider.of<UserNotifier>(context, listen: false);
       userNotifier.resetNotificationsCount();
     });
+  }
+
+  Widget _getIcon(String type) {
+    switch (type) {
+      case 'NEWS':
+        return Icon(CustomIcons.news, color: Theme.of(context).primaryColor, size: 20);
+      case 'SUPPORT':
+        return Icon(CustomIcons.support, color: Theme.of(context).primaryColor, size: 20);
+      case 'SYSTEM':
+        return Icon(CustomIcons.settings, color: Theme.of(context).primaryColor, size: 20);
+      case 'RESEARCHES':
+        return Icon(CustomIcons.test, color: Theme.of(context).primaryColor, size: 20);
+      case 'MESSAGE':
+        return Icon(Icons.chat, color: Theme.of(context).primaryColor, size: 20);
+      default:
+        return Icon(Icons.image, color: Theme.of(context).primaryColor, size: 20);
+    }
+  }
+
+  String _getText(String type) {
+    switch (type) {
+      case 'NEWS':
+        return 'НОВИНИ';
+      case 'SUPPORT':
+        return 'ПІДТРИМКА';
+      case 'SYSTEM':
+        return 'СИСТЕМА';
+      case 'RESEARCHES':
+        return 'ДОСЛІДЖЕННЯ';
+      case 'MESSAGE':
+        return 'ПОВІДОМЛЕННЯ';
+      default:
+        return '';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) {
-        final notificationsNotifier = NotificationsNotifier();
-        notificationsNotifier.load();
-        return notificationsNotifier;
-      },
+      create: (_) => NotificationsNotifier()..load(),
       child: Consumer3<NotificationsNotifier, UserNotifier, HomeNotifier>(
         builder: (context, notificationsNotifier, userNotifier, homeNotifier, _) {
           return Scaffold(
@@ -53,7 +85,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: RefreshIndicator(
                       onRefresh: () => notificationsNotifier.load(),
-                      child: ListView.separated(
+                      child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: notificationsNotifier.state == NotificationsState.LOADING
                             ? 1
@@ -95,71 +127,86 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             actionExtentRatio: 0.15,
                             secondaryActions: <Widget>[
                               IconSlideAction(
-                                color: Theme.of(context).errorColor,
+                                foregroundColor: Theme.of(context).errorColor,
                                 icon: Icons.delete,
                                 onTap: () {
                                   notificationsNotifier.delete(index);
                                 },
                               ),
                             ],
-                            child: Container(
-                              color: Colors.white,
-                              child: ListTile(
-                                leading: notificationsNotifier.notifications[index].type == 'NEWS'
-                                    ? CircleAvatar(
-                                        child: Image.network(notificationsNotifier.notifications[index]?.image ?? ''),
-                                      )
-                                    : Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(colors: [
-                                            Color(0xFF12EC34),
-                                            Color(0xFF00D0D0)
-                                          ]), // TODO: extract colors to theme
-                                        ),
-                                        child: _getIcon(notificationsNotifier.notifications[index].type),
+                            child: Card(
+                              margin: const EdgeInsets.all(16.0),
+                              child: InkWell(
+//                                 onTap: () {
+//                                   if (notificationsNotifier.notifications[index].action?.isNotEmpty ?? false) {
+//                                     if (notificationsNotifier.notifications[index].type == 'NEWS') {
+//                                       final values = notificationsNotifier.notifications[index].action.split(':');
+//                                       if (values.length > 1) {
+//                                         try {
+//                                           final id = num.parse(values[1]);
+// //                                          Navigator.of(context).pushNamed('/blogs/view', arguments: id);
+//                                           Navigator.of(context)
+//                                               .push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
+//                                         } catch (e) {
+//                                           print(e.toString());
+//                                         }
+//                                       }
+//                                     }
+
+//                                     // if (notificationsNotifier.notifications[index].type == 'MESSAGE') {
+//                                     //   if (canLaunch(notificationsNotifier.notifications[index].action)) {
+//                                     //     launch(notificationsNotifier.notifications[index].action);
+//                                     //   }
+//                                     // }
+//                                   }
+
+//                                   if (notificationsNotifier.notifications[index].type == 'SUPPORT') {
+//                                     Navigator.of(context).push(
+//                                       MaterialPageRoute(builder: (context) => SupportPage()),
+//                                     );
+//                                   }
+
+//                                   if (notificationsNotifier.notifications[index].type == 'REFILL') {
+//                                     homeNotifier.changePage(3);
+//                                   }
+//                                 },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          _getIcon(notificationsNotifier.notifications[index].type),
+                                          const SizedBox(width: 8.0),
+                                          Text(
+                                            _getText(notificationsNotifier.notifications[index].type),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w800,
+                                              color: Color(0xFF606060),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              '${timeago.format(notificationsNotifier.notifications[index].updatedAt, locale: 'uk')}',
+                                              style: TextStyle(fontSize: 12.0, color: Color(0xFF828282)),
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                title: Text(notificationsNotifier.notifications[index].text),
-                                onTap: () async {
-                                  if (notificationsNotifier.notifications[index].action?.isNotEmpty ?? false) {
-                                    if (notificationsNotifier.notifications[index].type == 'NEWS') {
-                                      final values = notificationsNotifier.notifications[index].action.split(':');
-                                      if (values.length > 1) {
-                                        try {
-                                          final id = num.parse(values[1]);
-//                                          Navigator.of(context).pushNamed('/blogs/view', arguments: id);
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
-                                        } catch (e) {
-                                          print(e.toString());
-                                        }
-                                      }
-                                    }
-
-                                    if (notificationsNotifier.notifications[index].type == 'MESSAGE') {
-                                      if (await canLaunch(notificationsNotifier.notifications[index].action)) {
-                                        launch(notificationsNotifier.notifications[index].action);
-                                      }
-                                    }
-                                  }
-
-                                  if (notificationsNotifier.notifications[index].type == 'SUPPORT') {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => SupportPage()),
-                                    );
-                                  }
-
-                                  if (notificationsNotifier.notifications[index].type == 'REFILL') {
-                                    homeNotifier.changePage(3);
-                                  }
-                                },
+                                      Text(notificationsNotifier.notifications[index].text.title,
+                                          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold), maxLines: 1),
+                                      Text(notificationsNotifier.notifications[index].text.content,
+                                          style: TextStyle(fontSize: 12.0), maxLines: 2),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           );
                         },
-                        separatorBuilder: (context, index) => Divider(indent: 16.0),
                       ),
                     ),
                   ),
@@ -167,26 +214,5 @@ class _NotificationsPageState extends State<NotificationsPage> {
         },
       ),
     );
-  }
-
-  Widget _getIcon(String type) {
-    switch (type) {
-      case 'REFILL':
-        return Center(
-            child: Text(
-          '\$',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 24),
-        ));
-      case 'WITHDRAW':
-        return Image.asset(Images.reply);
-      // case 'MESSAGE':
-      // return Image.asset(Images.settings);
-      // case 'SUPPORT':
-      // return Image.asset(Images.headphones);
-      case 'DEFAULT':
-        return Image.asset(Images.hamburger);
-      default:
-        return Image.asset(Images.hamburger);
-    }
   }
 }

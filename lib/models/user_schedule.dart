@@ -1,14 +1,12 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'user_schedule.freezed.dart';
 part 'user_schedule.g.dart';
 
-@JsonSerializable()
-class UserSchedule {
-  final String time;
-  final List<int> days;
-
-  UserSchedule({this.time, this.days});
+@freezed
+abstract class UserSchedule with _$UserSchedule {
+  factory UserSchedule({String time, List<int> days}) = _UserSchedule;
 
   factory UserSchedule.fromJson(Map<String, dynamic> json) => _$UserScheduleFromJson(json);
-  Map<String, dynamic> toJson() => _$UserScheduleToJson(this);
+  // Map<String, dynamic> toJson() => _$UserScheduleToJson(this);
 }

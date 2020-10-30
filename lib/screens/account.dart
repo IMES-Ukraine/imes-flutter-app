@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:imes/extensions/color.dart';
 
+import 'package:permission_handler/permission_handler.dart';
+
 class AccountPage extends StatelessWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
 
@@ -37,13 +39,13 @@ class AccountPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: OctoCircleAvatar(
-                      url: userNotifier.user?.basicInfo?.avatar?.path,
+                      url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
                     ),
                   ),
                   Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(
-                      userNotifier.user?.basicInfo?.name ?? 'Ім\'я Прізвище',
+                      userNotifier.user?.basicInformation?.name ?? 'Ім\'я Прізвище',
                       style: TextStyle(
                         color: Theme.of(context).dividerColor.darken(20),
                       ),
@@ -54,7 +56,7 @@ class AccountPage extends StatelessWidget {
                         Icon(Icons.phone, color: Theme.of(context).primaryColor, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          userNotifier.user?.basicInfo?.phone ?? '',
+                          userNotifier.user?.basicInformation?.phone ?? 'Телефон',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -65,7 +67,7 @@ class AccountPage extends StatelessWidget {
                         Icon(Icons.mail_outline, color: Theme.of(context).primaryColor, size: 16.0),
                         const SizedBox(width: 4.0),
                         Text(
-                          userNotifier.user?.basicInfo?.email ?? '',
+                          userNotifier.user?.basicInformation?.email ?? 'Пошта',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                         ),
                       ],
@@ -86,23 +88,24 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   Text('Спеціалізація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.specification ?? '',
+                  Text(userNotifier.user?.specializedInformation?.specification ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Рівень кваліфікації', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.qualification ?? '',
+                  Text(userNotifier.user?.specializedInformation?.qualification ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Місце роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.workplace ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(userNotifier.user?.specializedInformation?.workplace ?? '',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
                   Column(
                     children: List.generate(3, (index) {
-                          final s = userNotifier.user?.specialInfo?.schedule?.elementAt(index);
+                          final s = userNotifier.user?.specializedInformation?.schedule?.elementAt(index);
                           return Row(
                             children: [
                               for (var i = 0; i < days.length; i++)
@@ -124,36 +127,40 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   Text('Посада', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.position ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(userNotifier.user?.specializedInformation?.position ?? '',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Номер ліцензії лікаря', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.licenseNumber ?? '',
+                  Text(userNotifier.user?.specializedInformation?.licenseNumber ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
                   InkWell(
                     onTap: () async {
-                      var localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
-                      var dir = Directory(localPath);
+                      var status = await Permission.storage.request();
+                      var dir = Platform.isAndroid
+                          ? await getExternalStorageDirectory()
+                          : await getApplicationDocumentsDirectory();
                       var exists = await dir.exists();
-                      if(!exists) {
+                      if (!exists) {
                         dir.create();
                       }
+
                       final taskId = await FlutterDownloader.enqueue(
-                        url: userNotifier.user.specialInfo.educationDocument.path,
-                        savedDir: localPath,
-                        showNotification: true, // show download progress in status bar (for Android)
-                        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+                        url: userNotifier.user.specializedInformation.educationDocument.path,
+                        savedDir: dir.path,
+                        showNotification: true,
+                        openFileFromNotification: true,
                       );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(userNotifier.user?.specialInfo?.educationDocument != null ? 'Показать' : '',
+                        Text(userNotifier.user?.specializedInformation?.educationDocument != null ? 'Показать' : '',
                             style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                        Text(userNotifier.user?.specialInfo?.educationDocument?.fileName ?? '',
+                        Text(userNotifier.user?.specializedInformation?.educationDocument?.fileName ?? '',
                             style: TextStyle(color: Theme.of(context).primaryColor)),
                       ],
                     ),
@@ -161,12 +168,12 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   Text('Дата (період) навчання', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.studyPeriod ?? '',
+                  Text(userNotifier.user?.specializedInformation?.studyPeriod ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('Додаткова кваліфікація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specialInfo?.additionalQualification ?? '',
+                  Text(userNotifier.user?.specializedInformation?.additionalQualification ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16.0),
                 ],
@@ -186,7 +193,8 @@ class AccountPage extends StatelessWidget {
                     Divider(),
                     Text('Номер картки', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                     const SizedBox(height: 8.0),
-                    Text(userNotifier.user?.financialInfo?.card ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(userNotifier.user?.financialInformation?.card ?? '',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16.0),
                   ],
                 )),
@@ -194,9 +202,16 @@ class AccountPage extends StatelessWidget {
         }));
   }
 
-  Future<String> _findLocalPath() async {
-    final directory =
-        Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
+  // Future<Directory> _getDownloadDirectory() async {
+  //   if (Platform.isAndroid) {
+  //     return await DownloadsPathProvider.downloadsDirectory;
+  //   }
+
+  //   // in this example we are using only Android and iOS so I can assume
+  //   // that you are not trying it for other platforms and the if statement
+  //   // for iOS is unnecessary
+
+  //   // iOS directory visible to user
+  //   return await getApplicationDocumentsDirectory();
+  // }
 }

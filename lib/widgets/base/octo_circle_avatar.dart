@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 
-class OctoCircleAvatar extends StatelessWidget {
+class   OctoCircleAvatar extends StatelessWidget {
   final String url;
   final double size;
 
@@ -32,6 +32,7 @@ class OctoCircleAvatar extends StatelessWidget {
           ),
         ),
       ),
+      fit: BoxFit.cover,
       width: size,
       height: size,
     );

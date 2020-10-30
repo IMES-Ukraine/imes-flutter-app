@@ -150,4 +150,28 @@ class _$RestClient extends RestClient {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<ProfileResponse, ProfileResponse>($request);
   }
+
+  Future<Response<UploadFileResponse>> uploadEducationDoc(String path) {
+    final $url =
+        'https://echo.myftp.org/api/v1/profile/image/education_document';
+    final $parts = <PartValue>[PartValueFile<String>('file', path)];
+    final $request =
+        Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
+    return client.send<UploadFileResponse, UploadFileResponse>($request);
+  }
+
+  Future<Response<UploadFileResponse>> uploadProfileImage(String path) {
+    final $url = 'https://echo.myftp.org/api/v1/profile/image/avatar';
+    final $parts = <PartValue>[PartValueFile<String>('file', path)];
+    final $request =
+        Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
+    return client.send<UploadFileResponse, UploadFileResponse>($request);
+  }
+
+  Future<Response> readBlogBlock({num blogId, num blockIndex}) {
+    final $url =
+        'https://echo.myftp.org/api/v1/blog/${blogId}/read/${blockIndex}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

@@ -27,7 +27,7 @@ class _SupportPageState extends State<SupportPage> {
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('sessions')
-                      .doc('${userNotifier.user.username}')
+                      .doc('${userNotifier.user.id}')
                       .collection('messages')
                       .orderBy('time', descending: true)
                       .snapshots(),
@@ -103,7 +103,7 @@ class _SupportPageState extends State<SupportPage> {
                       onTap: () async {
                         if (_textEditingController.text.trim().isNotEmpty) {
                           final sessionDocumentRef =
-                              FirebaseFirestore.instance.collection('sessions').doc('${userNotifier.user.username}');
+                              FirebaseFirestore.instance.collection('sessions').doc('${userNotifier.user.id}');
                           final docSnapshot = await sessionDocumentRef.get();
                           if (!docSnapshot.exists) {
                             await sessionDocumentRef.set({'unreadCount': 1});

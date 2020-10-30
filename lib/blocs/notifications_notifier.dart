@@ -43,6 +43,7 @@ class NotificationsNotifier with ChangeNotifier {
     } catch (e) {
       _state = NotificationsState.ERROR;
       notifyListeners();
+      rethrow;
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_answer_data.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
+import 'package:imes/models/upload_file_response.dart';
 import 'package:imes/models/withdraw_history_response.dart';
 
 part 'api.chopper.dart';
@@ -110,4 +111,15 @@ abstract class RestClient extends ChopperService {
 
   @Post(path: '/api/v1/profile/verify')
   Future<Response<ProfileResponse>> submitProfile(@Body() Map<String, dynamic> data);
+
+  @multipart
+  @Post(path: '/api/v1/profile/image/education_document')
+  Future<Response<UploadFileResponse>> uploadEducationDoc(@PartFile('file') String path);
+
+  @multipart
+  @Post(path: '/api/v1/profile/image/avatar')
+  Future<Response<UploadFileResponse>> uploadProfileImage(@PartFile('file') String path);
+
+  @Get(path: '/api/v1/blog/{id}/read/{index}')
+  Future<Response> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
 }

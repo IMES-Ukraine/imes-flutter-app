@@ -9,9 +9,7 @@ void main() {
     expect(true, File(Images.loginLogo).existsSync());
     expect(true, File(Images.twoBars).existsSync());
     expect(true, File(Images.viber).existsSync());
-    expect(true, File(Images.hamburger).existsSync());
     expect(true, File(Images.bottle).existsSync());
-    expect(true, File(Images.reply).existsSync());
     expect(true, File(Images.history).existsSync());
     expect(true, File(Images.messenger).existsSync());
     expect(true, File(Images.weightIcon).existsSync());

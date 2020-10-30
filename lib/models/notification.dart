@@ -1,3 +1,4 @@
+import 'package:imes/models/notification_text.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'notification.g.dart';
@@ -10,7 +11,7 @@ class Notification {
   final String type;
   final String action;
   final String image;
-  final String text;
+  final NotificationText text;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'updated_at')
@@ -30,8 +31,7 @@ class Notification {
     this.deletedAt,
   });
 
-  factory Notification.fromJson(Map<String, dynamic> json) =>
-      _$NotificationFromJson(json);
+  factory Notification.fromJson(Map<String, dynamic> json) => _$NotificationFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotificationToJson(this);
 }

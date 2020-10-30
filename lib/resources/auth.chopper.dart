@@ -23,7 +23,7 @@ class _$AuthClient extends AuthClient {
     return client.send<dynamic, dynamic>($request);
   }
 
-  Future<Response<LoginResponse>> verify(
+  Future<Response<VerifyResponse>> verify(
       {String phone, String code, String deviceId, String deviceName}) {
     final $url = 'http://echo.myftp.org:6666/api/verify';
     final $headers = {'Content-Type': 'application/json'};
@@ -35,6 +35,6 @@ class _$AuthClient extends AuthClient {
     };
     final $request =
         Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
-    return client.send<LoginResponse, LoginResponse>($request);
+    return client.send<VerifyResponse, VerifyResponse>($request);
   }
 }

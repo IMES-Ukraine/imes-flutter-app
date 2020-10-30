@@ -5,6 +5,7 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/account.dart';
+import 'package:imes/screens/account_edit.dart';
 import 'package:imes/screens/balance.dart';
 
 import 'package:imes/widgets/base/notifications_button.dart';
@@ -29,7 +30,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Container(
+                  child: Material(
                     color: Colors.white,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +38,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: OctoCircleAvatar(
-                            url: userNotifier.user?.basicInfo?.avatar?.path,
+                            url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
                           ),
                         ),
                         Expanded(
@@ -47,13 +48,13 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userNotifier?.user?.basicInfo?.name ?? 'Ім\'я Прізвище',
+                                  userNotifier?.user?.basicInformation?.name ?? 'Ім\'я Прізвище',
                                   style: TextStyle(
                                     color: Theme.of(context).dividerColor.darken(20),
                                   ),
                                 ),
                                 Text(
-                                  userNotifier.user?.specialInfo?.specification ?? 'Спеціалізація',
+                                  userNotifier.user?.specializedInformation?.specification ?? 'Спеціалізація',
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
@@ -98,40 +99,52 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        RaisedGradientButton(
+                  padding: const EdgeInsets.all(8.0),
+                  child: userNotifier.user.basicInformation != null && userNotifier.user.specializedInformation != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            RaisedGradientButton(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.account_circle, color: Colors.white),
+                                  const SizedBox(width: 8.0),
+                                  Text('АКАУНТ',
+                                      style:
+                                          TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                                ],
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountPage()));
+                              },
+                            ),
+                            RaisedGradientButton(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                              child: Row(
+                                children: [
+                                  Icon(CustomIcons.blog_heart, color: Colors.white),
+                                  const SizedBox(width: 8.0),
+                                  Text('БАЛАНС',
+                                      style:
+                                          TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                                ],
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalancePage()));
+                              },
+                            ),
+                          ],
+                        )
+                      : RaisedGradientButton(
                           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.account_circle, color: Colors.white),
-                              const SizedBox(width: 8.0),
-                              Text('АКАУНТ',
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
-                            ],
-                          ),
+                          child: Text('ВЕРИФІКУВАТИ АКАУНТ',
+                              style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white)),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountPage()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountEditPage()));
                           },
                         ),
-                        RaisedGradientButton(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
-                          child: Row(
-                            children: [
-                              Icon(CustomIcons.blog_heart, color: Colors.white),
-                              const SizedBox(width: 8.0),
-                              Text('БАЛАНС',
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalancePage()));
-                          },
-                        ),
-                      ],
-                    )),
+                ),
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.all(8.0),

@@ -5,6 +5,8 @@ import 'package:http/io_client.dart';
 import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
+import 'package:imes/models/upload_file_response.dart';
+import 'package:imes/models/verify_response.dart';
 import 'package:imes/resources/api.dart';
 
 import 'package:imes/models/basic_response.dart';
@@ -46,6 +48,8 @@ class Repository {
       TestsResponse: TestsResponse.fromJsonFactory,
       TestResponse: TestResponse.fromJsonFactory,
       SubmitTestResponse: SubmitTestResponse.fromJsonFactory,
+      VerifyResponse: VerifyResponse.fromJsonFactory,
+      UploadFileResponse: UploadFileResponse.fromJsonFactory,
     });
     final httpClient = HttpClient();
     httpClient.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -58,7 +62,7 @@ class Repository {
       client: IOClient(httpClient),
       converter: converter,
       errorConverter: converter,
-      interceptors: [authHeader],
+      interceptors: [authHeader, tokenExpired],
     );
   }
 
@@ -74,6 +78,10 @@ class Repository {
       'Authorization',
       'Bearer $token',
     );
+  }
+
+  Future<Response> tokenExpired(Response response) async {
+    return response;
   }
 }
 

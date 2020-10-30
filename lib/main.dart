@@ -31,7 +31,7 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  timeago.setLocaleMessages('ua', UaMessages());
+  timeago.setLocaleMessages('uk', UaMessages());
 
 //  final FirebaseApp app = await FirebaseApp.configure(
 //    name: 'test',
@@ -54,6 +54,7 @@ void main() async {
 
   local.User user;
   if (token != null) {
+    print('authenticated');
     try {
       final response = await Repository().api.profile();
       if (response.statusCode == 200) {
@@ -69,6 +70,7 @@ void main() async {
       }
     } catch (e) {
       print(e);
+      rethrow;
     }
   }
 

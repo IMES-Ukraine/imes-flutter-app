@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:imes/models/login_response.dart';
+import 'package:imes/models/verify_response.dart';
 
 part 'auth.chopper.dart';
 
@@ -14,7 +15,7 @@ abstract class AuthClient extends ChopperService {
   Future<Response> auth(@Field('phone') String phone);
 
   @Post(path: '/api/verify', headers: {'Content-Type': 'application/json'})
-  Future<Response<LoginResponse>> verify({
+  Future<Response<VerifyResponse>> verify({
     @Field('phone') String phone,
     @Field('code') String code,
     @Field('deviceId') String deviceId,
