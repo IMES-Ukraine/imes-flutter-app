@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/screens/account_edit.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:imes/extensions/color.dart';
 
@@ -68,7 +72,6 @@ class AccountPage extends StatelessWidget {
                     ),
                   ])),
                 ])),
-            // HookBuilder(builder: (context) {
             Card(
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
               child: ExpansionTile(
@@ -130,14 +133,30 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(userNotifier.user?.specialInfo?.educationDocument != null ? 'Показать' : '',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                      Text(userNotifier.user?.specialInfo?.educationDocument?.fileName ?? '',
-                          style: TextStyle(color: Theme.of(context).primaryColor)),
-                    ],
+                  InkWell(
+                    onTap: () async {
+                      var localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
+                      var dir = Directory(localPath);
+                      var exists = await dir.exists();
+                      if(!exists) {
+                        dir.create();
+                      }
+                      final taskId = await FlutterDownloader.enqueue(
+                        url: userNotifier.user.specialInfo.educationDocument.path,
+                        savedDir: localPath,
+                        showNotification: true, // show download progress in status bar (for Android)
+                        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(userNotifier.user?.specialInfo?.educationDocument != null ? 'Показать' : '',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                        Text(userNotifier.user?.specialInfo?.educationDocument?.fileName ?? '',
+                            style: TextStyle(color: Theme.of(context).primaryColor)),
+                      ],
+                    ),
                   ),
                   Divider(),
                   Text('Дата (період) навчання', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
@@ -153,7 +172,6 @@ class AccountPage extends StatelessWidget {
                 ],
               ),
             ),
-            // }),
             Card(
                 margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                 child: ExpansionTile(
@@ -174,5 +192,11 @@ class AccountPage extends StatelessWidget {
                 )),
           ]));
         }));
+  }
+
+  Future<String> _findLocalPath() async {
+    final directory =
+        Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+    return directory.path;
   }
 }

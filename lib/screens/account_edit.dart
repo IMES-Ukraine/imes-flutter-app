@@ -56,7 +56,8 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specialInfo?.additionalQualification);
 
             final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInfo?.card);
-            // final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInfo?.exp);
+            final cardExpController = useTextEditingController(text: userNotifier.user?.financialInfo?.exp);
+            final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInfo?.ccv);
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -370,7 +371,7 @@ class AccountEditPage extends HookWidget {
                                 children: [
                                   Expanded(
                                     child: TextField(
-                                      // controller: workPlaceController,
+                                      controller: cardExpController,
                                       decoration: InputDecoration(
                                         isDense: true,
                                         labelText: 'Дата',
@@ -387,7 +388,7 @@ class AccountEditPage extends HookWidget {
                                   const SizedBox(width: 200.0),
                                   Expanded(
                                     child: TextField(
-                                      // controller: workPlaceController,
+                                      controller: cardCCVController,
                                       decoration: InputDecoration(
                                         isDense: true,
                                         labelText: 'CVV',
@@ -438,6 +439,12 @@ class AccountEditPage extends HookWidget {
                             'studyPeriod': studyPeriodController.text,
                             'additionalQualification': additionalQualificationController.text,
                             'schedule': resultSchedule,
+                          };
+
+                          result['financial_information'] = {
+                            'card': cardNumberController.text,
+                            'exp': cardExpController.text,
+                            'ccv': cardCCVController.text,
                           };
 
                           userNotifier

@@ -5,6 +5,7 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/account.dart';
+import 'package:imes/screens/balance.dart';
 
 import 'package:imes/widgets/base/notifications_button.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
@@ -36,7 +37,6 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: OctoCircleAvatar(
-                            // url: 'https://images.newrepublic.com/5485c82606455ce71f6659fc57975a096a291c11.jpeg',
                             url: userNotifier.user?.basicInfo?.avatar?.path,
                           ),
                         ),
@@ -126,7 +126,9 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
                             ],
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalancePage()));
+                          },
                         ),
                       ],
                     )),

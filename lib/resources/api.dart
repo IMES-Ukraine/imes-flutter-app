@@ -80,10 +80,12 @@ abstract class RestClient extends ChopperService {
   });
 
   @Get(path: '/api/v1/withdraw')
-  Future<Response<WithdrawHistoryResponse>> withdrawHistory({
-    @Query('page') int page = 0,
-    @Query('count') int count = 10,
-  });
+  Future<Response<WithdrawHistoryResponse>> withdrawHistory(
+      // {
+      //   @Query('page') int page = 0,
+      //   @Query('count') int count = 10,
+      // }
+      );
 
   @Post(path: '/api/v1/profile/token')
   Future<Response<BasicResponse>> submitToken({

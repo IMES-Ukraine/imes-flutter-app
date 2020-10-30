@@ -34,11 +34,11 @@ class BalanceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<User> submit() async {
+  Future<User> submit({int amount, String comment, String type}) async {
     _state = BalanceState.PROCESSING;
     notifyListeners();
 
-    final response = await Repository().api.withdraw(amount: _amount, comment: _comment, type: _type);
+    final response = await Repository().api.withdraw(amount: amount, comment: comment, type: type);
 
     _state = BalanceState.WITHDRAW;
     notifyListeners();

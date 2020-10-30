@@ -99,11 +99,9 @@ class _$RestClient extends RestClient {
     return client.send<ProfileResponse, ProfileResponse>($request);
   }
 
-  Future<Response<WithdrawHistoryResponse>> withdrawHistory(
-      {int page = 0, int count = 10}) {
+  Future<Response<WithdrawHistoryResponse>> withdrawHistory() {
     final $url = 'https://echo.myftp.org/api/v1/withdraw';
-    final Map<String, dynamic> $params = {'page': page, 'count': count};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    final $request = Request('GET', $url, client.baseUrl);
     return client
         .send<WithdrawHistoryResponse, WithdrawHistoryResponse>($request);
   }

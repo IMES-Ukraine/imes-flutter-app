@@ -51,7 +51,7 @@ class HistoryNotifier with ChangeNotifier {
 //    notifyListeners();
 
     final response = await Repository().api.withdrawHistory(
-          page: ++_lastPage,
+        // page: ++_lastPage,
         );
     if (response.statusCode == 200) {
       final historyPage = response.body.data;
