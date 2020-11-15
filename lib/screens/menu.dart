@@ -46,9 +46,9 @@ class MenuPage extends StatelessWidget {
                 ),
                 text: 'Інструкція',
                 onTap: () async {
-                  if (await canLaunch('https://pharmatracker.com.ua/PharmaTracker.pdf')) {
-                    launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
-                  }
+                  // if (await canLaunch('https://pharmatracker.com.ua/PharmaTracker.pdf')) {
+                  //   launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
+                  // }
                 },
               ),
               MenuItem(
@@ -59,9 +59,6 @@ class MenuPage extends StatelessWidget {
                 ),
                 text: 'Правила користування',
                 onTap: () async {
-                  // if (await canLaunch('https://pharmatracker.com.ua/rules')) {
-                  //   launch('https://pharmatracker.com.ua/rules');
-                  // }
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RulesPage()),
                   );

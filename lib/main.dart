@@ -17,8 +17,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/resources/repository.dart';
 
-import 'package:flutter_stetho/flutter_stetho.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -47,8 +45,6 @@ void main() async {
 //  final FirebaseStorage storage = FirebaseStorage(
 //      app: app, storageBucket: 'gs://tlogic-aed50.appspot.com/');
 
-  unawaited(Stetho.initialize());
-
   final storage = FlutterSecureStorage();
   final token = await storage.read(key: '__AUTH_TOKEN_');
 
@@ -70,7 +66,6 @@ void main() async {
       }
     } catch (e) {
       print(e);
-      rethrow;
     }
   }
 

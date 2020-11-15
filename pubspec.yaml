@@ -1,5 +1,5 @@
 name: imes
-description: A new PharmaTracker application.
+description: A new IMES application.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -14,59 +14,55 @@ description: A new PharmaTracker application.
 version: 1.0.0+11
 
 environment:
-  sdk: ">=2.11.0-213.0.dev <2.12.0"
+  sdk: ">=2.10.4 <2.12.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  better_player: ^0.0.29+1
+  better_player: ^0.0.33
   bubble: ^1.1.9+1
   cached_network_image: ^2.3.2+1
   chopper: ^2.4.1
-  cloud_firestore: ^0.14.1+3
+  cloud_firestore: ^0.14.3
   cupertino_icons: ^1.0.0
-  device_info: ^0.4.2+9
-  file_picker: ^2.0.11
-  firebase_auth: ^0.18.1+2
-  firebase_core: ^0.5.0+1
+
+  
+  device_info: ^1.0.0
+  file_picker: ^2.0.13
+  firebase_auth: ^0.18.3
+  firebase_core: ^0.5.2
   firebase_messaging: ^7.0.3
-  firebase_storage: ^4.0.1
+  firebase_storage: ^5.0.1
   flutter_cupertino_localizations: ^1.0.1
   flutter_downloader: ^1.5.2
+  # flutter_flipperkit: ^0.0.24
   flutter_hooks: ^0.14.1
   flutter_secure_storage: ^3.3.1+1
   flutter_slidable: ^0.5.4
   flutter_state_notifier: ^0.6.1
   freezed_annotation: ^0.12.0
-  image_picker: ^0.6.3+4
-  intl: ^0.16.0
+  image_picker: ^0.6.7+14
+  intl: ^0.16.1
   json_annotation: ^3.0.1
   mask_text_input_formatter: ^1.1.0
   observable: ^0.22.2
   octo_image: ^0.3.0
-  path_provider: ^1.6.22
+  path_provider: ^1.6.24
   permission_handler: ^5.0.1+1
-  photo_view: ^0.10.2
-  pin_code_fields: ^6.0.0
+  photo_view: ^0.10.3
+  pin_code_fields: ^6.0.1
   provider: ^4.0.4
-  sembast: ^2.4.7+7
-  shared_preferences: ^0.5.12+2
+  sembast: ^2.4.8
+  shared_preferences: ^0.5.12+4
   timeago: ^2.0.28
-  url_launcher: ^5.7.7
+  url_launcher: ^5.7.10
   visibility_detector: ^0.1.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # flutter_stetho: ^0.6.0-dev.1
-  flutter_stetho:
-    # path: /Users/romatroskin/Developer/Projects/flutter_stetho/
-    git:
-      url: https://github.com/romatroskin/flutter_stetho.git
-      ref: master
-
   build_runner: ^1.8.0
   chopper_generator: ^2.4.0
   freezed: ^0.12.1

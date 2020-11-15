@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>811852451922-f79e91jacdqi50oso9tuhbqrgrijlglc.apps.googleusercontent.com</string>
+	<string>811852451922-d76bv5n5jem8fvj9p9n6md4cblhlchs8.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.811852451922-f79e91jacdqi50oso9tuhbqrgrijlglc</string>
+	<string>com.googleusercontent.apps.811852451922-d76bv5n5jem8fvj9p9n6md4cblhlchs8</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB2bgjAnVw0Ydh-HQW5QZDjespk6kpdN5s</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>pro.imes</string>
+	<string>imes.pro</string>
 	<key>PROJECT_ID</key>
 	<string>imes-v1</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:811852451922:ios:3e909d1b25d2ec07484f8b</string>
+	<string>1:811852451922:ios:b467e2a6be2d4eca484f8b</string>
 	<key>DATABASE_URL</key>
 	<string>https://imes-v1.firebaseio.com</string>
 </dict>

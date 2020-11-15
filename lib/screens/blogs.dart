@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_flat_button.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 import 'package:imes/widgets/blogs/blog_tile.dart';
@@ -67,7 +69,56 @@ class BlogsPage extends StatelessWidget {
                         //     ? blogsNotifier.blogs[index].coverImages.first.path
                         //     : '',
                         onTap: () {
-                          Navigator.of(context).pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomAlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Внимание!',
+                                          style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Icon(Icons.warning, color: Theme.of(context).errorColor, size: 90.0),
+                                      const SizedBox(height: 16.0),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Для получения баллов за изучение статьи, необходимо полностью её прочесть',
+                                          style: TextStyle(fontSize: 12.0),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                        child: CustomFlatButton(
+                                            text: 'НАЧАТЬ',
+                                            color: Theme.of(context).primaryColor,
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            }),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                        child: CustomFlatButton(
+                                            text: 'ВЕРНУТЬСЯ ПОЗДЖЕ',
+                                            color: Theme.of(context).errorColor,
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).then((value) {
+                            if (value) {
+                              Navigator.of(context).pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
+                            }
+                          });
                         },
                       );
                     },

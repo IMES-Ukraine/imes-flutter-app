@@ -56,8 +56,8 @@ class ReportsNotifier with ChangeNotifier {
     final resultId = int.parse(reportIdString);
     final firebaseStorageRef = FirebaseStorage.instance.ref().child('bills/${resultId.toRadixString(16)}.jpg');
     final task = firebaseStorageRef.putFile(_reportFile);
-    task.events.listen((event) {
-      _progress = event.snapshot.bytesTransferred / event.snapshot.totalByteCount;
+    task.snapshotEvents.listen((event) {
+      _progress = event.bytesTransferred / event.totalBytes;
       notifyListeners();
     });
 
@@ -71,8 +71,6 @@ class ReportsNotifier with ChangeNotifier {
     final creationTime = '$hourLabel:$minuteLabel';
 
     print(creationTime);
-
-    final snapshot = await task.onComplete;
     final response = await Repository().api.postAnalytics(
           id: resultId.toRadixString(16),
           grams: _amount,

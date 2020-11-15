@@ -88,9 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                             style: TextStyle(fontWeight: FontWeight.bold),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
-                                                if (await canLaunch('https://pharmatracker.com.ua/rules')) {
-                                                  launch('https://pharmatracker.com.ua/rules');
-                                                }
+                                                // if (await canLaunch('https://pharmatracker.com.ua/rules')) {
+                                                //   launch('https://pharmatracker.com.ua/rules');
+                                                // }
                                               }),
                                       ],
                                     ),
