@@ -16,6 +16,7 @@
 		C28311CEA45B34403AFFCC1F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 471CA4C9AB571C3B9C465928 /* Pods_Runner.framework */; };
 		DF0B1E6A2561D14E004AAABE /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DF0B1E692561D13F004AAABE /* libsqlite3.tbd */; };
 		DF735CBB2561ACF6006D8BFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF735CBA2561ACF6006D8BFC /* GoogleService-Info.plist */; };
+		DFEE066D2561DEAF0034CCEC /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEE066C2561DEAF0034CCEC /* GradientView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		C4585234B395729929C744DA /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		DF0B1E692561D13F004AAABE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		DF735CBA2561ACF6006D8BFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DFEE066C2561DEAF0034CCEC /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				DF735CBA2561ACF6006D8BFC /* GoogleService-Info.plist */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				DFEE066C2561DEAF0034CCEC /* GradientView.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				DFEE066D2561DEAF0034CCEC /* GradientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
