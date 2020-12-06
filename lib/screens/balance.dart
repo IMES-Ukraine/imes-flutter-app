@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:imes/blocs/history_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
-import 'package:imes/helpers/utils.dart';
-import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/withdraw.dart';
 
-import 'package:imes/widgets/base/custom_dialog.dart';
-import 'package:imes/widgets/base/custom_alert_dialog.dart';
-import 'package:imes/widgets/base/notifications_button.dart';
-
 import 'package:imes/blocs/user_notifier.dart';
-import 'package:imes/blocs/balance_notifier.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:intl/intl.dart';
 
@@ -71,9 +63,13 @@ class _BalancePageState extends State<BalancePage> {
                                 'ОБМІНЯТИ БАЛИ',
                                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => WithdrawPage()));
-                              }),
+                              onPressed: userNotifier.user.basicInformation != null &&
+                                      userNotifier.user.specializedInformation != null
+                                  ? () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(builder: (context) => WithdrawPage()));
+                                    }
+                                  : null),
                         ),
                         Card(
                           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

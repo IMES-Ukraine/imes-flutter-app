@@ -22,10 +22,7 @@ import 'package:observable/observable.dart';
 import 'package:provider/provider.dart';
 
 class ComplexTest extends HookWidget {
-  ComplexTest({
-    Key key,
-    @required this.test,
-  });
+  ComplexTest({Key key, @required this.test});
 
   final Test test;
 
@@ -75,8 +72,8 @@ class ComplexTest extends HookWidget {
                             selected: state.value[test.complex[index].id] == v.variant,
                             selectedColor: index < step.value - 1
                                 ? state.value[test.complex[index].id] == test.complex[index].variants.correctAnswer
-                                    ? Theme.of(context).errorColor
-                                    : Color(0xFF4CF99E) // TODO: extract color to theme
+                                    ? Color(0xFF4CF99E) // TODO: extract color to theme
+                                    : Theme.of(context).errorColor
                                 : null,
                             onTap: index < step.value - 1
                                 ? null
@@ -103,8 +100,8 @@ class ComplexTest extends HookWidget {
                                   selectedColor: index < step.value - 1
                                       ? state.value[test.complex[index].id] ==
                                               test.complex[index].variants.correctAnswer
-                                          ? Theme.of(context).errorColor
-                                          : Color(0xFF4CF99E) // TODO: extract color to theme
+                                          ? Color(0xFF4CF99E) // TODO: extract color to theme
+                                          : Theme.of(context).errorColor
                                       : null,
                                   onTap: index < step.value - 1
                                       ? null
@@ -150,52 +147,61 @@ class ComplexTest extends HookWidget {
                                     state.value.entries.map((e) => TestAnswer(id: e.key, variant: e.value)).toList(),
                                     durationTimer.value,
                                   )
-                                      .then((user) {
-                                    showDialog(
+                                      .then((data) {
+                                    if (data.status == 'passed') {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => CustomAlertDialog(
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      'Ви пройшли тест!',
+                                                      style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                    const SizedBox(height: 16.0),
+                                                    Text(
+                                                      '${data.points} балів',
+                                                      style: TextStyle(
+                                                        fontSize: 23.0,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Color(0xFF4CF99E),
+                                                      ),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                    Text(
+                                                      'зараховано на баланс',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Color(0xFF4CF99E),
+                                                      ),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                    Divider(indent: 8.0, endIndent: 8.0),
+                                                    Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                      child: CustomFlatButton(
+                                                          text: 'OK',
+                                                          color: Theme.of(context).primaryColor,
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                          }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )).then((_) {
+                                        userNotifier.updateUser(data.user);
+                                        Navigator.of(context).pop();
+                                      });
+                                    } else {
+                                      showDialog(
                                         context: context,
                                         builder: (context) => CustomAlertDialog(
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    'Ви пройшли тест!',
-                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  const SizedBox(height: 16.0),
-                                                  Text(
-                                                    '${test.bonus} балів',
-                                                    style: TextStyle(
-                                                      fontSize: 23.0,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Color(0xFF4CF99E),
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  Text(
-                                                    'зараховано на баланс',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Color(0xFF4CF99E),
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  Divider(indent: 8.0, endIndent: 8.0),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                    child: CustomFlatButton(
-                                                        text: 'OK',
-                                                        color: Theme.of(context).primaryColor,
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                        }),
-                                                  ),
-                                                ],
-                                              ),
-                                            )).then((_) {
-                                      userNotifier.updateUser(user);
-                                      Navigator.of(context).pop();
-                                    });
+                                          content: Text('Тест не пройден, попробуйте свои силы в других'),
+                                        ),
+                                      ).then((_) => Navigator.of(context).pop());
+                                    }
                                   }).catchError((error) {
                                     print(error);
                                     showDialog(
@@ -205,7 +211,7 @@ class ComplexTest extends HookWidget {
                                           content: CustomDialog(
                                             icon: Icons.close,
                                             color: Theme.of(context).errorColor,
-                                            text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                            text: Utils.getErrorText(error?.body ?? 'unkown_error'),
                                           ),
                                         );
                                       },

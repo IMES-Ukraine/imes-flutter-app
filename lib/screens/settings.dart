@@ -94,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   state.value = value;
                 },
                 title: Text('Уведомления',
-                    style: TextStyle( 
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
@@ -165,58 +165,60 @@ class _SettingsPageState extends State<SettingsPage> {
                   childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
                   children: [
                     TextFormField(
-                      // focusNode: oldPasswordFocusNode,
-                      // controller: oldPasswordController,
+                      focusNode: oldPasswordFocusNode,
+                      controller: oldPasswordController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(labelText: 'Старый пароль'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
+                        if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
                         } else {
                           return null;
                         }
                       },
-                      // onFieldSubmitted: (value) {
-                      //   FocusScope.of(context).requestFocus(newPasswordFocusNode);
-                      // },
+                      onFieldSubmitted: (value) {
+                        FocusScope.of(context).requestFocus(newPasswordFocusNode);
+                      },
                     ),
                     TextFormField(
-                      // focusNode: newPasswordFocusNode,
-                      // controller: newPasswordController,
+                      focusNode: newPasswordFocusNode,
+                      controller: newPasswordController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(labelText: 'Новый пароль'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
+                        if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
                         } else {
                           return null;
                         }
                       },
-                      // onFieldSubmitted: (value) {
-                      //   FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
-                      // },
+                      onFieldSubmitted: (value) {
+                        FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+                      },
                     ),
                     TextFormField(
-                      // focusNode: confirmPasswordFocusNode,
-                      // controller: confirmPasswordController,
+                      focusNode: confirmPasswordFocusNode,
+                      controller: confirmPasswordController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(labelText: 'Подтвердить пароль'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
+                        if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
+                        } else if (value != newPasswordController.text) {
+                          return 'Не співпадає з паролем';
                         } else {
                           return null;
                         }
                       },
-                      // onFieldSubmitted: (value) {
-                      //   FocusScope.of(context).unfocus();
-                      // },
+                      onFieldSubmitted: (value) {
+                        FocusScope.of(context).unfocus();
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
@@ -229,19 +231,19 @@ class _SettingsPageState extends State<SettingsPage> {
                           final userNotifier = context.read<UserNotifier>();
                           FocusScope.of(context).unfocus();
                           if (_formState.currentState.validate()) {
-                            // userNotifier.setupPwd(newPasswordController.text).then((value) {}).catchError((error) {
-                            //   showDialog(
-                            //       context: context,
-                            //       builder: (context) {
-                            //         return CustomAlertDialog(
-                            //           content: CustomDialog(
-                            //             icon: Icons.close,
-                            //             color: Theme.of(context).errorColor,
-                            //             text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
-                            //           ),
-                            //         );
-                            //       });
-                            // });
+                            userNotifier.setupPwd(newPasswordController.text).then((value) {}).catchError((error) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomAlertDialog(
+                                      content: CustomDialog(
+                                        icon: Icons.close,
+                                        color: Theme.of(context).errorColor,
+                                        text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                      ),
+                                    );
+                                  });
+                            });
                           }
                         },
                       ),

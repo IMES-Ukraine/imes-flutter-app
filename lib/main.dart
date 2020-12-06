@@ -20,12 +20,16 @@ import 'package:imes/resources/repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'package:flutter_stetho/flutter_stetho.dart';
+
 import 'package:pedantic/pedantic.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true // optional: set false to disable printing logs to console
-      );
+
+  Stetho.initialize();
+
+  await FlutterDownloader.initialize(debug: true);
 
   await Firebase.initializeApp();
 
@@ -50,10 +54,10 @@ void main() async {
 
   local.User user;
   if (token != null) {
-    print('authenticated');
     try {
       final response = await Repository().api.profile();
       if (response.statusCode == 200) {
+        print('authenticated');
         user = response.body.data.user;
         final auth = FirebaseAuth.instance;
         final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
@@ -65,7 +69,7 @@ void main() async {
         });
       }
     } catch (e) {
-      print(e);
+      print(e?.body ?? e.toString);
     }
   }
 

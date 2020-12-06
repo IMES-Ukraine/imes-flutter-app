@@ -10,9 +10,9 @@ import 'package:imes/screens/support.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:provider/provider.dart';
+
+import 'login.dart';
 
 class MenuPage extends StatelessWidget {
   @override
@@ -86,6 +86,7 @@ class MenuPage extends StatelessWidget {
                 text: 'Вийти',
                 onTap: () {
                   userNotifier.logout();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
                 },
               ),
             ],

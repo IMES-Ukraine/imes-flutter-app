@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             final id = num.parse(values[1]);
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
           } catch (e) {
-            print(e.toString());
+            print(e);
           }
         }
       }

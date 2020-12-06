@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:imes/models/submit_test_data.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/models/test_answer.dart';
 import 'package:imes/models/test_answer_data.dart';
@@ -39,23 +40,23 @@ class TestNotifier with ChangeNotifier {
     return _test?.duration ?? 0;
   }
 
-  Future<User> postAnswer(int testId, List<String> answers, Duration duration) async {
+  Future<SubmitTestData> postAnswer(int testId, List<String> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
             data: answers.map((v) => TestAnswer(id: testId, variant: v)).toList(),
             seconds: duration.inSeconds,
           ),
         );
-    return response.body.data.user;
+    return response.body.data;
   }
 
-  Future<User> postAnswers(List<TestAnswer> answers, Duration duration) async {
+  Future<SubmitTestData> postAnswers(List<TestAnswer> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
             data: answers,
             seconds: duration.inSeconds,
           ),
         );
-    return response.body.data.user;
+    return response.body.data;
   }
 }

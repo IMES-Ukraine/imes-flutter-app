@@ -20,6 +20,7 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
   @override
   Widget build(BuildContext context) {
     final passwordController = useTextEditingController();
+    final confirmPasswordController = useTextEditingController();
 
     return Scaffold(body: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
       return SafeArea(
@@ -45,7 +46,7 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(labelText: 'Пароль'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
+                        if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
                         } else {
                           return null;
@@ -57,14 +58,16 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                     ),
                     TextFormField(
                       // focusNode: _passwordFocusNode,
-                      // controller: _passwordController,ы
+                      controller: confirmPasswordController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(labelText: 'Повторити пароль'),
                       validator: (value) {
-                        if (value.trim().isEmpty || value.length < 4) {
+                        if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
+                        } else if (value != passwordController.text) {
+                          return 'Не співпадає з паролем';
                         } else {
                           return null;
                         }
@@ -95,7 +98,7 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                                       content: CustomDialog(
                                         icon: Icons.close,
                                         color: Theme.of(context).errorColor,
-                                        text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                        text: Utils.getErrorText(error?.body ?? 'unkown_error'),
                                       ),
                                     );
                                   });

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:imes/blocs/blogs_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
-import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/account.dart';
 import 'package:imes/screens/account_edit.dart';
 import 'package:imes/screens/balance.dart';
@@ -81,11 +80,11 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                                         : Theme.of(context).dividerColor,
                                   ),
                                   const SizedBox(width: 8.0),
-                                  Text('${userNotifier.user.balance ?? 0}',
+                                  Text('${userNotifier.user?.balance ?? 0}',
                                       style: TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.bold,
-                                        color: userNotifier.user.balance > 0
+                                        color: (userNotifier.user?.balance ?? 0) > 0
                                             ? Theme.of(context).dividerColor.darken(20)
                                             : Theme.of(context).dividerColor,
                                       )),
