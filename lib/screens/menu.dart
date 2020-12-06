@@ -38,19 +38,19 @@ class MenuPage extends StatelessWidget {
                   );
                 },
               ),
-              MenuItem(
-                icon: Icon(
-                  CustomIcons.information,
-                  size: 40.0,
-                  color: Theme.of(context).primaryColor,
-                ),
-                text: 'Інструкція',
-                onTap: () async {
-                  // if (await canLaunch('https://pharmatracker.com.ua/PharmaTracker.pdf')) {
-                  //   launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
-                  // }
-                },
-              ),
+              // MenuItem(
+              //   icon: Icon(
+              //     CustomIcons.information,
+              //     size: 40.0,
+              //     color: Theme.of(context).primaryColor,
+              //   ),
+              //   text: 'Інструкція',
+              //   onTap: () async {
+              //     // if (await canLaunch('https://pharmatracker.com.ua/PharmaTracker.pdf')) {
+              //     //   launch('https://pharmatracker.com.ua/PharmaTracker.pdf');
+              //     // }
+              //   },
+              // ),
               MenuItem(
                 icon: Icon(
                   CustomIcons.rules,

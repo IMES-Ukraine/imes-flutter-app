@@ -347,7 +347,11 @@ PODS:
     - Flutter
   - flutter_hls_parser (0.0.1):
     - Flutter
+  - flutter_pdfview (1.0.2):
+    - Flutter
   - flutter_secure_storage (3.3.1):
+    - Flutter
+  - flutter_stetho (0.0.1):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -440,7 +444,9 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_hls_parser (from `.symlinks/plugins/flutter_hls_parser/ios`)
+  - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - flutter_stetho (from `.symlinks/plugins/flutter_stetho/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -503,8 +509,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_hls_parser:
     :path: ".symlinks/plugins/flutter_hls_parser/ios"
+  flutter_pdfview:
+    :path: ".symlinks/plugins/flutter_pdfview/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  flutter_stetho:
+    :path: ".symlinks/plugins/flutter_stetho/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider:
@@ -546,7 +556,9 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   flutter_hls_parser: be41df963ec4f909fb5c318d483c4483556553e0
+  flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
+  flutter_stetho: 0e844616b41b86d6429e86a518ae3a46e83af7cd
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3

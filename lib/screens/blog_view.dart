@@ -159,7 +159,7 @@ class BlogViewPage extends HookWidget {
                                           return VisibilityDetector(
                                             key: ValueKey<String>(e.title),
                                             onVisibilityChanged: (info) {
-                                              if (info.visibleFraction == 1 && !hasDoneRead.value) {
+                                              if (info.size.height == info.visibleBounds.bottom && !hasDoneRead.value) {
                                                 Repository()
                                                     .api
                                                     .readBlogBlock(

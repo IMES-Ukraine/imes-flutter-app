@@ -9,6 +9,8 @@ import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/models/test_answer.dart';
+import 'package:imes/models/test_answer_data.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
@@ -139,6 +141,7 @@ class ComplexTest extends HookWidget {
                                       controller.position.maxScrollExtent + controller.position.viewportDimension,
                                       duration: const Duration(milliseconds: 500),
                                       curve: Curves.easeIn);
+                                  Repository().api.submitTests(TestAnswerData(data: [TestAnswer(id: test.id)]));
                                 } else {
                                   final testNotifier = context.read<TestNotifier>();
                                   final userNotifier = context.read<UserNotifier>();

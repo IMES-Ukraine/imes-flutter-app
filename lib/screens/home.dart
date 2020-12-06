@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/screens/blogs.dart';
-import 'package:imes/screens/balance.dart';
 import 'package:imes/screens/menu.dart';
 import 'package:imes/screens/blog_view.dart';
-import 'package:imes/screens/balance_history.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/test_view.dart';
 import 'package:imes/screens/tests.dart';
@@ -173,24 +172,27 @@ class _HomePageState extends State<HomePage> {
                 ),
                 // ReportsPage(),
                 SupportPage(),
-                Navigator(
-                  key: _balanceNavigatorKey,
-                  initialRoute: '/',
-                  onGenerateRoute: (routeSettings) {
-                    return MaterialPageRoute(
-                      builder: (context) {
-                        switch (routeSettings.name) {
-                          case '/':
-                            return BalancePage();
-                          case '/balance/history':
-                            return BalanceHistoryPage();
-                          default:
-                            return BalancePage();
-                        }
-                      },
-                    );
-                  },
-                ),
+                PDF().cachedFromUrl('https://echo.myftp.org/instruction.pdf',
+                    placeholder: (progress) => Center(child: CircularProgressIndicator())),
+
+                // Navigator(
+                //   key: _balanceNavigatorKey,
+                //   initialRoute: '/',
+                //   onGenerateRoute: (routeSettings) {
+                //     return MaterialPageRoute(
+                //       builder: (context) {
+                //         switch (routeSettings.name) {
+                //           case '/':
+                //             return BalancePage();
+                //           case '/balance/history':
+                //             return BalanceHistoryPage();
+                //           default:
+                //             return BalancePage();
+                //         }
+                //       },
+                //     );
+                //   },
+                // ),
                 Navigator(
                   key: _menuNavigatorKey,
                   initialRoute: '/',
@@ -226,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                   BottomNavigationBarItem(icon: Icon(CustomIcons.home), label: 'Головна'),
                   BottomNavigationBarItem(icon: Icon(CustomIcons.test), label: 'Дослідження'),
                   BottomNavigationBarItem(icon: Icon(CustomIcons.chat), label: 'Чат'),
-                  BottomNavigationBarItem(icon: Icon(CustomIcons.clients), label: 'Пацієнти'),
+                  BottomNavigationBarItem(icon: Icon(Icons.info_rounded), label: 'Інформація'),
                   BottomNavigationBarItem(icon: Icon(CustomIcons.menu), label: 'Меню'),
                 ]),
           ),

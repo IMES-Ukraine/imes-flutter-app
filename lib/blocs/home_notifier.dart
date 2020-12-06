@@ -11,7 +11,7 @@ class HomeNotifier with ChangeNotifier {
   int get currentPage => _page;
 
   void changePage(int index) {
-    if (index == 3) return;
+    // if (index == 3) return;
     if (_page != index) {
       _page = index;
       controller.jumpToPage(index);
