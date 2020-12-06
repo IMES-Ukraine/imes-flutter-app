@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/all.dart';
 import 'package:imes/models/cover_image.dart';
 
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/models/user_basic_info.dart';
+import 'package:imes/models/user_financial_info.dart';
 import 'package:imes/models/user_special_info.dart';
 
 import 'package:imes/resources/repository.dart';
@@ -15,11 +17,26 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+final userNotifierProvider = ChangeNotifierProvider<UserNotifier>((ref) => UserNotifier());
+
+enum AppState {
+  authorized,
+  none,
+}
+
+// final dbUserProvider = FutureProvider<User>((ref) {
+
+// });
+
+final userStateProvider = StateProvider<local.User>((ref) => null);
+final appStateProvider = StateProvider<AppState>((ref) => AppState.none);
+final notificationsCountProvider = StateProvider<int>((ref) => 0);
+
 enum AuthState {
   AUTHENTICATED,
-  AUTHENTICATING,
-  VERIFYING,
-  NOT_VERIFIED,
+  // AUTHENTICATING,
+  // VERIFYING,/
+  // NOT_VERIFIED,
   NOT_AUTHENTICATED,
 }
 
@@ -29,61 +46,38 @@ class UserNotifier with ChangeNotifier {
 
   StreamSubscription<String> _tokenRefreshSubscription;
 
-  int _notifications = 0;
-
   UserNotifier({AuthState state, local.User user})
       : _user = user,
-        _state = state;
+        _state = state = AuthState.NOT_AUTHENTICATED;
 
   AuthState get state => _state;
 
   local.User get user => _user;
 
-  int get notificationsCount => _notifications;
+  Future<void> initFirebase() async {
+    final _firebaseMessaging = FirebaseMessaging();
+    ;
+    _tokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((newToken) {
+      Repository().api.submitToken(token: newToken);
+    });
 
-  Future login(String login, String password) async {
-    _state = AuthState.AUTHENTICATING;
-    notifyListeners();
-
-    final response = await Repository().api.login('$login@imes.pro', password);
-    if (response.statusCode == 200) {
-      _user = response.body.user;
-      _state = AuthState.AUTHENTICATED;
-
-      final storage = FlutterSecureStorage();
-      await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
-
-      final auth = FirebaseAuth.instance;
-      final authResult = await auth.signInWithCustomToken(response.body.user.firebaseToken);
-      final _firebaseMessaging = FirebaseMessaging();
-      final token = await _firebaseMessaging.getToken();
-      final result = await Repository().api.submitToken(token: token);
-      _tokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((newToken) {
-        Repository().api.submitToken(token: newToken);
-      });
-
-      notifyListeners();
-    }
+    await FirebaseAuth.instance.signInWithCustomToken(_user.firebaseToken);
   }
 
-  Future<bool> auth(String phone) async {
-    _state = AuthState.AUTHENTICATING;
+  Future<void> login(String login, String password) async {
+    final response = await Repository().api.login('$login@imes.pro', password);
+    _user = response.user;
+    _state = AuthState.AUTHENTICATED;
     notifyListeners();
+    return initFirebase();
+  }
 
+  Future<void> auth(String phone) async {
     final response = await Repository().auth.auth(phone);
-    if (response.statusCode == 200) {
-      _state = AuthState.NOT_VERIFIED;
-      notifyListeners();
-      return true;
-    }
-
-    return false;
+    print(response.data);
   }
 
   Future<void> verify(String phone, String code) async {
-    _state = AuthState.VERIFYING;
-    notifyListeners();
-
     String deviceId;
     String deviceName;
     final deviceInfo = DeviceInfoPlugin();
@@ -99,31 +93,16 @@ class UserNotifier with ChangeNotifier {
 
     final response =
         await Repository().auth.verify(phone: phone, code: code, deviceId: deviceId, deviceName: deviceName);
-    if (response.statusCode == 200) {
-      final storage = FlutterSecureStorage();
-      await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
-
-      final profileResponse = await Repository().api.profile();
-      if (profileResponse.statusCode == 200) {
-        _user = profileResponse.body.data.user;
-        _state = AuthState.AUTHENTICATED;
-
-        final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(profileResponse.body.data.user.firebaseToken);
-        final _firebaseMessaging = FirebaseMessaging();
-        final token = await _firebaseMessaging.getToken();
-        final result = await Repository().api.submitToken(token: token);
-        _firebaseMessaging.onTokenRefresh.listen((newToken) {
-          Repository().api.submitToken(token: newToken);
-        });
-
-        notifyListeners();
-      }
-    }
+    final profileResponse = await Repository().api.profile();
+    _user = profileResponse.data.user;
+    notifyListeners();
+    return initFirebase();
   }
 
   Future<void> setupPwd(String pwd) async {
-    final response = await Repository().api.submitPassword(pwd);
+    await Repository().api.submitPassword(pwd);
+    _state = AuthState.AUTHENTICATED;
+    notifyListeners();
   }
 
   void updateUser(local.User user) {
@@ -131,18 +110,20 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future submitProfile(Map<String, dynamic> data) async {
-    final response = await Repository().api.submitProfile(data);
-    if (response.statusCode == 200) {
-      updateUser(response.body.data.user);
-    }
+  Future<void> submitProfile(
+      UserBasicInfo basicInfo, UserSpecializedInfo spcializedInfo, UserFinancialInfo userFinancialInfo) async {
+    final response = await Repository().api.submitProfile(basicInfo, spcializedInfo, userFinancialInfo);
+    updateUser(response.data.user);
   }
 
-  Future updateProfile() async {
+  Future<local.User> updateProfile() async {
     final response = await Repository().api.profile();
-    if (response.statusCode == 200) {
-      updateUser(response.body.data.user);
+    if (_state != AuthState.AUTHENTICATED) {
+      _state = AuthState.AUTHENTICATED;
     }
+    updateUser(response.data.user);
+    initFirebase();
+    return response.data.user;
   }
 
   void updateEducationDocument(CoverImage doc) {
@@ -154,55 +135,40 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetState() {
-    _state = AuthState.NOT_AUTHENTICATED;
-    notifyListeners();
-  }
-
-  void increaseNotificationsCount() {
-    _notifications++;
-    notifyListeners();
-  }
-
-  void resetNotificationsCount() {
-    _notifications = 0;
-    notifyListeners();
-  }
-
   void logout() async {
     _state = AuthState.NOT_AUTHENTICATED;
     final storage = FlutterSecureStorage();
     await storage.delete(key: '__AUTH_TOKEN_');
-    _tokenRefreshSubscription.cancel();
-    Repository().create();
+    _tokenRefreshSubscription?.cancel();
+    _user = null;
     notifyListeners();
   }
 
   Future<void> uploadEducationDocument(String path) async {
     final response = await Repository().api.uploadEducationDoc(path);
-    if (response.statusCode == 200) {
-      if (user.specializedInformation != null) {
-        _user = user.copyWith(
-          specializedInformation: user.specializedInformation.copyWith(
-            educationDocument: response.body.data,
-          ),
-        );
-      } else {
-        _user = user.copyWith(specializedInformation: UserSpecializedInfo(educationDocument: response.body.data));
-      }
-      notifyListeners();
+    // if (response.statusCode == 200) {
+    if (user.specializedInformation != null) {
+      _user = user.copyWith(
+        specializedInformation: user.specializedInformation.copyWith(
+          educationDocument: response.data,
+        ),
+      );
+    } else {
+      _user = user.copyWith(specializedInformation: UserSpecializedInfo(educationDocument: response.data));
     }
+    notifyListeners();
+    // }
   }
 
   Future<void> uploadProfilePicture(String path) async {
     final response = await Repository().api.uploadProfileImage(path);
-    if (response.statusCode == 200) {
-      if (_user.basicInformation != null) {
-        _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.body.data));
-      } else {
-        _user.copyWith(basicInformation: UserBasicInfo(avatar: response.body.data));
-      }
-      notifyListeners();
+    // if (response.statusCode == 200) {
+    if (_user.basicInformation != null) {
+      _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.data));
+    } else {
+      _user.copyWith(basicInformation: UserBasicInfo(avatar: response.data));
     }
+    notifyListeners();
+    // }
   }
 }

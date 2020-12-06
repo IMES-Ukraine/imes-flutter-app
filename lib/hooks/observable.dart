@@ -16,7 +16,7 @@ ValueNotifier<T> useObservable<T extends Observable>(ValueNotifier<T> observable
 }
 
 class _ObservableHook extends Hook<void> {
-  const _ObservableHook(this.observable) : assert(observable != null, 'observable cannot be null');
+  const _ObservableHook(this.observable) : assert(observable != null, 'observable can not be null');
 
   final ValueNotifier<Observable> observable;
 

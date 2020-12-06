@@ -9,6 +9,7 @@ import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
+import 'package:imes/widgets/dialogs.dart';
 import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
@@ -178,21 +179,7 @@ class SimpleTest extends HookWidget {
                               context.read<UserNotifier>().updateUser(user);
                               Navigator.of(context).pop();
                             });
-                          }).catchError((error) {
-                            print(error);
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CustomAlertDialog(
-                                  content: CustomDialog(
-                                    icon: Icons.close,
-                                    color: Theme.of(context).errorColor,
-                                    text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
-                                  ),
-                                );
-                              },
-                            );
-                          });
+                          }).catchError((error) => showErrorDialog(context, error));
                         }
                       : null),
             );

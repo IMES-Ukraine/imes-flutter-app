@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:imes/models/withdraw_history.dart';
 
 import 'package:imes/resources/repository.dart';
+
+final historyNotifierProvider = ChangeNotifierProvider((ref) => HistoryNotifier());
 
 enum HistoryState {
   LOADED,
@@ -32,7 +35,7 @@ class HistoryNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.withdrawHistory();
       if (response.statusCode == 200) {
-        final historyPage = response.body.data;
+        final historyPage = response.data;
         _items = historyPage?.data ?? [];
         _total = historyPage?.total ?? 0;
         _lastPage = historyPage?.currentPage ?? 0;
@@ -54,7 +57,7 @@ class HistoryNotifier with ChangeNotifier {
         // page: ++_lastPage,
         );
     if (response.statusCode == 200) {
-      final historyPage = response.body.data;
+      final historyPage = response.data;
       final items = _items.toSet()..addAll(historyPage?.data ?? []);
       _items = items.toList();
       _total = historyPage?.total ?? _total;

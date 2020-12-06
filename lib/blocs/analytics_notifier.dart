@@ -40,7 +40,7 @@ class AnalyticsNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.analytics(date: dateFormat.format(_date));
       if (response.statusCode == 200) {
-        final analyticsPage = response.body.data;
+        final analyticsPage = response.data;
         _analytics = analyticsPage?.data ?? [];
         _total = analyticsPage?.total ?? 0;
         _lastPage = analyticsPage?.currentPage ?? 0;
@@ -63,7 +63,7 @@ class AnalyticsNotifier with ChangeNotifier {
           page: ++_lastPage,
         );
     if (response.statusCode == 200) {
-      final analyticsPage = response.body.data;
+      final analyticsPage = response.data;
       final analytics = _analytics.toSet()..addAll(analyticsPage?.data ?? []);
       _analytics = analytics.toList();
       _total = analyticsPage?.total ?? _total;

@@ -1,144 +1,55 @@
-import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:chopper/chopper.dart';
-import 'package:http/io_client.dart';
-import 'package:imes/models/submit_test_response.dart';
-import 'package:imes/models/test_response.dart';
-import 'package:imes/models/tests_response.dart';
-import 'package:imes/models/upload_file_response.dart';
-import 'package:imes/models/verify_response.dart';
+import 'package:imes/resources/auth.dart';
 import 'package:imes/resources/api.dart';
 
-import 'package:imes/models/basic_response.dart';
-import 'package:imes/models/login_response.dart';
-import 'package:imes/models/blogs_response.dart';
-import 'package:imes/models/blog_response.dart';
-import 'package:imes/models/profile_response.dart';
-import 'package:imes/models/analytics_response.dart';
-import 'package:imes/models/notifications_response.dart';
-import 'package:imes/models/withdraw_history_response.dart';
-import 'package:imes/models/error_response.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:imes/resources/auth.dart';
+// final repositoryProvider = Provider((_) => Repository(baseUrl: EnvironmentConfig.BASE_URL));
 
 class Repository {
   static final Repository _instance = Repository._internal();
 
-  ChopperClient _client;
+  Dio _dio;
 
-  RestClient get api => _client.getService<RestClient>();
+  RestClient _api;
+  RestClient get api => _api;
 
-  AuthClient get auth => _client.getService<AuthClient>();
+  AuthClient _auth;
+  AuthClient get auth => _auth;
 
-  factory Repository() {
-    return _instance;
-  }
+  factory Repository() => _instance;
 
-  void create() {
-    final converter = JsonSerializableConverter({
-      BasicResponse: BasicResponse.fromJsonFactory,
-      LoginResponse: LoginResponse.fromJsonFactory,
-      BlogsResponse: BlogsResponse.fromJsonFactory,
-      BlogResponse: BlogResponse.fromJsonFactory,
-      ProfileResponse: ProfileResponse.fromJsonFactory,
-      NotificationsResponse: NotificationsResponse.fromJsonFactory,
-      AnalyticsResponse: AnalyticsResponse.fromJsonFactory,
-      WithdrawHistoryResponse: WithdrawHistoryResponse.fromJsonFactory,
-      TestsResponse: TestsResponse.fromJsonFactory,
-      TestResponse: TestResponse.fromJsonFactory,
-      SubmitTestResponse: SubmitTestResponse.fromJsonFactory,
-      VerifyResponse: VerifyResponse.fromJsonFactory,
-      UploadFileResponse: UploadFileResponse.fromJsonFactory,
-    });
-    final httpClient = HttpClient();
-    httpClient.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-    _client = ChopperClient(
-      services: [
-        // the generated service
-        RestClient.create(),
-        AuthClient.create()
-      ],
-      client: IOClient(httpClient),
-      converter: converter,
-      errorConverter: converter,
-      interceptors: [authHeader, tokenExpired],
-    );
-  }
+  Repository._internal() : _dio = Dio() {
+    // _dio.interceptors.add(LogInterceptor());
+    // _dio.transformer = FlutterTransformer();
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (RequestOptions options) async {
+        final storage = FlutterSecureStorage();
+        final authToken = await storage.read(key: '__AUTH_TOKEN_');
+        if (authToken != null) options.headers['Authorization'] = 'Bearer $authToken';
+        return options;
+      },
+      onResponse: (Response response) async {
+        if (response.statusCode == 418) {
+          return _dio.reject('Authorization failed.');
+        }
+        if (response.data.containsKey('token') && response.data['token'] != null) {
+          final storage = FlutterSecureStorage();
+          await storage.write(
+            key: '__AUTH_TOKEN_',
+            value: response.data['token'],
+          );
+        }
+        return response;
+      },
+      onError: (DioError e) {
+        print(e.request.uri);
+        return e;
+      },
+    ));
 
-  Repository._internal() {
-    create();
-  }
-
-  Future<Request> authHeader(Request request) async {
-    final storage = FlutterSecureStorage();
-    final token = await storage.read(key: '__AUTH_TOKEN_');
-    return applyHeader(
-      request,
-      'Authorization',
-      'Bearer $token',
-    );
-  }
-
-  Future<Response> tokenExpired(Response response) async {
-    return response;
-  }
-}
-
-typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
-
-class JsonSerializableConverter extends JsonConverter {
-  final Map<Type, JsonFactory> factories;
-
-  JsonSerializableConverter(this.factories);
-
-  T _decodeMap<T>(Map<String, dynamic> values) {
-    /// Get jsonFactory using Type parameters
-    /// if not found or invalid, throw error or return null
-    final jsonFactory = factories[T];
-    if (jsonFactory == null || jsonFactory is! JsonFactory<T>) {
-      /// throw serializer not found error;
-      return null;
-    }
-
-    return jsonFactory(values);
-  }
-
-  List<T> _decodeList<T>(List values) => values.where((v) => v != null).map<T>((v) => _decode<T>(v)).toList();
-
-  dynamic _decode<T>(entity) {
-    if (entity is Iterable) return _decodeList<T>(entity);
-
-    if (entity is Map) return _decodeMap<T>(entity);
-
-    return entity;
-  }
-
-  @override
-  Response<ResultType> convertResponse<ResultType, Item>(Response response) {
-    // use [JsonConverter] to decode json
-    final jsonRes = super.convertResponse(response);
-
-    return jsonRes.replace<ResultType>(body: _decode<Item>(jsonRes.body));
-  }
-
-  @override
-  // all objects should implements toJson method
-  Request convertRequest(Request request) => super.convertRequest(request);
-
-  @override
-  Response convertError<ResultType, Item>(Response response) {
-    // use [JsonConverter] to decode json
-    final jsonRes = super.convertError(response);
-
-    try {
-      final response = jsonRes.replace<ErrorResponse>(
-        body: ErrorResponse.fromJsonFactory(jsonRes.body),
-      );
-
-      return response;
-    } catch (e) {
-      return response;
-    }
+    _api = RestClient(_dio);
+    _auth = AuthClient(_dio);
   }
 }

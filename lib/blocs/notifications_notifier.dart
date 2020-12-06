@@ -1,8 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:imes/models/notification.dart';
 
 import 'package:imes/resources/repository.dart';
+
+final notificationsNotifierProvider =
+    ChangeNotifierProvider.autoDispose<NotificationsNotifier>((ref) => NotificationsNotifier()..load());
 
 enum NotificationsState {
   LOADED,
@@ -32,7 +36,7 @@ class NotificationsNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.notifications();
       if (response.statusCode == 200) {
-        final notificationsPage = response.body.data;
+        final notificationsPage = response.data;
         _notifications = notificationsPage?.data ?? [];
         _total = notificationsPage?.total ?? 0;
         _lastPage = notificationsPage?.currentPage ?? 0;
@@ -52,7 +56,7 @@ class NotificationsNotifier with ChangeNotifier {
           page: ++_lastPage,
         );
     if (response.statusCode == 200) {
-      final notificationsPage = response.body.data;
+      final notificationsPage = response.data;
       final notifications = _notifications.toSet()..addAll(notificationsPage?.data ?? []);
       _notifications = notifications.toList();
       _total = notificationsPage?.total ?? _total;
@@ -66,7 +70,7 @@ class NotificationsNotifier with ChangeNotifier {
   Future delete(int index) async {
     final id = _notifications[index].id;
     final response = await Repository().api.deleteNotification(id);
-    if (response.statusCode == 200) {
+    if (response.response.statusCode == 200) {
       _notifications.removeWhere((n) => n.id == id);
       _total--;
       notifyListeners();

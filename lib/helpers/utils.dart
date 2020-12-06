@@ -4,7 +4,9 @@ class Utils {
   static const String EMAIL_REGEXP =
       r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
-  static String getErrorText(String errorText) {
+  static String getErrorText(dynamic error) {
+    // if (error is DioError || error is String) {
+    final errorText = error.response?.toString();
     switch (errorText) {
       case 'invalid_credentials':
         return 'Невірний логін або пароль.';

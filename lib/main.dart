@@ -1,33 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:imes/screens/login.dart';
 import 'package:imes/screens/home.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/timeago_ua_messages.dart';
 
-import 'package:provider/provider.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_stetho/flutter_stetho.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'package:imes/models/user.dart' as local;
-import 'package:imes/resources/repository.dart';
+import 'blocs/database_provider.dart';
+import 'widgets/base/unfocus_global.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:pedantic/pedantic.dart';
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true // optional: set false to disable printing logs to console
-      );
+  Stetho.initialize();
 
-  await Firebase.initializeApp();
+  FlutterDownloader.initialize(debug: true);
+
+  Firebase.initializeApp();
 
   timeago.setLocaleMessages('uk', UaMessages());
 
@@ -45,74 +44,79 @@ void main() async {
 //  final FirebaseStorage storage = FirebaseStorage(
 //      app: app, storageBucket: 'gs://tlogic-aed50.appspot.com/');
 
-  final storage = FlutterSecureStorage();
-  final token = await storage.read(key: '__AUTH_TOKEN_');
+  // final storage = FlutterSecureStorage();
+  // final token = await storage.read(key: '__AUTH_TOKEN_');
 
-  local.User user;
-  if (token != null) {
-    print('authenticated');
-    try {
-      final response = await Repository().api.profile();
-      if (response.statusCode == 200) {
-        user = response.body.data.user;
-        final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
-        final _firebaseMessaging = FirebaseMessaging();
-        final token = await _firebaseMessaging.getToken();
-        final result = await Repository().api.submitToken(token: token);
-        _firebaseMessaging.onTokenRefresh.listen((newToken) {
-          Repository().api.submitToken(token: newToken);
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // local.User user;
+  // if (token != null) {
+  //   print('authenticated');
+  //   try {
+  //     final response = await Repository().api.profile();
+  //     if (response.statusCode == 200) {
+  //       user = response.body.data.user;
+  //       final auth = FirebaseAuth.instance;
+  //       final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
+  //       final _firebaseMessaging = FirebaseMessaging();
+  //       final token = await _firebaseMessaging.getToken();
+  //       final result = await Repository().api.submitToken(token: token);
+  //       _firebaseMessaging.onTokenRefresh.listen((newToken) {
+  //         Repository().api.submitToken(token: newToken);
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print(e.body);
+  //   }
+  // }
 
-  runApp(ChangeNotifierProvider(
-      create: (_) {
-        return UserNotifier(
-            state: token != null && user != null ? AuthState.AUTHENTICATED : AuthState.NOT_AUTHENTICATED, user: user);
-      },
-      child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserNotifier>(builder: (context, userNotifier, _) {
-      return MaterialApp(
-        localizationsDelegates: [
-//          MaterialLocalizationUk(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('uk'),
-//          const Locale('en'),
-        ],
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: 'Montserrat',
-          primaryColor: const Color(0xFF00B7FF),
-          accentColor: const Color(0xFF00D7FF),
-          scaffoldBackgroundColor: const Color(0xFFF7F7F9),
-          errorColor: const Color(0xFFFF5C8E),
-          dividerColor: const Color(0xFFE0E0E0),
-          canvasColor: const Color(0xFFF2F2F2),
-          appBarTheme: AppBarTheme(
-              color: Colors.white,
-              elevation: 4.0,
-              iconTheme: IconThemeData(
-                color: const Color(0xFF00B7FF),
-              ),
-              actionsIconTheme: IconThemeData(
-                color: const Color(0xFF00B7FF),
-              )),
-        ),
-        home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
-      );
+    final userProvider = useProvider(userNotifierProvider);
+
+    final user = useProvider(userStateProvider);
+    useEffect(() {
+      return user.stream.listen((newUser) {
+        context.read(dbProvider).whenData((data) => data.write('user', newUser.toJson()));
+      }).cancel;
     });
+
+    return MaterialApp(
+      localizationsDelegates: [
+        // MaterialLocalizationUk(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('uk'),
+//          const Locale('en'),
+      ],
+      title: 'IMES',
+      theme: ThemeData(
+        fontFamily: 'Montserrat',
+        primaryColor: const Color(0xFF00B7FF),
+        accentColor: const Color(0xFF00D7FF),
+        scaffoldBackgroundColor: const Color(0xFFF7F7F9),
+        errorColor: const Color(0xFFFF5C8E),
+        dividerColor: const Color(0xFFE0E0E0),
+        canvasColor: const Color(0xFFF2F2F2),
+        appBarTheme: AppBarTheme(
+            color: Colors.white,
+            elevation: 4.0,
+            iconTheme: IconThemeData(
+              color: const Color(0xFF00B7FF),
+            ),
+            actionsIconTheme: IconThemeData(
+              color: const Color(0xFF00B7FF),
+            )),
+      ),
+      builder: (context, child) => UnfocusGlobal(child: child),
+      home: userProvider.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
+    );
   }
 }

@@ -41,7 +41,7 @@ class TestsStateNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.tests(type: page.index + 1);
       if (response.statusCode == 200) {
-        final testsPage = response.body.data;
+        final testsPage = response.data;
         _tests = testsPage.data;
         _total = testsPage.total;
         _lastPage = testsPage.currentPage;
@@ -51,7 +51,8 @@ class TestsStateNotifier with ChangeNotifier {
       }
     } catch (e) {
       _state = TestsState.ERROR;
-      debugPrint(e);
+      print(e);
+      if (e.response.statusCode == 400) _state = TestsState.LOADED;
       notifyListeners();
     }
   }
@@ -62,7 +63,7 @@ class TestsStateNotifier with ChangeNotifier {
 
     final response = await Repository().api.tests(page: ++_lastPage);
     if (response.statusCode == 200) {
-      final testsPage = response.body.data;
+      final testsPage = response.data;
       final tests = _tests.toSet()..addAll(testsPage.data);
       _tests = tests.toList();
       _total = testsPage.total;

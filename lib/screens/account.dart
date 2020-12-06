@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/screens/account_edit.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:imes/extensions/color.dart';
 
 import 'package:permission_handler/permission_handler.dart';
@@ -29,7 +30,8 @@ class AccountPage extends StatelessWidget {
             ),
           ],
         ),
-        body: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
+        body: Consumer(builder: (context, watch, _) {
+          final userNotifier = watch(userNotifierProvider);
           return SingleChildScrollView(
               child: Column(children: [
             const SizedBox(height: 16.0),
@@ -39,7 +41,7 @@ class AccountPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: OctoCircleAvatar(
-                      url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
+                      url: userNotifier?.user?.basicInformation?.avatar?.path ?? '',
                     ),
                   ),
                   Expanded(

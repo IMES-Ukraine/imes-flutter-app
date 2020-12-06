@@ -1,6 +1,8 @@
 part of 'resources.dart';
 
 class Images {
+  Images._();
+
   static const String telegram = 'assets/telegram.png';
   static const String loginLogo = 'assets/login_logo.png';
   static const String twoBars = 'assets/two_bars.png';

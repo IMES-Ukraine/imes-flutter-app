@@ -14,8 +14,8 @@ abstract class PageableData<T> with _$PageableData<T> {
 @freezed
 abstract class DataState<T> with _$DataState<T> {
   const factory DataState(T state) = Data<T>;
-  const factory DataState.init() = Init<T>;
-  const factory DataState.loading() = Loading<T>;
+  const factory DataState.init() = _Init<T>;
+  const factory DataState.loading() = _Loading<T>;
   const factory DataState.error([String message]) = ErrorDetails<T>;
 }
 
@@ -31,7 +31,7 @@ class TestsNotifier extends StateNotifier<DataState<PageableData<Test>>> with Lo
       final response = await Repository().api.tests();
       // final response = await Repository().api.analytics(date: dateFormat.format(DateTime.now()));
       if (response.statusCode == 200) {
-        final optionsPage = response.body.data;
+        final optionsPage = response.data;
         final current = PageableData<Test>(
           data: optionsPage?.data ?? [],
           total: optionsPage?.total ?? 0,

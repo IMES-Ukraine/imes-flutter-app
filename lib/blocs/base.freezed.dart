@@ -168,13 +168,13 @@ class _$DataStateTearOff {
   }
 
 // ignore: unused_element
-  Init<T> init<T>() {
-    return Init<T>();
+  _Init<T> init<T>() {
+    return _Init<T>();
   }
 
 // ignore: unused_element
-  Loading<T> loading<T>() {
-    return Loading<T>();
+  _Loading<T> loading<T>() {
+    return _Loading<T>();
   }
 
 // ignore: unused_element
@@ -192,34 +192,34 @@ const $DataState = _$DataStateTearOff();
 /// @nodoc
 mixin _$DataState<T> {
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(T state), {
-    @required Result init(),
-    @required Result loading(),
-    @required Result error(String message),
+  TResult when<TResult extends Object>(
+    TResult $default(T state), {
+    @required TResult init(),
+    @required TResult loading(),
+    @required TResult error(String message),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(T state), {
-    Result init(),
-    Result loading(),
-    Result error(String message),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(T state), {
+    TResult init(),
+    TResult loading(),
+    TResult error(String message),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Data<T> value), {
-    @required Result init(Init<T> value),
-    @required Result loading(Loading<T> value),
-    @required Result error(ErrorDetails<T> value),
+  TResult map<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    @required TResult init(_Init<T> value),
+    @required TResult loading(_Loading<T> value),
+    @required TResult error(ErrorDetails<T> value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Data<T> value), {
-    Result init(Init<T> value),
-    Result loading(Loading<T> value),
-    Result error(ErrorDetails<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    TResult init(_Init<T> value),
+    TResult loading(_Loading<T> value),
+    TResult error(ErrorDetails<T> value),
+    @required TResult orElse(),
   });
 }
 
@@ -295,11 +295,11 @@ class _$Data<T> implements Data<T> {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(T state), {
-    @required Result init(),
-    @required Result loading(),
-    @required Result error(String message),
+  TResult when<TResult extends Object>(
+    TResult $default(T state), {
+    @required TResult init(),
+    @required TResult loading(),
+    @required TResult error(String message),
   }) {
     assert($default != null);
     assert(init != null);
@@ -310,12 +310,12 @@ class _$Data<T> implements Data<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(T state), {
-    Result init(),
-    Result loading(),
-    Result error(String message),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(T state), {
+    TResult init(),
+    TResult loading(),
+    TResult error(String message),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if ($default != null) {
@@ -326,11 +326,11 @@ class _$Data<T> implements Data<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Data<T> value), {
-    @required Result init(Init<T> value),
-    @required Result loading(Loading<T> value),
-    @required Result error(ErrorDetails<T> value),
+  TResult map<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    @required TResult init(_Init<T> value),
+    @required TResult loading(_Loading<T> value),
+    @required TResult error(ErrorDetails<T> value),
   }) {
     assert($default != null);
     assert(init != null);
@@ -341,12 +341,12 @@ class _$Data<T> implements Data<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Data<T> value), {
-    Result init(Init<T> value),
-    Result loading(Loading<T> value),
-    Result error(ErrorDetails<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    TResult init(_Init<T> value),
+    TResult loading(_Loading<T> value),
+    TResult error(ErrorDetails<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if ($default != null) {
@@ -364,24 +364,24 @@ abstract class Data<T> implements DataState<T> {
 }
 
 /// @nodoc
-abstract class $InitCopyWith<T, $Res> {
-  factory $InitCopyWith(Init<T> value, $Res Function(Init<T>) then) =
-      _$InitCopyWithImpl<T, $Res>;
+abstract class _$InitCopyWith<T, $Res> {
+  factory _$InitCopyWith(_Init<T> value, $Res Function(_Init<T>) then) =
+      __$InitCopyWithImpl<T, $Res>;
 }
 
 /// @nodoc
-class _$InitCopyWithImpl<T, $Res> extends _$DataStateCopyWithImpl<T, $Res>
-    implements $InitCopyWith<T, $Res> {
-  _$InitCopyWithImpl(Init<T> _value, $Res Function(Init<T>) _then)
-      : super(_value, (v) => _then(v as Init<T>));
+class __$InitCopyWithImpl<T, $Res> extends _$DataStateCopyWithImpl<T, $Res>
+    implements _$InitCopyWith<T, $Res> {
+  __$InitCopyWithImpl(_Init<T> _value, $Res Function(_Init<T>) _then)
+      : super(_value, (v) => _then(v as _Init<T>));
 
   @override
-  Init<T> get _value => super._value as Init<T>;
+  _Init<T> get _value => super._value as _Init<T>;
 }
 
 /// @nodoc
-class _$Init<T> implements Init<T> {
-  const _$Init();
+class _$_Init<T> implements _Init<T> {
+  const _$_Init();
 
   @override
   String toString() {
@@ -390,7 +390,7 @@ class _$Init<T> implements Init<T> {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Init<T>);
+    return identical(this, other) || (other is _Init<T>);
   }
 
   @override
@@ -398,11 +398,11 @@ class _$Init<T> implements Init<T> {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(T state), {
-    @required Result init(),
-    @required Result loading(),
-    @required Result error(String message),
+  TResult when<TResult extends Object>(
+    TResult $default(T state), {
+    @required TResult init(),
+    @required TResult loading(),
+    @required TResult error(String message),
   }) {
     assert($default != null);
     assert(init != null);
@@ -413,12 +413,12 @@ class _$Init<T> implements Init<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(T state), {
-    Result init(),
-    Result loading(),
-    Result error(String message),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(T state), {
+    TResult init(),
+    TResult loading(),
+    TResult error(String message),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (init != null) {
@@ -429,11 +429,11 @@ class _$Init<T> implements Init<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Data<T> value), {
-    @required Result init(Init<T> value),
-    @required Result loading(Loading<T> value),
-    @required Result error(ErrorDetails<T> value),
+  TResult map<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    @required TResult init(_Init<T> value),
+    @required TResult loading(_Loading<T> value),
+    @required TResult error(ErrorDetails<T> value),
   }) {
     assert($default != null);
     assert(init != null);
@@ -444,12 +444,12 @@ class _$Init<T> implements Init<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Data<T> value), {
-    Result init(Init<T> value),
-    Result loading(Loading<T> value),
-    Result error(ErrorDetails<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    TResult init(_Init<T> value),
+    TResult loading(_Loading<T> value),
+    TResult error(ErrorDetails<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (init != null) {
@@ -459,29 +459,30 @@ class _$Init<T> implements Init<T> {
   }
 }
 
-abstract class Init<T> implements DataState<T> {
-  const factory Init() = _$Init<T>;
+abstract class _Init<T> implements DataState<T> {
+  const factory _Init() = _$_Init<T>;
 }
 
 /// @nodoc
-abstract class $LoadingCopyWith<T, $Res> {
-  factory $LoadingCopyWith(Loading<T> value, $Res Function(Loading<T>) then) =
-      _$LoadingCopyWithImpl<T, $Res>;
+abstract class _$LoadingCopyWith<T, $Res> {
+  factory _$LoadingCopyWith(
+          _Loading<T> value, $Res Function(_Loading<T>) then) =
+      __$LoadingCopyWithImpl<T, $Res>;
 }
 
 /// @nodoc
-class _$LoadingCopyWithImpl<T, $Res> extends _$DataStateCopyWithImpl<T, $Res>
-    implements $LoadingCopyWith<T, $Res> {
-  _$LoadingCopyWithImpl(Loading<T> _value, $Res Function(Loading<T>) _then)
-      : super(_value, (v) => _then(v as Loading<T>));
+class __$LoadingCopyWithImpl<T, $Res> extends _$DataStateCopyWithImpl<T, $Res>
+    implements _$LoadingCopyWith<T, $Res> {
+  __$LoadingCopyWithImpl(_Loading<T> _value, $Res Function(_Loading<T>) _then)
+      : super(_value, (v) => _then(v as _Loading<T>));
 
   @override
-  Loading<T> get _value => super._value as Loading<T>;
+  _Loading<T> get _value => super._value as _Loading<T>;
 }
 
 /// @nodoc
-class _$Loading<T> implements Loading<T> {
-  const _$Loading();
+class _$_Loading<T> implements _Loading<T> {
+  const _$_Loading();
 
   @override
   String toString() {
@@ -490,7 +491,7 @@ class _$Loading<T> implements Loading<T> {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Loading<T>);
+    return identical(this, other) || (other is _Loading<T>);
   }
 
   @override
@@ -498,11 +499,11 @@ class _$Loading<T> implements Loading<T> {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(T state), {
-    @required Result init(),
-    @required Result loading(),
-    @required Result error(String message),
+  TResult when<TResult extends Object>(
+    TResult $default(T state), {
+    @required TResult init(),
+    @required TResult loading(),
+    @required TResult error(String message),
   }) {
     assert($default != null);
     assert(init != null);
@@ -513,12 +514,12 @@ class _$Loading<T> implements Loading<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(T state), {
-    Result init(),
-    Result loading(),
-    Result error(String message),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(T state), {
+    TResult init(),
+    TResult loading(),
+    TResult error(String message),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loading != null) {
@@ -529,11 +530,11 @@ class _$Loading<T> implements Loading<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Data<T> value), {
-    @required Result init(Init<T> value),
-    @required Result loading(Loading<T> value),
-    @required Result error(ErrorDetails<T> value),
+  TResult map<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    @required TResult init(_Init<T> value),
+    @required TResult loading(_Loading<T> value),
+    @required TResult error(ErrorDetails<T> value),
   }) {
     assert($default != null);
     assert(init != null);
@@ -544,12 +545,12 @@ class _$Loading<T> implements Loading<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Data<T> value), {
-    Result init(Init<T> value),
-    Result loading(Loading<T> value),
-    Result error(ErrorDetails<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    TResult init(_Init<T> value),
+    TResult loading(_Loading<T> value),
+    TResult error(ErrorDetails<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loading != null) {
@@ -559,8 +560,8 @@ class _$Loading<T> implements Loading<T> {
   }
 }
 
-abstract class Loading<T> implements DataState<T> {
-  const factory Loading() = _$Loading<T>;
+abstract class _Loading<T> implements DataState<T> {
+  const factory _Loading() = _$_Loading<T>;
 }
 
 /// @nodoc
@@ -622,11 +623,11 @@ class _$ErrorDetails<T> implements ErrorDetails<T> {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>(
-    Result $default(T state), {
-    @required Result init(),
-    @required Result loading(),
-    @required Result error(String message),
+  TResult when<TResult extends Object>(
+    TResult $default(T state), {
+    @required TResult init(),
+    @required TResult loading(),
+    @required TResult error(String message),
   }) {
     assert($default != null);
     assert(init != null);
@@ -637,12 +638,12 @@ class _$ErrorDetails<T> implements ErrorDetails<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>(
-    Result $default(T state), {
-    Result init(),
-    Result loading(),
-    Result error(String message),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(T state), {
+    TResult init(),
+    TResult loading(),
+    TResult error(String message),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
@@ -653,11 +654,11 @@ class _$ErrorDetails<T> implements ErrorDetails<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>(
-    Result $default(Data<T> value), {
-    @required Result init(Init<T> value),
-    @required Result loading(Loading<T> value),
-    @required Result error(ErrorDetails<T> value),
+  TResult map<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    @required TResult init(_Init<T> value),
+    @required TResult loading(_Loading<T> value),
+    @required TResult error(ErrorDetails<T> value),
   }) {
     assert($default != null);
     assert(init != null);
@@ -668,12 +669,12 @@ class _$ErrorDetails<T> implements ErrorDetails<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>(
-    Result $default(Data<T> value), {
-    Result init(Init<T> value),
-    Result loading(Loading<T> value),
-    Result error(ErrorDetails<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(Data<T> value), {
+    TResult init(_Init<T> value),
+    TResult loading(_Loading<T> value),
+    TResult error(ErrorDetails<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {

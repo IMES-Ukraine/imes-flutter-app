@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
-import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/settings.dart';
-import 'package:provider/provider.dart';
-import 'package:imes/widgets/base/custom_alert_dialog.dart';
-import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/dialogs.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 
@@ -94,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   state.value = value;
                 },
                 title: Text('Уведомления',
-                    style: TextStyle( 
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
@@ -140,6 +138,8 @@ class _SettingsPageState extends State<SettingsPage> {
             final oldPasswordFocusNode = useFocusNode();
             final newPasswordFocusNode = useFocusNode();
             final confirmPasswordFocusNode = useFocusNode();
+
+            final userNotifier = useProvider(userNotifierProvider);
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
               child: Form(
@@ -226,22 +226,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
                         onPressed: () {
-                          final userNotifier = context.read<UserNotifier>();
                           FocusScope.of(context).unfocus();
                           if (_formState.currentState.validate()) {
-                            // userNotifier.setupPwd(newPasswordController.text).then((value) {}).catchError((error) {
-                            //   showDialog(
-                            //       context: context,
-                            //       builder: (context) {
-                            //         return CustomAlertDialog(
-                            //           content: CustomDialog(
-                            //             icon: Icons.close,
-                            //             color: Theme.of(context).errorColor,
-                            //             text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
-                            //           ),
-                            //         );
-                            //       });
-                            // });
+                            userNotifier
+                                .setupPwd(newPasswordController.text)
+                                .then((value) {})
+                                .catchError((error) => showErrorDialog(context, error));
                           }
                         },
                       ),

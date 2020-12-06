@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:imes/models/blog.dart';
 
 import 'package:imes/resources/repository.dart';
+
+final blogsNotifierProvider = ChangeNotifierProvider((ref) => BlogsNotifier());
 
 enum BlogsState {
   LOADED,
@@ -44,7 +47,7 @@ class BlogsNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.blogs(type: page.index + 1);
       if (response.statusCode == 200) {
-        final blogsPage = response.body.data;
+        final blogsPage = response.data;
         _blogs = blogsPage.data;
         _total = blogsPage.total;
         _lastPage = blogsPage.currentPage;
@@ -65,7 +68,7 @@ class BlogsNotifier with ChangeNotifier {
 
     final response = await Repository().api.blogs(page: ++_lastPage);
     if (response.statusCode == 200) {
-      final blogsPage = response.body.data;
+      final blogsPage = response.data;
       final blogs = _blogs.toSet()..addAll(blogsPage.data);
       _blogs = blogs.toList();
       _total = blogsPage.total;

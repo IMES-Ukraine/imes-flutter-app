@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final homeNotifierProvider = ChangeNotifierProvider.family<HomeNotifier, PageController>(
+    (ref, controller) => HomeNotifier(controller: controller));
 
 class HomeNotifier with ChangeNotifier {
   final PageController controller;

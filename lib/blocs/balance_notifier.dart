@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:imes/models/user.dart';
 
 import 'package:imes/resources/repository.dart';
+
+final balanceNotifierProvider = ChangeNotifierProvider((ref) => BalanceNotifier());
 
 enum BalanceState {
   WITHDRAW,
@@ -43,7 +46,7 @@ class BalanceNotifier extends ChangeNotifier {
     _state = BalanceState.WITHDRAW;
     notifyListeners();
 
-    return response.body.data.user;
+    return response.data.user;
   }
 
   void resetState() {

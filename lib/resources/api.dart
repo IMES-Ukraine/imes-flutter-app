@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chopper/chopper.dart';
 
 import 'package:imes/models/basic_response.dart';
 import 'package:imes/models/login_response.dart';
@@ -13,113 +12,113 @@ import 'package:imes/models/test_answer_data.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
 import 'package:imes/models/upload_file_response.dart';
+import 'package:imes/models/user_basic_info.dart';
+import 'package:imes/models/user_financial_info.dart';
+import 'package:imes/models/user_special_info.dart';
 import 'package:imes/models/withdraw_history_response.dart';
+import 'package:retrofit/retrofit.dart';
+import 'package:dio/dio.dart';
 
-part 'api.chopper.dart';
+part 'api.g.dart';
 
-//@ChopperApi(baseUrl: 'http://185.65.244.189')
-// @ChopperApi(baseUrl: 'http://yaris-ls.serveo.net')
-@ChopperApi(baseUrl: 'https://echo.myftp.org')
-abstract class RestClient extends ChopperService {
-  static RestClient create([ChopperClient client]) => _$RestClient(client);
+@RestApi(baseUrl: 'http://echo.myftp.org')
+abstract class RestClient {
+  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @multipart
-  @Post(path: '/api/auth/login')
-  Future<Response<LoginResponse>> login(
+  @POST('/api/auth/login')
+  Future<LoginResponse> login(
     @Field('login') String login,
     @Field('password') String password,
   );
 
-  @Get(path: '/api/v1/profile')
-  Future<Response<ProfileResponse>> profile();
+  @GET('/api/v1/profile')
+  Future<ProfileResponse> profile();
 
-  @multipart
-  @Post(path: '/api/v1/profile/password')
-  Future<Response<ProfileResponse>> submitPassword(
+  @POST('/api/v1/profile/password')
+  Future<ProfileResponse> submitPassword(
     @Field('password') String password,
   );
 
-  @Get(path: '/api/v1/blog')
-  Future<Response<BlogsResponse>> blogs({
+  @GET('/api/v1/blog')
+  Future<BlogsResponse> blogs({
     @Query('page') int page = 0,
     @Query('count') int count = 10,
     @Query('type') int type = 1,
   });
 
-  @Get(path: '/api/v1/blog/{id}')
-  Future<Response<BlogResponse>> blog(@Path('id') num id);
+  @GET('/api/v1/blog/{id}')
+  Future<BlogResponse> blog(@Path('id') num id);
 
-  @Get(path: '/api/v1/analytics')
-  Future<Response<AnalyticsResponse>> analytics({
+  @GET('/api/v1/analytics')
+  Future<AnalyticsResponse> analytics({
     @Query('date') String date,
     @Query('page') int page = 0,
     @Query('count') int count = 10,
   });
 
-  @Post(path: '/api/v1/analytics')
-  Future<Response<BasicResponse>> postAnalytics({
+  @POST('/api/v1/analytics')
+  Future<BasicResponse> postAnalytics({
     @Field('photo_id') String id,
     @Field('grams') int grams = 10,
     @Field('count') int count = 1,
     @Field('creation_time') String creationTime,
   });
 
-  @Get(path: '/api/v1/notifications')
-  Future<Response<NotificationsResponse>> notifications({
+  @GET('/api/v1/notifications')
+  Future<NotificationsResponse> notifications({
     @Query('page') int page = 0,
     @Query('count') int count = 10,
   });
 
-  @Delete(path: '/api/v1/notifications/{id}')
-  Future<Response> deleteNotification(@Path('id') num id);
+  @DELETE('/api/v1/notifications/{id}')
+  Future<HttpResponse> deleteNotification(@Path('id') num id);
 
-  @Post(path: '/api/v1/profile/withdraw')
-  Future<Response<ProfileResponse>> withdraw({
+  @POST('/api/v1/profile/withdraw')
+  Future<ProfileResponse> withdraw({
     @Field('total') int amount = 0,
     @Field('comment') String comment,
     @Field('type') String type,
   });
 
-  @Get(path: '/api/v1/withdraw')
-  Future<Response<WithdrawHistoryResponse>> withdrawHistory(
-      // {
-      //   @Query('page') int page = 0,
-      //   @Query('count') int count = 10,
-      // }
-      );
+  @GET('/api/v1/withdraw')
+  Future<WithdrawHistoryResponse> withdrawHistory();
 
-  @Post(path: '/api/v1/profile/token')
-  Future<Response<BasicResponse>> submitToken({
+  @POST('/api/v1/profile/token')
+  Future<BasicResponse> submitToken({
     @Field('token') String token,
   });
 
-  @Get(path: '/api/v1/blog/{id}/callback')
-  Future<Response<BasicResponse>> blogCallback(@Path('id') num id);
+  @GET('/api/v1/blog/{id}/callback')
+  Future<BasicResponse> blogCallback(@Path('id') num id);
 
-  @Get(path: '/api/v1/tests')
-  Future<Response<TestsResponse>> tests({
+  @GET('/api/v1/tests')
+  Future<TestsResponse> tests({
     @Query('page') int page = 0,
     @Query('count') int count = 10,
     @Query('type') int type = 1,
   });
 
-  @Get(path: '/api/v1/tests/{id}')
-  Future<Response<TestResponse>> test(@Path('id') num id);
+  @GET('/api/v1/tests/{id}')
+  Future<TestResponse> test(@Path('id') num id);
 
-  @Post(path: '/api/v1/tests/submit')
-  Future<Response<SubmitTestResponse>> submitTests(@Body() TestAnswerData data);
+  @POST('/api/v1/tests/submit')
+  Future<SubmitTestResponse> submitTests(@Body() TestAnswerData data);
 
-  @Post(path: '/api/v1/profile/verify')
-  Future<Response<ProfileResponse>> submitProfile(@Body() Map<String, dynamic> data);
+  @POST('/api/v1/profile/verify')
+  Future<ProfileResponse> submitProfile(
+    @Field('basic_information') UserBasicInfo basicInfo,
+    @Field('specialized_information') UserSpecializedInfo specializedInfo,
+    @Field('financial_information') UserFinancialInfo financialInfo,
+  );
 
-  @multipart
-  @Post(path: '/api/v1/profile/image/education_document')
-  Future<Response<UploadFileResponse>> uploadEducationDoc(@PartFile('file') String path);
+  @MultiPart()
+  @POST('/api/v1/profile/image/education_document')
+  Future<UploadFileResponse> uploadEducationDoc(@Part(name: 'file') String path);
 
-  @multipart
-  @Post(path: '/api/v1/profile/image/avatar')
-  Future<Response<UploadFileResponse>> uploadProfileImage(@PartFile('file') String path);
+  @MultiPart()
+  @POST('/api/v1/profile/image/avatar')
+  Future<UploadFileResponse> uploadProfileImage(@Part(name: 'file') String path);
 
-  @Get(path: '/api/v1/blog/{id}/read/{index}')
-  Future<Response> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
+  @GET('/api/v1/blog/{id}/read/{index}')
+  Future<HttpResponse> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
 }

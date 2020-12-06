@@ -31,11 +31,11 @@ class BlogNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.blog(id);
       if (response.statusCode == 200) {
-        _blog = response.body.data.single;
+        _blog = response.data.single;
 
         final nextResponse = await Repository().api.blogs(count: 5, type: 3);
         if (nextResponse.statusCode == 200) {
-          _popular = nextResponse.body.data.data;
+          _popular = nextResponse.data.data;
         }
 
         _state = BlogState.LOADED;
