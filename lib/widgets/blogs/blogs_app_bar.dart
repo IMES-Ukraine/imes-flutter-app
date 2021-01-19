@@ -104,7 +104,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
                               child: Row(
                                 children: [
                                   Icon(Icons.account_circle, color: Colors.white),
@@ -119,7 +119,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               },
                             ),
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
                               child: Row(
                                 children: [
                                   Icon(CustomIcons.blog_heart, color: Colors.white),
@@ -136,7 +136,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         )
                       : RaisedGradientButton(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
                           child: Text('ВЕРИФІКУВАТИ АКАУНТ',
                               style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white)),
                           onPressed: () {

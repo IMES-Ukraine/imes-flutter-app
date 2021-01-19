@@ -27,14 +27,8 @@ class _HomePageState extends State<HomePage> {
 
   final GlobalKey<NavigatorState> _blogsNavigatorKey = GlobalKey();
   final GlobalKey<NavigatorState> _analyticsNavigatorKey = GlobalKey();
-  final GlobalKey<NavigatorState> _balanceNavigatorKey = GlobalKey();
+  // final GlobalKey<NavigatorState> _balanceNavigatorKey = GlobalKey();
   final GlobalKey<NavigatorState> _menuNavigatorKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
-  }
 
   void _redirect(final message, final homeNotifier) {
     final data = message['data'];
@@ -116,11 +110,11 @@ class _HomePageState extends State<HomePage> {
               }
             }
 
-            if (homeNotifier.currentPage == 3) {
-              if (await _balanceNavigatorKey.currentState.maybePop()) {
-                return false;
-              }
-            }
+            // if (homeNotifier.currentPage == 3) {
+            //   if (await _balanceNavigatorKey.currentState.maybePop()) {
+            //     return false;
+            //   }
+            // }
 
             if (homeNotifier.currentPage == 4) {
               if (await _menuNavigatorKey.currentState.maybePop()) {

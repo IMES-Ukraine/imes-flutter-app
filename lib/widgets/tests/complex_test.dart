@@ -8,9 +8,6 @@ import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
-import 'package:imes/models/test_answer.dart';
-import 'package:imes/models/test_answer_data.dart';
-import 'package:imes/resources/repository.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
@@ -31,7 +28,7 @@ class ComplexTest extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final durationTimer = useCountDownValueNotifier(context, Duration(seconds: test.duration));
-    final state = useValueNotifier(ObservableMap());
+    final state = useValueNotifier(ObservableMap<num, ObservableList<String>>());
     final controller = useScrollController();
     final step = useState(1);
 
@@ -65,22 +62,40 @@ class ComplexTest extends HookWidget {
                   if (test.complex[index].answerType == 'variants')
                     HookBuilder(builder: (_) {
                       useObservable(state);
+
+                      if (state.value[test.complex[index].id] == null) {
+                        state.value[test.complex[index].id] = ObservableList();
+                      }
+
+                      final stateNotifier = useValueNotifier(state.value[test.complex[index].id]);
+                      useObservable(stateNotifier);
                       if (test.complex[index].variants.type == 'text') {
                         return Column(
                             children: test.complex[index].variants.buttons.map((v) {
                           return TestVariantFlatButton(
                             variant: v.variant,
                             title: v.title,
-                            selected: state.value[test.complex[index].id] == v.variant,
+                            selected: state.value[test.complex[index].id] != null &&
+                                state.value[test.complex[index].id].contains(v.variant),
                             selectedColor: index < step.value - 1
-                                ? state.value[test.complex[index].id] == test.complex[index].variants.correctAnswer
+                                ? state.value[test.complex[index].id] != null &&
+                                        state.value[test.complex[index].id]
+                                            .contains(test.complex[index].variants.correctAnswer)
                                     ? Color(0xFF4CF99E) // TODO: extract color to theme
                                     : Theme.of(context).errorColor
                                 : null,
                             onTap: index < step.value - 1
                                 ? null
                                 : () {
-                                    state.value[test.complex[index].id] = v.variant;
+                                    if (state.value[test.complex[index].id] == null) {
+                                      state.value[test.complex[index].id] = ObservableList();
+                                    }
+
+                                    if (!state.value[test.complex[index].id].contains(v.variant)) {
+                                      state.value[test.complex[index].id].add(v.variant);
+                                    } else {
+                                      state.value[test.complex[index].id].remove(v.variant);
+                                    }
                                   },
                           );
                         }).toList());
@@ -98,7 +113,8 @@ class ComplexTest extends HookWidget {
                                   title: v.title,
                                   descr: v.description,
                                   imageUrl: v.file.path,
-                                  selected: state.value[test.complex[index].id] == v.variant,
+                                  selected: state.value[test.complex[index].id] != null &&
+                                      state.value[test.complex[index].id].contains(v.variant),
                                   selectedColor: index < step.value - 1
                                       ? state.value[test.complex[index].id] ==
                                               test.complex[index].variants.correctAnswer
@@ -108,7 +124,15 @@ class ComplexTest extends HookWidget {
                                   onTap: index < step.value - 1
                                       ? null
                                       : () {
-                                          state.value[test.complex[index].id] = v.variant;
+                                          if (state.value[test.complex[index].id] == null) {
+                                            state.value[test.complex[index].id] = ObservableList();
+                                          }
+
+                                          if (!state.value[test.complex[index].id].contains(v.variant)) {
+                                            state.value[test.complex[index].id].add(v.variant);
+                                          } else {
+                                            state.value[test.complex[index].id].remove(v.variant);
+                                          }
                                         },
                                 ),
                               );
@@ -129,27 +153,30 @@ class ComplexTest extends HookWidget {
                     ),
                   HookBuilder(builder: (context) {
                     useObservable(state);
+                    if (state.value[test.complex[index].id] == null) {
+                      state.value[test.complex[index].id] = ObservableList();
+                    }
+
+                    final stateNotifier = useValueNotifier(state.value[test.complex[index].id]);
+                    useObservable(stateNotifier);
                     return Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: RaisedGradientButton(
                         child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         onPressed: state.value[test.complex[index].id] != null && index == step.value - 1
                             ? () {
+                                final testNotifier = context.read<TestNotifier>();
                                 if (step.value < test.complex.length) {
                                   step.value++;
                                   controller.animateTo(
                                       controller.position.maxScrollExtent + controller.position.viewportDimension,
                                       duration: const Duration(milliseconds: 500),
                                       curve: Curves.easeIn);
-                                  Repository().api.submitTests(TestAnswerData(data: [TestAnswer(id: test.id)]));
+                                  testNotifier.postAnswer(test.id, state.value[test.id], durationTimer.value);
                                 } else {
-                                  final testNotifier = context.read<TestNotifier>();
                                   final userNotifier = context.read<UserNotifier>();
                                   testNotifier
-                                      .postAnswers(
-                                    state.value.entries.map((e) => TestAnswer(id: e.key, variant: e.value)).toList(),
-                                    durationTimer.value,
-                                  )
+                                      .postAnswer(test.id, state.value[test.id], durationTimer.value)
                                       .then((data) {
                                     if (data.status == 'passed') {
                                       showDialog(

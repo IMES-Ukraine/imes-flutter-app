@@ -63,7 +63,7 @@ class TestsStateNotifier with ChangeNotifier {
     final response = await Repository().api.tests(page: ++_lastPage);
     if (response.statusCode == 200) {
       final testsPage = response.body.data;
-      final tests = _tests.toSet()..addAll(testsPage.data);
+      final tests = _tests.toSet()..addAll(testsPage?.data ?? []);
       _tests = tests.toList();
       _total = testsPage.total;
       _lastPage = testsPage.currentPage;

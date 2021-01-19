@@ -12,6 +12,9 @@ import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
+import 'package:imes/widgets/tests/test_vide_card.dart';
+import 'package:imes/hooks/observable.dart';
+import 'package:observable/observable.dart';
 import 'package:provider/provider.dart';
 
 class SimpleTest extends HookWidget {
@@ -23,7 +26,8 @@ class SimpleTest extends HookWidget {
   Widget build(BuildContext context) {
     final durationTimer = useCountDownValueNotifier(context, Duration(seconds: test.duration));
     final controller = useTextEditingController();
-    final state = useState<String>();
+    final stateNotifier = useValueNotifier<ObservableList<String>>(ObservableList());
+    final state = useObservable(stateNotifier);
 
     return SingleChildScrollView(
       child: Consumer<TestNotifier>(builder: (context, testNotifier, _) {
@@ -31,7 +35,7 @@ class SimpleTest extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TestTitle(title: 'Тест простой', duration: durationTimer),
-            TestCard(test: test),
+            if (test.hasToLearn) TestCard(test: test),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text('ВОПРОС',
@@ -49,6 +53,7 @@ class SimpleTest extends HookWidget {
                   )),
             ),
             Divider(indent: 8.0, endIndent: 8.0),
+            if (test.hasVideo) TestVideoCard(url: test.video.data),
             if (test.answerType == 'variants')
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -62,9 +67,13 @@ class SimpleTest extends HookWidget {
                           (v) => TestVariantFlatButton(
                             variant: v.variant,
                             title: v.title,
-                            selected: state.value == v.variant,
+                            selected: state.value.contains(v.variant),
                             onTap: () {
-                              state.value = v.variant;
+                              if (!state.value.contains(v.variant)) {
+                                state.value.add(v.variant);
+                              } else {
+                                state.value.remove(v.variant);
+                              }
                             },
                           ),
                         )
@@ -106,7 +115,7 @@ class SimpleTest extends HookWidget {
 
   void submit(
     BuildContext context,
-    ValueNotifier<String> state,
+    ValueNotifier<List<String>> state,
     TestNotifier testNotifier,
     TextEditingController controller,
     ValueNotifier<Duration> durationTimer,

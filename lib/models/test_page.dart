@@ -15,7 +15,7 @@ class TestPage extends Pageable {
     int to,
     int total,
     int lastPage,
-    int perPage,
+    // int perPage,
   }) : super(
           currentPage: currentPage,
           from: from,

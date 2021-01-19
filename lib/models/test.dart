@@ -28,6 +28,8 @@ class Test {
   final int duration;
   final List<Test> complex;
   final String question;
+  final List agreementAccepted;
+  final String agreement;
 
   Test({
     this.id,
@@ -43,6 +45,8 @@ class Test {
     this.duration,
     this.complex,
     this.question,
+    this.agreementAccepted,
+    this.agreement,
   });
 
   bool get hasToLearn => options.indexWhere((element) => element.type == 'to_learn') != -1;

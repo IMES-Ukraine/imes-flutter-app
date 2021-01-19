@@ -6,7 +6,7 @@ part 'test_variants.g.dart';
 @JsonSerializable()
 class TestVariants {
   @JsonKey(name: 'correct_answer')
-  final String correctAnswer;
+  final List<String> correctAnswer;
   final String type;
   final List<TestButton> buttons;
 

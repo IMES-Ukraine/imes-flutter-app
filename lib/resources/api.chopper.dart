@@ -174,4 +174,16 @@ class _$RestClient extends RestClient {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<dynamic, dynamic>($request);
   }
+
+  Future<Response<TestResponse>> getAgreement(num testId) {
+    final $url = 'https://echo.myftp.org/api/v1/agreement/${testId}';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<TestResponse, TestResponse>($request);
+  }
+
+  Future<Response> postAgreement(num testId) {
+    final $url = 'https://echo.myftp.org/api/v1/agreement/${testId}';
+    final $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
 }
