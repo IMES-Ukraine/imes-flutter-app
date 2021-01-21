@@ -65,10 +65,11 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.studyPeriod);
             final additionalQualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.additionalQualification);
+            final micIdController = useTextEditingController(text: userNotifier.user?.specializedInformation?.micId);
 
             final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInformation?.card);
-            final cardExpController = useTextEditingController(text: userNotifier.user?.financialInformation?.exp);
-            final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInformation?.ccv);
+            // final cardExpController = useTextEditingController(text: userNotifier.user?.financialInformation?.exp);
+            // final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInformation?.ccv);
 
             final isLoading = useState<bool>(false);
             return Stack(
@@ -96,8 +97,10 @@ class AccountEditPage extends HookWidget {
                                                         text: 'КАМЕРА',
                                                         color: Theme.of(context).primaryColor,
                                                         onPressed: () async {
-                                                          final image =
-                                                              await ImagePicker().getImage(source: ImageSource.camera);
+                                                          final image = await ImagePicker().getImage(
+                                                              source: ImageSource.camera,
+                                                              maxWidth: 800,
+                                                              maxHeight: 600);
                                                           Navigator.of(context).pop(image?.path);
                                                         }),
                                                   ),
@@ -107,8 +110,10 @@ class AccountEditPage extends HookWidget {
                                                         text: 'ГАЛЕРЕЯ',
                                                         color: Theme.of(context).primaryColor,
                                                         onPressed: () async {
-                                                          final image =
-                                                              await ImagePicker().getImage(source: ImageSource.gallery);
+                                                          final image = await ImagePicker().getImage(
+                                                              source: ImageSource.gallery,
+                                                              maxWidth: 800,
+                                                              maxHeight: 600);
                                                           Navigator.of(context).pop(image?.path);
                                                         }),
                                                   ),
@@ -119,6 +124,7 @@ class AccountEditPage extends HookWidget {
                                         ));
                                 isLoading.value = true;
                                 userNotifier.uploadProfilePicture(path).then((_) {
+                                  print(userNotifier.user.basicInformation);
                                   isLoading.value = false;
                                 }).catchError((error) {
                                   isLoading.value = false;
@@ -413,6 +419,18 @@ class AccountEditPage extends HookWidget {
                                   ),
                                   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                                 ),
+                                const SizedBox(height: 8.0),
+                                Divider(),
+                                TextField(
+                                  controller: micIdController,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    labelText: 'MIC id',
+                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    contentPadding: EdgeInsets.zero,
+                                  ),
+                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                ),
                                 const SizedBox(height: 16.0),
                               ],
                             ),
@@ -466,44 +484,44 @@ class AccountEditPage extends HookWidget {
                                     ],
                                     style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
                                   ),
-                                  const SizedBox(height: 8.0),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextField(
-                                          controller: cardExpController,
-                                          decoration: InputDecoration(
-                                            isDense: true,
-                                            labelText: 'Дата',
-                                            labelStyle: TextStyle(fontSize: 12.0),
-                                            contentPadding: EdgeInsets.zero,
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [
-                                            MaskTextInputFormatter(mask: '## / ##', filter: {'#': RegExp(r'[0-9]')})
-                                          ],
-                                          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 200.0),
-                                      Expanded(
-                                        child: TextField(
-                                          controller: cardCCVController,
-                                          decoration: InputDecoration(
-                                            isDense: true,
-                                            labelText: 'CVV',
-                                            labelStyle: TextStyle(fontSize: 12.0),
-                                            contentPadding: EdgeInsets.zero,
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [
-                                            MaskTextInputFormatter(mask: '###', filter: {'#': RegExp(r'[0-9]')})
-                                          ],
-                                          style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // const SizedBox(height: 8.0),
+                                  // Row(
+                                  //   children: [
+                                  //     Expanded(
+                                  //       child: TextField(
+                                  //         controller: cardExpController,
+                                  //         decoration: InputDecoration(
+                                  //           isDense: true,
+                                  //           labelText: 'Дата',
+                                  //           labelStyle: TextStyle(fontSize: 12.0),
+                                  //           contentPadding: EdgeInsets.zero,
+                                  //         ),
+                                  //         keyboardType: TextInputType.number,
+                                  //         inputFormatters: [
+                                  //           MaskTextInputFormatter(mask: '## / ##', filter: {'#': RegExp(r'[0-9]')})
+                                  //         ],
+                                  //         style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(width: 200.0),
+                                  //     Expanded(
+                                  //       child: TextField(
+                                  //         controller: cardCCVController,
+                                  //         decoration: InputDecoration(
+                                  //           isDense: true,
+                                  //           labelText: 'CVV',
+                                  //           labelStyle: TextStyle(fontSize: 12.0),
+                                  //           contentPadding: EdgeInsets.zero,
+                                  //         ),
+                                  //         keyboardType: TextInputType.number,
+                                  //         inputFormatters: [
+                                  //           MaskTextInputFormatter(mask: '###', filter: {'#': RegExp(r'[0-9]')})
+                                  //         ],
+                                  //         style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   const SizedBox(height: 16.0),
                                 ],
                               ),
@@ -544,8 +562,8 @@ class AccountEditPage extends HookWidget {
 
                               result['financial_information'] = {
                                 'card': cardNumberController.text,
-                                'exp': cardExpController.text,
-                                'ccv': cardCCVController.text,
+                                // 'exp': cardExpController.text,
+                                // 'ccv': cardCCVController.text,
                               };
 
                               isLoading.value = true;

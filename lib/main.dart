@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
     return Consumer<UserNotifier>(builder: (context, userNotifier, _) {
       return MaterialApp(
         localizationsDelegates: [
-//          MaterialLocalizationUk(),
+          // MaterialLocalizationUk(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

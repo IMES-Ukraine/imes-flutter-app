@@ -78,9 +78,7 @@ class ComplexTest extends HookWidget {
                             selected: state.value[test.complex[index].id] != null &&
                                 state.value[test.complex[index].id].contains(v.variant),
                             selectedColor: index < step.value - 1
-                                ? state.value[test.complex[index].id] != null &&
-                                        state.value[test.complex[index].id]
-                                            .contains(test.complex[index].variants.correctAnswer)
+                                ? test.complex[index].variants.correctAnswer.contains(v.variant)
                                     ? Color(0xFF4CF99E) // TODO: extract color to theme
                                     : Theme.of(context).errorColor
                                 : null,
@@ -116,8 +114,7 @@ class ComplexTest extends HookWidget {
                                   selected: state.value[test.complex[index].id] != null &&
                                       state.value[test.complex[index].id].contains(v.variant),
                                   selectedColor: index < step.value - 1
-                                      ? state.value[test.complex[index].id] ==
-                                              test.complex[index].variants.correctAnswer
+                                      ? test.complex[index].variants.correctAnswer.contains(v.variant)
                                           ? Color(0xFF4CF99E) // TODO: extract color to theme
                                           : Theme.of(context).errorColor
                                       : null,
@@ -172,11 +169,13 @@ class ComplexTest extends HookWidget {
                                       controller.position.maxScrollExtent + controller.position.viewportDimension,
                                       duration: const Duration(milliseconds: 500),
                                       curve: Curves.easeIn);
-                                  testNotifier.postAnswer(test.id, state.value[test.id], durationTimer.value);
+                                  testNotifier.postAnswer(
+                                      test.complex[index].id, state.value[test.complex[index].id], durationTimer.value);
                                 } else {
                                   final userNotifier = context.read<UserNotifier>();
                                   testNotifier
-                                      .postAnswer(test.id, state.value[test.id], durationTimer.value)
+                                      .postAnswer(test.complex[index].id, state.value[test.complex[index].id],
+                                          durationTimer.value)
                                       .then((data) {
                                     if (data.status == 'passed') {
                                       showDialog(

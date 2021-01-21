@@ -17,6 +17,7 @@ abstract class UserSpecializedInfo with _$UserSpecializedInfo {
     String studyPeriod,
     String additionalQualification,
     CoverImage educationDocument,
+    String micId,
   }) = _UserSpecializedInfo;
 
   factory UserSpecializedInfo.fromJson(Map<String, dynamic> json) => _$UserSpecializedInfoFromJson(json);

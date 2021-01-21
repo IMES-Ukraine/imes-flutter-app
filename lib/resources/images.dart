@@ -14,4 +14,5 @@ class Images {
   static const String union = 'assets/union.png';
   static const String facebook = 'assets/facebook.png';
   static const String camera = 'assets/camera.png';
+  static const String token = 'assets/token.png';
 }

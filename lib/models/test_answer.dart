@@ -6,7 +6,7 @@ part 'test_answer.g.dart';
 class TestAnswer {
   @JsonKey(name: 'test_id')
   final int id;
-  final String variant;
+  final List<String> variant;
 
   TestAnswer({this.id, this.variant});
 

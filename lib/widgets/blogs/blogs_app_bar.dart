@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:imes/blocs/blogs_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
+import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/account.dart';
 import 'package:imes/screens/account_edit.dart';
 import 'package:imes/screens/balance.dart';
@@ -73,12 +74,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    CustomIcons.blog_heart,
-                                    color: userNotifier.user.balance > 0
-                                        ? Theme.of(context).primaryColor
-                                        : Theme.of(context).dividerColor,
-                                  ),
+                                  Image.asset(Images.token, scale: 2.0),
                                   const SizedBox(width: 8.0),
                                   Text('${userNotifier.user?.balance ?? 0}',
                                       style: TextStyle(
@@ -104,7 +100,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
+                              padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 32.0),
                               child: Row(
                                 children: [
                                   Icon(Icons.account_circle, color: Colors.white),
@@ -119,10 +115,10 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               },
                             ),
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
+                              padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 32.0),
                               child: Row(
                                 children: [
-                                  Icon(CustomIcons.blog_heart, color: Colors.white),
+                                  Image.asset(Images.token, scale: 1.5),
                                   const SizedBox(width: 8.0),
                                   Text('БАЛАНС',
                                       style:

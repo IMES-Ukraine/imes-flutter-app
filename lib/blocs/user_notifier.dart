@@ -198,9 +198,9 @@ class UserNotifier with ChangeNotifier {
     final response = await Repository().api.uploadProfileImage(path);
     if (response.statusCode == 200) {
       if (_user.basicInformation != null) {
-        _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.body.data));
+        _user = _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.body.data));
       } else {
-        _user.copyWith(basicInformation: UserBasicInfo(avatar: response.body.data));
+        _user = _user.copyWith(basicInformation: UserBasicInfo(avatar: response.body.data));
       }
       notifyListeners();
     }

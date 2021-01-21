@@ -57,7 +57,7 @@ class TestVariantCardButton extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
-              Text(title),
+              Expanded(child: Text(title)),
             ]),
           ),
           Padding(
@@ -65,10 +65,12 @@ class TestVariantCardButton extends StatelessWidget {
             child: IntrinsicHeight(
               child: Row(children: [
                 Expanded(child: Text(descr, style: TextStyle(fontSize: 8.0))),
+                const SizedBox(width: 5.0),
                 Expanded(
                     child: OctoImage(
+                  height: 50,
                   image: CachedNetworkImageProvider(imageUrl),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.scaleDown,
                 ))
               ]),
             ),

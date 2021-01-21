@@ -20,7 +20,7 @@ class _SupportPageState extends State<SupportPage> {
   Widget build(BuildContext context) {
     return Consumer<UserNotifier>(builder: (context, userNotifier, _) {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text('Технічна підтримкка')),
         body: Column(
           children: <Widget>[
             Expanded(

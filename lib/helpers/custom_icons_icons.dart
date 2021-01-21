@@ -37,5 +37,5 @@ class CustomIcons {
   static const IconData plus = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData test = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData chat = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData blog_heart = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // static const IconData blog_heart = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

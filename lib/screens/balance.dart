@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imes/blocs/history_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
+import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/withdraw.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
@@ -44,7 +45,7 @@ class _BalancePageState extends State<BalancePage> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Icon(CustomIcons.blog_heart, color: Theme.of(context).primaryColor, size: 36.0),
+                            Image.asset(Images.token),
                             const SizedBox(width: 16.0),
                             Text(
                               '${userNotifier.user.balance ?? 0}',

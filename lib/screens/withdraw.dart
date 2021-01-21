@@ -61,7 +61,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Row(children: [
-                                    Icon(CustomIcons.blog_heart, color: Theme.of(context).primaryColor, size: 26.0),
+                                    Image.asset(Images.token),
                                     const SizedBox(width: 16.0),
                                     Text(
                                       '${userNotifier.user.balance ?? 0}',
@@ -96,28 +96,28 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                   Text('на карту', style: TextStyle(fontWeight: FontWeight.bold)),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Radio(
-                                      value: 'certificate',
-                                      groupValue: selectedType.value,
-                                      onChanged: (value) {
-                                        selectedType.value = value;
-                                      }),
-                                  Text('сертифікати', style: TextStyle(fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Radio(
-                                      value: 'special',
-                                      groupValue: selectedType.value,
-                                      onChanged: (value) {
-                                        selectedType.value = value;
-                                      }),
-                                  Text('візит спеціальних заходів', style: TextStyle(fontWeight: FontWeight.bold)),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Radio(
+                              //         value: 'certificate',
+                              //         groupValue: selectedType.value,
+                              //         onChanged: (value) {
+                              //           selectedType.value = value;
+                              //         }),
+                              //     Text('сертифікати', style: TextStyle(fontWeight: FontWeight.bold)),
+                              //   ],
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     Radio(
+                              //         value: 'special',
+                              //         groupValue: selectedType.value,
+                              //         onChanged: (value) {
+                              //           selectedType.value = value;
+                              //         }),
+                              //     Text('візит спеціальних заходів', style: TextStyle(fontWeight: FontWeight.bold)),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),
@@ -208,8 +208,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                                       padding: const EdgeInsets.all(16.0),
                                                       child:
                                                           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                        Icon(CustomIcons.blog_heart,
-                                                            color: Theme.of(context).primaryColor, size: 26.0),
+                                                        Image.asset(Images.token),
                                                         const SizedBox(width: 16.0),
                                                         Text(
                                                           '${userNotifier.user.balance ?? 0}',

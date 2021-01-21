@@ -46,13 +46,13 @@ class BlogViewPage extends HookWidget {
       child: Consumer<BlogNotifier>(builder: (context, blogNotifier, _) {
         return Scaffold(
             appBar: AppBar(
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.favorite),
-                  onPressed: () {},
-                )
-              ],
-            ),
+                // actions: [
+                //   IconButton(
+                //     icon: Icon(Icons.favorite),
+                //     onPressed: () {},
+                //   )
+                // ],
+                ),
             body: LayoutBuilder(builder: (context, constraints) {
               if (blogNotifier.state == BlogState.ERROR) {
                 return ErrorRetry(onTap: () {

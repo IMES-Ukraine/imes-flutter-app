@@ -17,7 +17,7 @@ class TestVideoCard extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: BetterPlayerListVideoPlayer(
-          BetterPlayerDataSource(BetterPlayerDataSourceType.NETWORK, url),
+          BetterPlayerDataSource(BetterPlayerDataSourceType.network, url),
           configuration: BetterPlayerConfiguration(
             autoPlay: false,
             aspectRatio: 16 / 9,

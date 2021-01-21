@@ -115,7 +115,7 @@ class SimpleTest extends HookWidget {
 
   void submit(
     BuildContext context,
-    ValueNotifier<List<String>> state,
+    ValueNotifier<ObservableList<String>> state,
     TestNotifier testNotifier,
     TextEditingController controller,
     ValueNotifier<Duration> durationTimer,
@@ -123,7 +123,7 @@ class SimpleTest extends HookWidget {
     testNotifier
         .postAnswer(
       test.id,
-      [state.value ?? controller.text],
+      state.value ?? [controller.text],
       durationTimer.value,
     )
         .then((data) {

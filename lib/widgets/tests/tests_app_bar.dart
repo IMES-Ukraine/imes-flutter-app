@@ -31,28 +31,28 @@ class TestsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ? Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
                       : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
                   child: Text(
-                    'Нові'.toUpperCase(),
+                    'Дослідження'.toUpperCase(),
                   ),
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Provider.of<TestsStateNotifier>(context, listen: false).changePage(TestsPage.INFORMATION);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AnimatedDefaultTextStyle(
-                  duration: Duration(milliseconds: 200),
-                  style: Provider.of<TestsStateNotifier>(context).page == TestsPage.INFORMATION
-                      ? Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
-                      : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
-                  child: Text(
-                    'Популярні'.toUpperCase(),
-                  ),
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Provider.of<TestsStateNotifier>(context, listen: false).changePage(TestsPage.INFORMATION);
+            //   },
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: AnimatedDefaultTextStyle(
+            //       duration: Duration(milliseconds: 200),
+            //       style: Provider.of<TestsStateNotifier>(context).page == TestsPage.INFORMATION
+            //           ? Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 17.0)
+            //           : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
+            //       child: Text(
+            //         'Популярні'.toUpperCase(),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 32.0),
               child: NotificationsButton(),

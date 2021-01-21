@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  better_player: ^0.0.33
+  better_player: ^0.0.46
   bubble: ^1.1.9+1
   cached_network_image: ^2.3.2+1
   chopper: ^2.4.1
