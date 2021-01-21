@@ -30,8 +30,11 @@ class _WithdrawPageState extends State<WithdrawPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userBalance = context.watch<UserNotifier>().user.balance;
     final selectedType = useState('card');
-    final sendBalance = useState(context.watch<UserNotifier>().user.balance);
+    final sendBalance = useState(userBalance);
+
+    if (sendBalance.value > userBalance) sendBalance.value = userBalance;
 
     return Scaffold(
       appBar: AppBar(title: Text('ОБМІН', style: TextStyle(fontWeight: FontWeight.w800))),
@@ -156,7 +159,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                     child: AnimatedSwitcher(
                                       duration: const Duration(milliseconds: 200),
                                       reverseDuration: const Duration(milliseconds: 500),
-                                      child: Text('${sendBalance.value}',
+                                      child: Text(
+                                          '${sendBalance.value < userNotifier.user.balance ? sendBalance.value : userNotifier.user.balance}',
                                           key: ValueKey<int>(sendBalance.value),
                                           style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor)),
                                     )),
@@ -211,7 +215,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                                         Image.asset(Images.token),
                                                         const SizedBox(width: 16.0),
                                                         Text(
-                                                          '${userNotifier.user.balance ?? 0}',
+                                                          '${sendBalance.value ?? 0}',
                                                           style: TextStyle(
                                                             fontSize: 36.0,
                                                             fontWeight: FontWeight.bold,
