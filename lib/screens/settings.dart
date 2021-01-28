@@ -31,7 +31,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SingleChildScrollView(
         child: Column(children: [
           const SizedBox(height: 16.0),
-          Card(
+          /*Card(
             margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
-          ),
+          ),*/
           HookBuilder(builder: (context) {
             final state = useState<bool>(false);
             final notificationsAll = useStream(notificationsAllController.stream);
