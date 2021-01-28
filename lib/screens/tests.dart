@@ -124,7 +124,7 @@ class TestsPage extends StatelessWidget {
                                           const SizedBox(height: 16.0),
                                           AlertContainer(
                                             child: Text(
-                                              'Внимание!\n\nУбедитесь, что Вы готовы к участию в данном исследовании, так как количество попыток ограничено',
+                                              'Увага!\n\nПереконайтеся, що Ви готові  до участі в даному дослідженні, так як кількість спроб обмежена',
                                               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
                                               textAlign: TextAlign.center,
                                             ),

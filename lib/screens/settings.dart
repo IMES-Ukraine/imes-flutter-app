@@ -38,7 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Язик', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Мова', style: TextStyle(fontWeight: FontWeight.bold)),
                   Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4.0),
@@ -93,35 +93,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 onExpansionChanged: (value) {
                   state.value = value;
                 },
-                title: Text('Уведомления',
+                title: Text('Сповіщення',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     )),
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
                 children: [
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Все'),
+                    Text('Всі'),
                     Switch(value: notificationsAll?.data ?? false, onChanged: (v) => notificationsAllController.add(v)),
                   ]),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Новости'),
+                    Text('Новини'),
                     Switch(
                         value: notificationsNews?.data ?? false, onChanged: (v) => notificationsNewsController.add(v)),
                   ]),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Тесты'),
+                    Text('Тести'),
                     Switch(
                         value: notificationsTests?.data ?? false,
                         onChanged: (v) => notificationsTestsController.add(v)),
                   ]),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Баллы'),
+                    Text('Бали'),
                     Switch(
                         value: notificationsBalance?.data ?? false,
                         onChanged: (v) => notificationsBalanceController.add(v)),
                   ]),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Сообщения'),
+                    Text('Повідомлення'),
                     Switch(
                         value: notificationsMessages?.data ?? false,
                         onChanged: (v) => notificationsMessagesController.add(v)),
@@ -158,7 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onExpansionChanged: (value) {
                     state.value = value;
                   },
-                  title: Text('Смена пароля',
+                  title: Text('Зміна пароля',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
@@ -170,7 +170,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(labelText: 'Старый пароль'),
+                      decoration: InputDecoration(labelText: 'Старий пароль'),
                       validator: (value) {
                         if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
@@ -188,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(labelText: 'Новый пароль'),
+                      decoration: InputDecoration(labelText: 'Новий пароль'),
                       validator: (value) {
                         if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';
@@ -206,7 +206,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       obscureText: true,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(labelText: 'Подтвердить пароль'),
+                      decoration: InputDecoration(labelText: 'Підтвердити пароль'),
                       validator: (value) {
                         if (value.isEmpty || value.length < 4) {
                           return 'Пароль не може бути меньш ніж 4 символа';

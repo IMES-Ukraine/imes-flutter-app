@@ -79,7 +79,7 @@ class BlogsPage extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'Внимание!',
+                                          'Увага!',
                                           style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
                                         ),
                                       ),
@@ -89,14 +89,14 @@ class BlogsPage extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'Для получения баллов за изучение статьи, необходимо полностью её прочесть',
+                                          'Для отримання балів  за вивчення статті,  необхідно повністю її прочитати',
                                           style: TextStyle(fontSize: 12.0),
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                         child: CustomFlatButton(
-                                            text: 'НАЧАТЬ',
+                                            text: 'РОЗПОЧАТИ',
                                             color: Theme.of(context).primaryColor,
                                             onPressed: () {
                                               Navigator.of(context).pop(true);
@@ -105,7 +105,7 @@ class BlogsPage extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                         child: CustomFlatButton(
-                                            text: 'ВЕРНУТЬСЯ ПОЗДЖЕ',
+                                            text: 'ПОВЕРНУТИСЯ ПІЗНІШЕ',
                                             color: Theme.of(context).errorColor,
                                             onPressed: () {
                                               Navigator.of(context).pop(false);
