@@ -42,7 +42,7 @@ class _TestViewPageState extends State<TestViewPage> {
                           const SizedBox(height: 16.0),
                           AlertContainer(
                             child: Text(
-                              'Внимание!\n\nВы находитесь в режиме прохождения теста. Повторноепрохождение будет недоступно.',
+                              'Увага!\n\nВи знаходитесь у режимі проходження теста. Повторне прохождення буде недоступно.',
                               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
                               textAlign: TextAlign.center,
                             ),
