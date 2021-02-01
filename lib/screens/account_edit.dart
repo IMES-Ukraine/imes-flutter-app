@@ -425,7 +425,7 @@ class AccountEditPage extends HookWidget {
                                   controller: micIdController,
                                   decoration: InputDecoration(
                                     isDense: true,
-                                    labelText: 'MIC id',
+                                    labelText: 'ІПН',
                                     labelStyle: TextStyle(fontSize: 12.0),
                                     contentPadding: EdgeInsets.zero,
                                   ),
@@ -558,6 +558,7 @@ class AccountEditPage extends HookWidget {
                                 'study_period': studyPeriodController.text,
                                 'additional_qualification': additionalQualificationController.text,
                                 'schedule': resultSchedule,
+                                'mic_id': micIdController.text,
                               };
 
                               result['financial_information'] = {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -33,6 +34,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
     final userBalance = context.watch<UserNotifier>().user.balance;
     final selectedType = useState('card');
     final sendBalance = useState(userBalance);
+    final sendInputController = useTextEditingController.fromValue(TextEditingValue(text: '$userBalance'));
 
     if (sendBalance.value > userBalance) sendBalance.value = userBalance;
 
@@ -150,6 +152,22 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                   },
                                 ),
                                 const SizedBox(width: 16.0),
+                                // Expanded(
+                                //   child: TextField(
+                                //     controller: sendInputController,
+                                //     decoration: InputDecoration(
+                                //       border: OutlineInputBorder(
+                                //         borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                //         borderRadius: BorderRadius.circular(36.0),
+                                //       ),
+                                //       contentPadding: const EdgeInsets.all(4.0),
+                                //     ),
+                                //     style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor),
+                                //     textAlign: TextAlign.center,
+                                //     keyboardType: TextInputType.number,
+                                //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                //   ),
+                                // ),
                                 Container(
                                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64.0),
                                     decoration: BoxDecoration(

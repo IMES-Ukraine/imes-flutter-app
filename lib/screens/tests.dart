@@ -217,7 +217,10 @@ class TestsPage extends StatelessWidget {
                                     });
                                   } else {
                                     Navigator.of(mainContext)
-                                        .pushNamed('/tests/view', arguments: testsNotifier.tests[index].id);
+                                        .pushNamed('/tests/view', arguments: testsNotifier.tests[index].id)
+                                        .then((_) {
+                                      testsNotifier.remove(testsNotifier.tests[index]);
+                                    });
                                   }
                                 }
                               });

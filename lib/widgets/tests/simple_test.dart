@@ -127,9 +127,8 @@ class SimpleTest extends HookWidget {
       durationTimer.value,
     )
         .then((data) {
-      Future dialogFuture;
       if (test.answerType == 'text') {
-        dialogFuture = showDialog(
+        showDialog(
             context: context,
             builder: (context) => CustomAlertDialog(
                   content: Column(
@@ -157,8 +156,11 @@ class SimpleTest extends HookWidget {
                       ),
                     ],
                   ),
-                ));
+                )).then((_) {
+          Navigator.of(context).pop();
+        });
       } else {
+        Future dialogFuture;
         if (data.status == 'passed') {
           dialogFuture = showDialog(
               context: context,

@@ -35,6 +35,7 @@ class Blog {
   final int learningBonus;
   @JsonKey(name: 'cover_image')
   final CoverImage coverImage;
+  final List isOpened;
 
   Blog({
     this.id,
@@ -55,6 +56,7 @@ class Blog {
     this.featuredImages,
     this.learningBonus,
     this.coverImage,
+    this.isOpened,
   });
 
   @override

@@ -176,7 +176,7 @@ class AccountPage extends StatelessWidget {
                   Text(userNotifier.user?.specializedInformation?.additionalQualification ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
-                  Text('MIC id', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  Text('ІПН', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
                   Text(userNotifier.user?.specializedInformation?.micId ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
