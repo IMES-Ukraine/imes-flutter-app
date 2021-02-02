@@ -4,6 +4,7 @@ import 'package:imes/screens/blogs.dart';
 import 'package:imes/screens/menu.dart';
 import 'package:imes/screens/blog_view.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+// import 'package:native_pdf_view/native_pdf_view.dart';
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/test_view.dart';
 import 'package:imes/screens/tests.dart';
@@ -29,6 +30,16 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<NavigatorState> _analyticsNavigatorKey = GlobalKey();
   // final GlobalKey<NavigatorState> _balanceNavigatorKey = GlobalKey();
   final GlobalKey<NavigatorState> _menuNavigatorKey = GlobalKey();
+
+  // PdfController _pdfController;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _pdfController = PdfController(
+  //     document: PdfDocument.openAsset('assets/instruction.pdf'),
+  //   );
+  // }
 
   void _redirect(final message, final homeNotifier) {
     final data = message['data'];
@@ -132,7 +143,7 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Navigator(
                   key: _blogsNavigatorKey,
-                  initialRoute: '/',
+                  initialRoute: homeNotifier.initialPageRoute,
                   onGenerateRoute: (routeSettings) {
                     return MaterialPageRoute(
                       builder: (context) {
@@ -150,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Navigator(
                   key: _analyticsNavigatorKey,
-                  initialRoute: '/',
+                  initialRoute: homeNotifier.initialPageRoute,
                   onGenerateRoute: (routeSettings) {
                     return MaterialPageRoute(builder: (context) {
                       switch (routeSettings.name) {
@@ -168,7 +179,23 @@ class _HomePageState extends State<HomePage> {
                 SupportPage(),
                 PDF().cachedFromUrl('https://echo.myftp.org/instruction.pdf',
                     placeholder: (progress) => Center(child: CircularProgressIndicator())),
-
+                // PdfView(
+                //   documentLoader: Center(child: CircularProgressIndicator()),
+                //   pageLoader: Center(child: CircularProgressIndicator()),
+                //   controller: _pdfController,
+                //   pageSnapping: true,
+                //   onDocumentLoaded: (document) {
+                //     // setState(() {
+                //     //   _actualPageNumber = 1;
+                //     //   _allPagesCount = document.pagesCount;
+                //     // });
+                //   },
+                //   onPageChanged: (page) {
+                //     // setState(() {
+                //     //   _actualPageNumber = page;
+                //     // });
+                //   },
+                // ),
                 // Navigator(
                 //   key: _balanceNavigatorKey,
                 //   initialRoute: '/',
@@ -189,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                 // ),
                 Navigator(
                   key: _menuNavigatorKey,
-                  initialRoute: '/',
+                  initialRoute: homeNotifier.initialPageRoute,
                   onGenerateRoute: (routeSettings) {
                     return MaterialPageRoute(builder: (context) {
                       switch (routeSettings.name) {

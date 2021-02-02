@@ -86,6 +86,11 @@ class AccountPage extends StatelessWidget {
                 expandedCrossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Divider(),
+                  Text('Місто', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  Text(userNotifier.user?.specializedInformation?.city ?? '',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Divider(),
                   Text('Спеціалізація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
                   Text(userNotifier.user?.specializedInformation?.specification ?? '',
@@ -158,9 +163,40 @@ class AccountPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(userNotifier.user?.specializedInformation?.educationDocument != null ? 'Показать' : '',
+                        Text(userNotifier.user?.specializedInformation?.educationDocument != null ? 'Показати' : '',
                             style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
                         Text(userNotifier.user?.specializedInformation?.educationDocument?.fileName ?? '',
+                            style: TextStyle(color: Theme.of(context).primaryColor)),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Text('Паспорт громадянина України', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  InkWell(
+                    onTap: () async {
+                      var status = await Permission.storage.request();
+                      var dir = Platform.isAndroid
+                          ? await getExternalStorageDirectory()
+                          : await getApplicationDocumentsDirectory();
+                      var exists = await dir.exists();
+                      if (!exists) {
+                        dir.create();
+                      }
+
+                      final taskId = await FlutterDownloader.enqueue(
+                        url: userNotifier.user.specializedInformation.passport.path,
+                        savedDir: dir.path,
+                        showNotification: true,
+                        openFileFromNotification: true,
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(userNotifier.user?.specializedInformation?.passport != null ? 'Показати' : '',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                        Text(userNotifier.user?.specializedInformation?.passport?.fileName ?? '',
                             style: TextStyle(color: Theme.of(context).primaryColor)),
                       ],
                     ),

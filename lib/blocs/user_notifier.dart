@@ -194,6 +194,22 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  Future<void> uploadPassport(String path) async {
+    final response = await Repository().api.uploadPassport(path);
+    if (response.statusCode == 200) {
+      if (user.specializedInformation != null) {
+        _user = user.copyWith(
+          specializedInformation: user.specializedInformation.copyWith(
+            passport: response.body.data,
+          ),
+        );
+      } else {
+        _user = user.copyWith(specializedInformation: UserSpecializedInfo(passport: response.body.data));
+      }
+      notifyListeners();
+    }
+  }
+
   Future<void> uploadProfilePicture(String path) async {
     final response = await Repository().api.uploadProfileImage(path);
     if (response.statusCode == 200) {

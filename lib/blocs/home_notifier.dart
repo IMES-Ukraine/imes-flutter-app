@@ -8,9 +8,13 @@ class HomeNotifier with ChangeNotifier {
 
   int _page = 0;
 
+  String _initialPage = '/';
+
   int get currentPage => _page;
 
-  void changePage(int index) {
+  String get initialPageRoute => _initialPage;
+
+  void changePage(int index, [String initialPage = '/']) {
     // if (index == 3) return;
     if (_page != index) {
       _page = index;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:imes/screens/rules.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:imes/blocs/register_notifier.dart';
 import 'package:imes/resources/resources.dart';
@@ -85,9 +86,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                       children: [
                                         TextSpan(
                                             text: 'Умовами',
-                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).accentColor,
+                                            ),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(builder: (context) => RulesPage()),
+                                                );
                                                 // if (await canLaunch('https://pharmatracker.com.ua/rules')) {
                                                 //   launch('https://pharmatracker.com.ua/rules');
                                                 // }

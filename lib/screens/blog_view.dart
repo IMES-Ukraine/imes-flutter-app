@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:imes/blocs/home_notifier.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class BlogViewPage extends HookWidget {
@@ -206,7 +208,21 @@ class BlogViewPage extends HookWidget {
                                         // borderSide: BorderSide(color: Theme.of(context).accentColor),
                                         // textColor: Theme.of(context).accentColor,
                                         onPressed: () async {
-                                          blogNotifier.read();
+                                          if (await canLaunch(blogNotifier.blog.action)) {
+                                            launch(blogNotifier.blog.action);
+                                            final response = await Repository().api.blogCallback(blogNotifier.blog.id);
+                                          } else {
+                                            final navData = blogNotifier.blog.action.split('|');
+                                            if (navData.first == 'article') {
+                                              Navigator.of(context)
+                                                  .pushNamed('/blogs/view', arguments: int.parse(navData[1]));
+                                            } else if (navData.first == 'test') {
+                                              Provider.of<HomeNotifier>(context, listen: false)
+                                                  .changePage(1, '/tests/view');
+                                              // Navigator.of(context)
+                                              //     .pushNamed('/tests/view', arguments: int.parse(navData[1]));
+                                            }
+                                          }
                                         },
                                       ),
                                     ),

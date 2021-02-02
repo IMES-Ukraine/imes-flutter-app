@@ -137,19 +137,20 @@ class _WithdrawPageState extends State<WithdrawPage> {
                             ),
                             children: [
                               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                GestureDetector(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text('-', style: TextStyle(fontSize: 32.0)),
-                                  ),
-                                  onTap: () => sendBalance.value > 20 ? sendBalance.value-- : null,
-                                  onLongPress: () {
-                                    _timer = Timer.periodic(const Duration(milliseconds: 30),
-                                        (timer) => sendBalance.value > 20 ? sendBalance.value-- : timer.cancel());
-                                  },
-                                  onLongPressUp: () {
-                                    _timer.cancel();
-                                  },
+                                RaisedGradientButton(
+                                  radius: 10.0,
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                  child: Text('-10',
+                                      style:
+                                          TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
+                                  onPressed: () => sendBalance.value > 20 ? sendBalance.value -= 10 : null,
+                                  // onLongPress: () {
+                                  //   _timer = Timer.periodic(const Duration(milliseconds: 30),
+                                  //       (timer) => sendBalance.value > 20 ? sendBalance.value -= 10 : timer.cancel());
+                                  // },
+                                  // onLongPressUp: () {
+                                  //   _timer.cancel();
+                                  // },
                                 ),
                                 const SizedBox(width: 16.0),
                                 // Expanded(
@@ -183,23 +184,24 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                           style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor)),
                                     )),
                                 const SizedBox(width: 16.0),
-                                GestureDetector(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text('+', style: TextStyle(fontSize: 32.0)),
-                                  ),
-                                  onTap: () =>
-                                      sendBalance.value < userNotifier.user.balance ? sendBalance.value++ : null,
-                                  onLongPress: () {
-                                    _timer = Timer.periodic(
-                                        const Duration(milliseconds: 30),
-                                        (timer) => sendBalance.value < userNotifier.user.balance
-                                            ? sendBalance.value++
-                                            : timer.cancel());
-                                  },
-                                  onLongPressUp: () {
-                                    _timer.cancel();
-                                  },
+                                RaisedGradientButton(
+                                  radius: 10.0,
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                  child: Text('+10',
+                                      style:
+                                          TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
+                                  onPressed: () =>
+                                      sendBalance.value < userNotifier.user.balance ? sendBalance.value += 10 : null,
+                                  // onLongPress: () {
+                                  //   _timer = Timer.periodic(
+                                  //       const Duration(milliseconds: 30),
+                                  //       (timer) => sendBalance.value < userNotifier.user.balance
+                                  //           ? sendBalance.value += 10
+                                  //           : timer.cancel());
+                                  // },
+                                  // onLongPressUp: () {
+                                  //   _timer.cancel();
+                                  // },
                                 ),
                               ]),
                               const SizedBox(height: 16.0),

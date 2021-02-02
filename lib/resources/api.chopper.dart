@@ -160,6 +160,14 @@ class _$RestClient extends RestClient {
     return client.send<UploadFileResponse, UploadFileResponse>($request);
   }
 
+  Future<Response<UploadFileResponse>> uploadPassport(String path) {
+    final $url = 'https://echo.myftp.org/api/v1/profile/image/passport';
+    final $parts = <PartValue>[PartValueFile<String>('file', path)];
+    final $request =
+        Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
+    return client.send<UploadFileResponse, UploadFileResponse>($request);
+  }
+
   Future<Response<UploadFileResponse>> uploadProfileImage(String path) {
     final $url = 'https://echo.myftp.org/api/v1/profile/image/avatar';
     final $parts = <PartValue>[PartValueFile<String>('file', path)];

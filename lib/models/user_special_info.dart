@@ -8,6 +8,7 @@ part 'user_special_info.g.dart';
 @freezed
 abstract class UserSpecializedInfo with _$UserSpecializedInfo {
   factory UserSpecializedInfo({
+    String city,
     String specification,
     String qualification,
     String workplace,
@@ -17,6 +18,7 @@ abstract class UserSpecializedInfo with _$UserSpecializedInfo {
     String studyPeriod,
     String additionalQualification,
     CoverImage educationDocument,
+    CoverImage passport,
     String micId,
   }) = _UserSpecializedInfo;
 

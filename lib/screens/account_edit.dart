@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,8 +19,47 @@ import 'package:provider/provider.dart';
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
+  // static final cities = ['',]
 
   final workingDaysInitial = {0: [], 1: [], 2: []};
+
+  Future loadCities(BuildContext context) async {
+    final data = await DefaultAssetBundle.of(context).loadString('assets/res/cities.json');
+    final jsonData = jsonDecode(data);
+    return (jsonData as List)
+        .map(
+          (v) => DropdownMenuItem<String>(
+            value: v['name'],
+            child: Text(
+              v['name'],
+              style: TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Future loadHospitals(BuildContext context) async {
+    final data = await DefaultAssetBundle.of(context).loadString('assets/res/hospitals.json');
+    final jsonData = jsonDecode(data);
+    return (jsonData as List)
+        .map(
+          (v) => DropdownMenuItem<String>(
+            value: v['name'],
+            child: Text(
+              v['name'],
+              style: TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        )
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +76,9 @@ class AccountEditPage extends HookWidget {
                       ? 1
                       : 2,
             );
+
+            final city = useState<String>();
+            final hospital = useState<String>();
 
             final workingDays = userNotifier.user?.specializedInformation?.schedule?.isNotEmpty ?? false
                 ? userNotifier.user.specializedInformation.schedule
@@ -55,8 +99,8 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.specification);
             final qualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.qualification);
-            final workPlaceController =
-                useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
+            // final workPlaceController =
+            //     useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
             final positionController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
             final licenseController =
@@ -236,6 +280,24 @@ class AccountEditPage extends HookWidget {
                               childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
                               expandedCrossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                FutureBuilder(
+                                  future: loadCities(context),
+                                  builder: (context, snapshot) {
+                                    return DropdownButton<String>(
+                                      isExpanded: true,
+                                      hint: Text('Місто',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      items: snapshot.data ?? [],
+                                      value: city.value,
+                                      onChanged: (value) {
+                                        city.value = value;
+                                      },
+                                    );
+                                  },
+                                ),
                                 TextField(
                                   controller: specificationController,
                                   decoration: InputDecoration(
@@ -260,15 +322,24 @@ class AccountEditPage extends HookWidget {
                                 ),
                                 const SizedBox(height: 8.0),
                                 Divider(),
-                                TextField(
-                                  controller: workPlaceController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'Місце роботи',
-                                    labelStyle: TextStyle(fontSize: 12.0),
-                                    contentPadding: EdgeInsets.zero,
-                                  ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                FutureBuilder(
+                                  future: loadHospitals(context),
+                                  builder: (context, snapshot) {
+                                    return DropdownButton<String>(
+                                      isExpanded: true,
+                                      itemHeight: 150.0,
+                                      hint: Text('Місце роботи',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      items: snapshot.data ?? [],
+                                      value: hospital.value,
+                                      onChanged: (value) {
+                                        hospital.value = value;
+                                      },
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 8.0),
                                 Divider(),
@@ -351,10 +422,11 @@ class AccountEditPage extends HookWidget {
                                 const SizedBox(height: 8.0),
                                 InkWell(
                                   onTap: () async {
-                                    final result = await FilePicker.platform.pickFiles();
+                                    final result = await ImagePicker()
+                                        .getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
                                     if (result != null) {
                                       isLoading.value = true;
-                                      userNotifier.uploadEducationDocument(result.files.single.path).then((_) {
+                                      userNotifier.uploadEducationDocument(result.path).then((_) {
                                         isLoading.value = false;
                                       }).catchError((error) {
                                         isLoading.value = false;
@@ -380,7 +452,52 @@ class AccountEditPage extends HookWidget {
                                       const SizedBox(width: 8.0),
                                       Text(
                                           userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
-                                              'Разместить',
+                                              'Завантажити',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).primaryColor,
+                                              fontSize: 12.0)),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 8.0),
+                                Divider(),
+                                Text('Паспорт громадянини України',
+                                    style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                                const SizedBox(height: 8.0),
+                                InkWell(
+                                  onTap: () async {
+                                    final result = await ImagePicker()
+                                        .getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
+                                    if (result != null) {
+                                      isLoading.value = true;
+                                      userNotifier.uploadPassport(result.path).then((_) {
+                                        isLoading.value = false;
+                                      }).catchError((error) {
+                                        isLoading.value = false;
+                                        print(error);
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomAlertDialog(
+                                              content: CustomDialog(
+                                                icon: Icons.close,
+                                                color: Theme.of(context).errorColor,
+                                                text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 20.0),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                          userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
+                                              'Завантажити',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(context).primaryColor,
@@ -550,9 +667,10 @@ class AccountEditPage extends HookWidget {
                               }
 
                               result['specialized_information'] = {
+                                'city': city.value,
                                 'specification': specificationController.text,
                                 'qualification': qualificationController.text,
-                                'workplace': workPlaceController.text,
+                                'workplace': hospital.value,
                                 'position': positionController.text,
                                 'license_number': licenseController.text,
                                 'study_period': studyPeriodController.text,

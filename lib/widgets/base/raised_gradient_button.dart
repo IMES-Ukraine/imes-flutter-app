@@ -4,6 +4,7 @@ class RaisedGradientButton extends StatelessWidget {
   final Widget child;
   final Gradient gradient;
   // final double width;
+  final double radius;
   final double height;
   final EdgeInsets padding;
   final Function onPressed;
@@ -14,6 +15,7 @@ class RaisedGradientButton extends StatelessWidget {
     this.gradient,
     this.padding = const EdgeInsets.all(8.0),
     // this.width = double.infinity,
+    this.radius = 5.0,
     this.height = 50.0,
     this.onPressed,
   }) : super(key: key);
@@ -30,7 +32,7 @@ class RaisedGradientButton extends StatelessWidget {
         gradient: onPressed != null
             ? defaultGradient
             : LinearGradient(colors: [Colors.grey[400], Colors.grey]), // TODO: extraact colors to theme
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(radius),
         boxShadow: [
           BoxShadow(
             color: onPressed != null ? Color(0xFF2F80ED) : Colors.grey[400], // TODO: extract color to theme
