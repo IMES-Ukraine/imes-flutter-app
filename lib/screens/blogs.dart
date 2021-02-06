@@ -4,15 +4,14 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
-import 'package:imes/resources/database.dart';
+import 'package:imes/utils/constants.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 import 'package:imes/widgets/blogs/blog_tile.dart';
 import 'package:imes/widgets/blogs/blogs_app_bar.dart';
 import 'package:imes/widgets/dialogs/dialogs.dart';
 
-import 'package:provider/provider.dart' hide ReadContext;
-import 'package:hooks_riverpod/hooks_riverpod.dart' hide ChangeNotifierProvider, Consumer;
+import 'package:provider/provider.dart';
 
 class BlogsPage extends HookWidget {
   @override
@@ -30,12 +29,12 @@ class BlogsPage extends HookWidget {
                   onRefresh: () => blogsNotifier.load(),
                   child: blogsNotifier.page == BlogPage.FAVORITES
                       ? ValueListenableBuilder(
-                          valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                          valueListenable: Hive.box(Constants.FAVORITES_BOX).listenable(),
                           builder: (context, box, widget) {
                             return ListView(
                               children: box.values
                                   .map<Widget>((v) => ValueListenableBuilder(
-                                      valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                                      valueListenable: Hive.box(Constants.FAVORITES_BOX).listenable(),
                                       builder: (context, box, widget) {
                                         return BlogListTile(
                                           date: v.publishedAt,
@@ -101,7 +100,7 @@ class BlogsPage extends HookWidget {
                             }
 
                             return ValueListenableBuilder(
-                                valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                                valueListenable: Hive.box(Constants.FAVORITES_BOX).listenable(),
                                 builder: (context, box, widget) {
                                   return BlogListTile(
                                     date: blogsNotifier.blogs[index].publishedAt,

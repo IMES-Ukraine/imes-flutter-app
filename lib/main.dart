@@ -8,12 +8,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart'
     hide ChangeNotifierProvider, Consumer;
 import 'package:imes/models/blog.dart';
 import 'package:imes/models/cover_image.dart';
-import 'package:imes/resources/database.dart';
 import 'package:imes/screens/login.dart';
 import 'package:imes/screens/home.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/timeago_ua_messages.dart';
+import 'package:imes/utils/constants.dart';
 
 import 'package:provider/provider.dart';
 
@@ -63,7 +63,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BlogAdapter());
   Hive.registerAdapter(CoverImageAdapter());
-  await Hive.openBox(FAVORITES_BOX);
+  await Hive.openBox(Constants.FAVORITES_BOX);
 
   local.User user;
   if (token != null) {

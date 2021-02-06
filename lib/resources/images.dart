@@ -3,7 +3,6 @@ part of 'resources.dart';
 class Images {
   Images._();
 
-  static const String instruction = 'assets/instruction.png';
   static const String telegram = 'assets/telegram.png';
   static const String loginLogo = 'assets/login_logo.png';
   static const String token = 'assets/token.png';

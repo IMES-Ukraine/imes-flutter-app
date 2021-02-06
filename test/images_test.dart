@@ -5,7 +5,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('images assets test', () {
-    expect(true, File(Images.instruction).existsSync());
     expect(true, File(Images.telegram).existsSync());
     expect(true, File(Images.loginLogo).existsSync());
     expect(true, File(Images.token).existsSync());
