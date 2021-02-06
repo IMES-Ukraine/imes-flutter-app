@@ -1,6 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart'
+    hide ChangeNotifierProvider, Consumer;
+import 'package:imes/models/blog.dart';
+import 'package:imes/models/cover_image.dart';
+import 'package:imes/resources/database.dart';
 import 'package:imes/screens/login.dart';
 import 'package:imes/screens/home.dart';
 
@@ -22,7 +30,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter_stetho/flutter_stetho.dart';
 
-import 'package:pedantic/pedantic.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +60,11 @@ void main() async {
   final storage = FlutterSecureStorage();
   final token = await storage.read(key: '__AUTH_TOKEN_');
 
+  await Hive.initFlutter();
+  Hive.registerAdapter(BlogAdapter());
+  Hive.registerAdapter(CoverImageAdapter());
+  await Hive.openBox(FAVORITES_BOX);
+
   local.User user;
   if (token != null) {
     try {
@@ -60,7 +73,8 @@ void main() async {
         print('authenticated');
         user = response.body.data.user;
         final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
+        final authResult = await auth
+            .signInWithCustomToken(response.body.data.user.firebaseToken);
         final _firebaseMessaging = FirebaseMessaging();
         final token = await _firebaseMessaging.getToken();
         final result = await Repository().api.submitToken(token: token);
@@ -76,47 +90,56 @@ void main() async {
   runApp(ChangeNotifierProvider(
       create: (_) {
         return UserNotifier(
-            state: token != null && user != null ? AuthState.AUTHENTICATED : AuthState.NOT_AUTHENTICATED, user: user);
+            state: token != null && user != null
+                ? AuthState.AUTHENTICATED
+                : AuthState.NOT_AUTHENTICATED,
+            user: user);
       },
-      child: MyApp()));
+      child: ProviderScope(child: MyApp())));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserNotifier>(builder: (context, userNotifier, _) {
-      return MaterialApp(
-        localizationsDelegates: [
-          // MaterialLocalizationUk(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('uk'),
+      return LayoutBuilder(builder: (context, constraints) {
+        return OrientationBuilder(builder: (context, orientation) {
+          SizerUtil().init(constraints, orientation);
+          return MaterialApp(
+            localizationsDelegates: [
+              // MaterialLocalizationUk(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('uk'),
 //          const Locale('en'),
-        ],
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: 'Montserrat',
-          primaryColor: const Color(0xFF00B7FF),
-          accentColor: const Color(0xFF00D7FF),
-          scaffoldBackgroundColor: const Color(0xFFF7F7F9),
-          errorColor: const Color(0xFFFF5C8E),
-          dividerColor: const Color(0xFFE0E0E0),
-          canvasColor: const Color(0xFFF2F2F2),
-          appBarTheme: AppBarTheme(
-              color: Colors.white,
-              elevation: 4.0,
-              iconTheme: IconThemeData(
-                color: const Color(0xFF00B7FF),
-              ),
-              actionsIconTheme: IconThemeData(
-                color: const Color(0xFF00B7FF),
-              )),
-        ),
-        home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
-      );
+            ],
+            theme: ThemeData(
+              fontFamily: 'Montserrat',
+              primaryColor: const Color(0xFF00B7FF),
+              accentColor: const Color(0xFF00D7FF),
+              scaffoldBackgroundColor: const Color(0xFFF7F7F9),
+              errorColor: const Color(0xFFFF5C8E),
+              dividerColor: const Color(0xFFE0E0E0),
+              canvasColor: const Color(0xFFF2F2F2),
+              appBarTheme: AppBarTheme(
+                  color: Colors.white,
+                  elevation: 4.0,
+                  iconTheme: IconThemeData(
+                    color: const Color(0xFF00B7FF),
+                  ),
+                  actionsIconTheme: IconThemeData(
+                    color: const Color(0xFF00B7FF),
+                  )),
+            ),
+            home: userNotifier.state == AuthState.AUTHENTICATED
+                ? HomePage()
+                : LoginPage(),
+          );
+        });
+      });
     });
   }
 }

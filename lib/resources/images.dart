@@ -1,8 +1,12 @@
 part of 'resources.dart';
 
 class Images {
+  Images._();
+
+  static const String instruction = 'assets/instruction.png';
   static const String telegram = 'assets/telegram.png';
   static const String loginLogo = 'assets/login_logo.png';
+  static const String token = 'assets/token.png';
   static const String twoBars = 'assets/two_bars.png';
   static const String viber = 'assets/viber.png';
   static const String bottle = 'assets/bottle.png';
@@ -14,5 +18,4 @@ class Images {
   static const String union = 'assets/union.png';
   static const String facebook = 'assets/facebook.png';
   static const String camera = 'assets/camera.png';
-  static const String token = 'assets/token.png';
 }

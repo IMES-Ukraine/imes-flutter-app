@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
-import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/account.dart';
 import 'package:imes/screens/account_edit.dart';
@@ -12,13 +11,14 @@ import 'package:imes/widgets/base/notifications_button.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 
+import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
 import 'package:imes/extensions/color.dart';
 
 class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(216.0);
+  Size get preferredSize => Size.fromHeight(30.0.h);
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +36,14 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(2.0.h),
                           child: OctoCircleAvatar(
                             url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
+                            padding: EdgeInsets.symmetric(vertical: 3.0.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -51,12 +51,13 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   userNotifier?.user?.basicInformation?.name ?? 'Ім\'я Прізвище',
                                   style: TextStyle(
                                     color: Theme.of(context).dividerColor.darken(20),
+                                    fontSize: 11.0.sp,
                                   ),
                                 ),
                                 Text(
                                   userNotifier.user?.specializedInformation?.specification ?? 'Спеціалізація',
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 8.0.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Theme.of(context).dividerColor.darken(20),
                                   ),
@@ -71,14 +72,14 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           children: [
                             NotificationsButton(),
                             Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(1.0.h),
                               child: Row(
                                 children: [
                                   Image.asset(Images.token, scale: 2.0),
                                   const SizedBox(width: 8.0),
                                   Text('${userNotifier.user?.balance ?? 0}',
                                       style: TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: 16.0.sp,
                                         fontWeight: FontWeight.bold,
                                         color: (userNotifier.user?.balance ?? 0) > 0
                                             ? Theme.of(context).dividerColor.darken(20)
@@ -94,20 +95,20 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(1.0.h),
                   child: userNotifier.user.basicInformation != null && userNotifier.user.specializedInformation != null
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 32.0),
+                              padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
                               child: Row(
                                 children: [
                                   Icon(Icons.account_circle, color: Colors.white),
-                                  const SizedBox(width: 8.0),
+                                  SizedBox(width: 2.0.w),
                                   Text('АКАУНТ',
-                                      style:
-                                          TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                                      style: TextStyle(
+                                          fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white))
                                 ],
                               ),
                               onPressed: () {
@@ -115,14 +116,14 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               },
                             ),
                             RaisedGradientButton(
-                              padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 32.0),
+                              padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
                               child: Row(
                                 children: [
                                   Image.asset(Images.token, scale: 1.5),
-                                  const SizedBox(width: 8.0),
+                                  SizedBox(width: 2.0.w),
                                   Text('БАЛАНС',
-                                      style:
-                                          TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white))
+                                      style: TextStyle(
+                                          fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white))
                                 ],
                               ),
                               onPressed: () {
@@ -132,9 +133,9 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         )
                       : RaisedGradientButton(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
+                          padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
                           child: Text('ВЕРИФІКУВАТИ АКАУНТ',
-                              style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w800, color: Colors.white)),
+                              style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white)),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountEditPage()));
                           },
@@ -142,7 +143,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(1.0.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -151,15 +152,15 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.NEWS);
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0.h),
                           child: AnimatedDefaultTextStyle(
                             duration: Duration(milliseconds: 200),
                             style: Provider.of<BlogsNotifier>(context).page == BlogPage.NEWS
                                 ? Theme.of(context)
                                     .textTheme
                                     .bodyText2
-                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 17.0)
-                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
+                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
+                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
                             child: Text(
                               'Новини'.toUpperCase(),
                             ),
@@ -172,15 +173,15 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.INFORMATION);
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(1.0.h),
                           child: AnimatedDefaultTextStyle(
                             duration: Duration(milliseconds: 200),
                             style: Provider.of<BlogsNotifier>(context).page == BlogPage.INFORMATION
                                 ? Theme.of(context)
                                     .textTheme
                                     .bodyText2
-                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 17.0)
-                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17.0),
+                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
+                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
                             child: Text(
                               'Інформація'.toUpperCase(),
                             ),
@@ -188,7 +189,14 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       ),
                       VerticalDivider(color: Colors.black),
-                      IconButton(icon: Icon(Icons.favorite_border, color: Theme.of(context).dividerColor)),
+                      IconButton(
+                        icon: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
+                            ? Icon(Icons.favorite, color: Theme.of(context).accentColor)
+                            : Icon(Icons.favorite_border, color: Theme.of(context).dividerColor),
+                        onPressed: () {
+                          Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.FAVORITES);
+                        },
+                      ),
                     ],
                   ),
                 ),

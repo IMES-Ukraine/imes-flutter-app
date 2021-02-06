@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/screens/account_edit.dart';
+import 'package:imes/utils/file_utils.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -91,6 +92,11 @@ class AccountPage extends StatelessWidget {
                   Text(userNotifier.user?.specializedInformation?.city ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
+                  Text('Місце роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  Text(userNotifier.user?.specializedInformation?.workplace ?? '',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Divider(),
                   Text('Спеціалізація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
                   Text(userNotifier.user?.specializedInformation?.specification ?? '',
@@ -101,10 +107,49 @@ class AccountPage extends StatelessWidget {
                   Text(userNotifier.user?.specializedInformation?.qualification ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
-                  Text('Місце роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  Text('Посада', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specializedInformation?.workplace ?? '',
+                  Text(userNotifier.user?.specializedInformation?.position ?? '',
                       style: TextStyle(fontWeight: FontWeight.bold)),
+                  Divider(),
+                  Text('Номер ліцензії лікаря', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  Text(userNotifier.user?.specializedInformation?.licenseNumber ?? '',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Divider(),
+                  Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  InkWell(
+                    onTap: () async {
+                      FileUtils.downloadFile(userNotifier.user.specializedInformation.educationDocument.path);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(userNotifier.user?.specializedInformation?.educationDocument != null ? 'Показати' : '',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                        Text(userNotifier.user?.specializedInformation?.educationDocument?.fileName ?? '',
+                            style: TextStyle(color: Theme.of(context).primaryColor)),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Text('Паспорт громадянина України', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  const SizedBox(height: 8.0),
+                  InkWell(
+                    onTap: () async {
+                      FileUtils.downloadFile(userNotifier.user.specializedInformation.passport.path);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(userNotifier.user?.specializedInformation?.passport != null ? 'Показати' : '',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                        Text(userNotifier.user?.specializedInformation?.passport?.fileName ?? '',
+                            style: TextStyle(color: Theme.of(context).primaryColor)),
+                      ],
+                    ),
+                  ),
                   Divider(),
                   Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),
@@ -129,88 +174,15 @@ class AccountPage extends StatelessWidget {
                         })?.toList() ??
                         [],
                   ),
-                  Divider(),
-                  Text('Посада', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specializedInformation?.position ?? '',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Divider(),
-                  Text('Номер ліцензії лікаря', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specializedInformation?.licenseNumber ?? '',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Divider(),
-                  Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  InkWell(
-                    onTap: () async {
-                      var status = await Permission.storage.request();
-                      var dir = Platform.isAndroid
-                          ? await getExternalStorageDirectory()
-                          : await getApplicationDocumentsDirectory();
-                      var exists = await dir.exists();
-                      if (!exists) {
-                        dir.create();
-                      }
-
-                      final taskId = await FlutterDownloader.enqueue(
-                        url: userNotifier.user.specializedInformation.educationDocument.path,
-                        savedDir: dir.path,
-                        showNotification: true,
-                        openFileFromNotification: true,
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(userNotifier.user?.specializedInformation?.educationDocument != null ? 'Показати' : '',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                        Text(userNotifier.user?.specializedInformation?.educationDocument?.fileName ?? '',
-                            style: TextStyle(color: Theme.of(context).primaryColor)),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Text('Паспорт громадянина України', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  InkWell(
-                    onTap: () async {
-                      var status = await Permission.storage.request();
-                      var dir = Platform.isAndroid
-                          ? await getExternalStorageDirectory()
-                          : await getApplicationDocumentsDirectory();
-                      var exists = await dir.exists();
-                      if (!exists) {
-                        dir.create();
-                      }
-
-                      final taskId = await FlutterDownloader.enqueue(
-                        url: userNotifier.user.specializedInformation.passport.path,
-                        savedDir: dir.path,
-                        showNotification: true,
-                        openFileFromNotification: true,
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(userNotifier.user?.specializedInformation?.passport != null ? 'Показати' : '',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
-                        Text(userNotifier.user?.specializedInformation?.passport?.fileName ?? '',
-                            style: TextStyle(color: Theme.of(context).primaryColor)),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Text('Дата (період) навчання', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specializedInformation?.studyPeriod ?? '',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Divider(),
-                  Text('Додаткова кваліфікація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                  const SizedBox(height: 8.0),
-                  Text(userNotifier.user?.specializedInformation?.additionalQualification ?? '',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  // Text('Дата (період) навчання', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  // const SizedBox(height: 8.0),
+                  // Text(userNotifier.user?.specializedInformation?.studyPeriod ?? '',
+                  //     style: TextStyle(fontWeight: FontWeight.bold)),
+                  // Divider(),
+                  // Text('Додаткова кваліфікація', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                  // const SizedBox(height: 8.0),
+                  // Text(userNotifier.user?.specializedInformation?.additionalQualification ?? '',
+                  // style: TextStyle(fontWeight: FontWeight.bold)),
                   Divider(),
                   Text('ІПН', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                   const SizedBox(height: 8.0),

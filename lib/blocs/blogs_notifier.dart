@@ -13,6 +13,7 @@ enum BlogsState {
 enum BlogPage {
   NEWS,
   INFORMATION,
+  FAVORITES,
 }
 
 class BlogsNotifier with ChangeNotifier {

@@ -169,7 +169,8 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async {
+  void logout() async { 
+    _user = null;
     _state = AuthState.NOT_AUTHENTICATED;
     final storage = FlutterSecureStorage();
     await storage.delete(key: '__AUTH_TOKEN_');

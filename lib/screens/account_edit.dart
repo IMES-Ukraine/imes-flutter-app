@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +18,6 @@ import 'package:provider/provider.dart';
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
-  // static final cities = ['',]
 
   final workingDaysInitial = {0: [], 1: [], 2: []};
 
@@ -105,8 +103,8 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
             final licenseController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.licenseNumber);
-            final studyPeriodController =
-                useTextEditingController(text: userNotifier.user?.specializedInformation?.studyPeriod);
+            // final studyPeriodController =
+            //     useTextEditingController(text: userNotifier.user?.specializedInformation?.studyPeriod);
             final additionalQualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.additionalQualification);
             final micIdController = useTextEditingController(text: userNotifier.user?.specializedInformation?.micId);
@@ -298,6 +296,29 @@ class AccountEditPage extends HookWidget {
                                     );
                                   },
                                 ),
+                                const SizedBox(height: 8.0),
+                                Divider(),
+                                FutureBuilder(
+                                  future: loadHospitals(context),
+                                  builder: (context, snapshot) {
+                                    return DropdownButton<String>(
+                                      isExpanded: true,
+                                      itemHeight: 150.0,
+                                      hint: Text('Місце роботи',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      items: snapshot.data ?? [],
+                                      value: hospital.value,
+                                      onChanged: (value) {
+                                        hospital.value = value;
+                                      },
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 8.0),
+                                Divider(),
                                 TextField(
                                   controller: specificationController,
                                   decoration: InputDecoration(
@@ -319,27 +340,6 @@ class AccountEditPage extends HookWidget {
                                     contentPadding: EdgeInsets.zero,
                                   ),
                                   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Divider(),
-                                FutureBuilder(
-                                  future: loadHospitals(context),
-                                  builder: (context, snapshot) {
-                                    return DropdownButton<String>(
-                                      isExpanded: true,
-                                      itemHeight: 150.0,
-                                      hint: Text('Місце роботи',
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                      items: snapshot.data ?? [],
-                                      value: hospital.value,
-                                      onChanged: (value) {
-                                        hospital.value = value;
-                                      },
-                                    );
-                                  },
                                 ),
                                 const SizedBox(height: 8.0),
                                 Divider(),
@@ -505,37 +505,37 @@ class AccountEditPage extends HookWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 8.0),
-                                Divider(),
-                                TextField(
-                                  controller: studyPeriodController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'Дата (період) навчання',
-                                    hintText: '__.__.____ - __.__.____',
-                                    labelStyle: TextStyle(fontSize: 12.0),
-                                    contentPadding: EdgeInsets.zero,
-                                    border: InputBorder.none,
-                                  ),
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    MaskTextInputFormatter(
-                                        mask: '##.##.#### - ##.##.####', filter: {'#': RegExp(r'[0-9]')})
-                                  ],
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Divider(),
-                                TextField(
-                                  controller: additionalQualificationController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'Додаткова кваліфікація',
-                                    labelStyle: TextStyle(fontSize: 12.0),
-                                    contentPadding: EdgeInsets.zero,
-                                  ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                ),
+                                // const SizedBox(height: 8.0),
+                                // Divider(),
+                                // TextField(
+                                //   controller: studyPeriodController,
+                                //   decoration: InputDecoration(
+                                //     isDense: true,
+                                //     labelText: 'Дата (період) навчання',
+                                //     hintText: '__.__.____ - __.__.____',
+                                //     labelStyle: TextStyle(fontSize: 12.0),
+                                //     contentPadding: EdgeInsets.zero,
+                                //     border: InputBorder.none,
+                                //   ),
+                                //   keyboardType: TextInputType.number,
+                                //   inputFormatters: [
+                                //     MaskTextInputFormatter(
+                                //         mask: '##.##.#### - ##.##.####', filter: {'#': RegExp(r'[0-9]')})
+                                //   ],
+                                //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                // ),
+                                // const SizedBox(height: 8.0),
+                                // Divider(),
+                                // TextField(
+                                //   controller: additionalQualificationController,
+                                //   decoration: InputDecoration(
+                                //     isDense: true,
+                                //     labelText: 'Додаткова кваліфікація',
+                                //     labelStyle: TextStyle(fontSize: 12.0),
+                                //     contentPadding: EdgeInsets.zero,
+                                //   ),
+                                //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                // ),
                                 const SizedBox(height: 8.0),
                                 Divider(),
                                 TextField(
@@ -673,7 +673,7 @@ class AccountEditPage extends HookWidget {
                                 'workplace': hospital.value,
                                 'position': positionController.text,
                                 'license_number': licenseController.text,
-                                'study_period': studyPeriodController.text,
+                                // 'study_period': studyPeriodController.text,
                                 'additional_qualification': additionalQualificationController.text,
                                 'schedule': resultSchedule,
                                 'mic_id': micIdController.text,

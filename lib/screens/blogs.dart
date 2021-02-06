@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:imes/blocs/blogs_notifier.dart';
-import 'package:imes/widgets/base/custom_alert_dialog.dart';
-import 'package:imes/widgets/base/custom_flat_button.dart';
+import 'package:imes/resources/database.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 import 'package:imes/widgets/blogs/blog_tile.dart';
 import 'package:imes/widgets/blogs/blogs_app_bar.dart';
+import 'package:imes/widgets/dialogs/dialogs.dart';
 
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' hide ReadContext;
+import 'package:hooks_riverpod/hooks_riverpod.dart' hide ChangeNotifierProvider, Consumer;
 
-class BlogsPage extends StatelessWidget {
+class BlogsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -24,110 +28,108 @@ class BlogsPage extends StatelessWidget {
                 })
               : RefreshIndicator(
                   onRefresh: () => blogsNotifier.load(),
-                  child: ListView.builder(
-                    itemCount: blogsNotifier.state == BlogsState.LOADING ? 1 : blogsNotifier.blogs.length + 1,
-                    itemBuilder: (context, index) {
-                      if (blogsNotifier.state == BlogsState.LOADING) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
+                  child: blogsNotifier.page == BlogPage.FAVORITES
+                      ? ValueListenableBuilder(
+                          valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                          builder: (context, box, widget) {
+                            return ListView(
+                              children: box.values
+                                  .map<Widget>((v) => ValueListenableBuilder(
+                                      valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                                      builder: (context, box, widget) {
+                                        return BlogListTile(
+                                          date: v.publishedAt,
+                                          title: v?.title ?? '',
+                                          points: v?.learningBonus ?? 0,
+                                          image: v?.coverImage?.path ?? '',
+                                          isFavourite: box.containsKey(v.id),
+                                          onFavoriteChanged: (value) async {
+                                            if (value) {
+                                              box.put(v.id, v);
+                                            } else {
+                                              box.delete(v.id);
+                                            }
+                                          },
+                                          onTap: () async {
+                                            var open = true;
+                                            if (v.isOpened?.isEmpty ?? true) {
+                                              open = await showBlogInfoDialog(context);
+                                            }
+                                            if (open) {
+                                              Navigator.of(context).pushNamed('/blogs/view', arguments: v.id);
+                                            }
+                                          },
+                                        );
+                                      }))
+                                  .toList(),
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: blogsNotifier.state == BlogsState.LOADING ? 1 : blogsNotifier.blogs.length + 1,
+                          itemBuilder: (context, index) {
+                            if (blogsNotifier.state == BlogsState.LOADING) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
 
-                      if (index == blogsNotifier.blogs.length) {
-                        if (blogsNotifier.blogs.isEmpty) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('Новини відсутні.'),
-                            ),
-                          );
-                        }
-
-                        if (blogsNotifier.blogs.length == blogsNotifier.total) {
-                          return null;
-                        }
-
-                        blogsNotifier.loadNext();
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-
-                      return BlogListTile(
-                        date: blogsNotifier.blogs[index].publishedAt,
-                        title: blogsNotifier.blogs[index]?.title ?? '',
-                        points: blogsNotifier.blogs[index]?.learningBonus ?? 0,
-                        // text: blogsNotifier.blogs[index]?.content ?? '',
-                        image: blogsNotifier.blogs[index]?.coverImage?.path ?? '',
-                        // image: blogsNotifier.blogs[index]?.coverImages?.isNotEmpty ?? false
-                        //     ? blogsNotifier.blogs[index].coverImages.first.path
-                        //     : '',
-                        onTap: () {
-                          if (blogsNotifier.blogs[index].isOpened?.isEmpty ?? true) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CustomAlertDialog(
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'Увага!',
-                                            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8.0),
-                                        Icon(Icons.warning, color: Theme.of(context).errorColor, size: 90.0),
-                                        const SizedBox(height: 16.0),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'Для отримання балів за вивчення статті, необхідно повністю її прочитати',
-                                            style: TextStyle(fontSize: 12.0),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          child: CustomFlatButton(
-                                              text: 'РОЗПОЧАТИ',
-                                              color: Theme.of(context).primaryColor,
-                                              onPressed: () {
-                                                Navigator.of(context).pop(true);
-                                              }),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          child: CustomFlatButton(
-                                              text: 'ПОВЕРНУТИСЯ ПІЗНІШЕ',
-                                              color: Theme.of(context).errorColor,
-                                              onPressed: () {
-                                                Navigator.of(context).pop(false);
-                                              }),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).then((value) {
-                              if (value) {
-                                Navigator.of(context)
-                                    .pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
+                            if (index == blogsNotifier.blogs.length) {
+                              if (blogsNotifier.blogs.isEmpty) {
+                                return Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Новини відсутні.'),
+                                  ),
+                                );
                               }
-                            });
-                          } else {
-                            Navigator.of(context).pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
-                          }
-                        },
-                      );
-                    },
-                  ),
+
+                              if (blogsNotifier.blogs.length == blogsNotifier.total) {
+                                return null;
+                              }
+
+                              blogsNotifier.loadNext();
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+
+                            return ValueListenableBuilder(
+                                valueListenable: Hive.box(FAVORITES_BOX).listenable(),
+                                builder: (context, box, widget) {
+                                  return BlogListTile(
+                                    date: blogsNotifier.blogs[index].publishedAt,
+                                    title: blogsNotifier.blogs[index]?.title ?? '',
+                                    points: blogsNotifier.blogs[index]?.learningBonus ?? 0,
+                                    image: blogsNotifier.blogs[index]?.coverImage?.path ?? '',
+                                    isFavourite: box.containsKey(blogsNotifier.blogs[index].id),
+                                    onFavoriteChanged: (value) async {
+                                      if (value) {
+                                        box.put(blogsNotifier.blogs[index].id, blogsNotifier.blogs[index]);
+                                      } else {
+                                        box.delete(blogsNotifier.blogs[index].id);
+                                      }
+                                    },
+                                    onTap: () async {
+                                      var open = true;
+                                      if (blogsNotifier.blogs[index].isOpened?.isEmpty ?? true) {
+                                        open = await showBlogInfoDialog(context);
+                                      }
+                                      if (open) {
+                                        Navigator.of(context)
+                                            .pushNamed('/blogs/view', arguments: blogsNotifier.blogs[index].id);
+                                      }
+                                    },
+                                  );
+                                });
+                          },
+                        ),
                 ),
         );
       }),

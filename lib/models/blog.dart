@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:imes/models/cover_image.dart';
 import 'blog_content.dart';
@@ -7,44 +8,38 @@ import 'featured_image.dart';
 part 'blog.g.dart';
 
 @JsonSerializable()
-class Blog {
+@HiveType(typeId: 0)
+class Blog extends HiveObject {
+  @HiveField(0)
   final num id;
-  // @JsonKey(name: 'user_id')
-  // final num userId;
+  @HiveField(1)
   final String title;
   final String slug;
   final String excerpt;
   final List<BlogContent> content;
-  // @JsonKey(name: 'content_html')
-  // final String contentHtml;
   final List<BlogRecommended> recommended;
-  @JsonKey(name: 'published_at')
+  @HiveField(2)
   final DateTime publishedAt;
   final int published;
-  @JsonKey(name: 'created_at')
   final DateTime createdAt;
-  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
   final String action;
   final String summary;
-  @JsonKey(name: 'has_summary')
   final bool hasSummary;
-  @JsonKey(name: 'featured_images')
   List<FeaturedImage> featuredImages;
-  @JsonKey(name: 'learning_bonus')
+  @HiveField(3)
   final int learningBonus;
-  @JsonKey(name: 'cover_image')
+  @HiveField(4)
   final CoverImage coverImage;
+  @HiveField(5)
   final List isOpened;
 
   Blog({
     this.id,
-    // this.userId,
     this.title,
     this.slug,
     this.excerpt,
     this.content,
-    // this.contentHtml,
     this.recommended,
     this.publishedAt,
     this.published,

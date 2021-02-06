@@ -98,7 +98,7 @@ class _SupportPageState extends State<SupportPage> {
                       child: Container(
                         padding: const EdgeInsets.all(4.0),
                         decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).dividerColor),
-                        child: const Icon(Icons.send, size: 13, color: Colors.white),
+                        child: const Icon(Icons.send, size: 13.0, color: Colors.blue),
                       ),
                       onTap: () async {
                         if (_textEditingController.text.trim().isNotEmpty) {

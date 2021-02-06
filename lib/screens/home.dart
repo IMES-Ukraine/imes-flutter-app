@@ -3,18 +3,16 @@ import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/screens/blogs.dart';
 import 'package:imes/screens/menu.dart';
 import 'package:imes/screens/blog_view.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-// import 'package:native_pdf_view/native_pdf_view.dart';
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/test_view.dart';
 import 'package:imes/screens/tests.dart';
+import 'package:imes/utils/constants.dart';
+import 'package:imes/widgets/base/bottom_appbar_button.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/home_notifier.dart';
-
-import 'package:imes/helpers/size_config.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -28,18 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   final GlobalKey<NavigatorState> _blogsNavigatorKey = GlobalKey();
   final GlobalKey<NavigatorState> _analyticsNavigatorKey = GlobalKey();
-  // final GlobalKey<NavigatorState> _balanceNavigatorKey = GlobalKey();
   final GlobalKey<NavigatorState> _menuNavigatorKey = GlobalKey();
-
-  // PdfController _pdfController;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _pdfController = PdfController(
-  //     document: PdfDocument.openAsset('assets/instruction.pdf'),
-  //   );
-  // }
 
   void _redirect(final message, final homeNotifier) {
     final data = message['data'];
@@ -75,8 +62,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     final themeData = Theme.of(context);
     return ChangeNotifierProvider(
       create: (_) {
@@ -120,12 +105,6 @@ class _HomePageState extends State<HomePage> {
                 return false;
               }
             }
-
-            // if (homeNotifier.currentPage == 3) {
-            //   if (await _balanceNavigatorKey.currentState.maybePop()) {
-            //     return false;
-            //   }
-            // }
 
             if (homeNotifier.currentPage == 4) {
               if (await _menuNavigatorKey.currentState.maybePop()) {
@@ -175,45 +154,12 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                // ReportsPage(),
                 SupportPage(),
-                PDF().cachedFromUrl('https://echo.myftp.org/instruction.pdf',
-                    placeholder: (progress) => Center(child: CircularProgressIndicator())),
-                // PdfView(
-                //   documentLoader: Center(child: CircularProgressIndicator()),
-                //   pageLoader: Center(child: CircularProgressIndicator()),
-                //   controller: _pdfController,
-                //   pageSnapping: true,
-                //   onDocumentLoaded: (document) {
-                //     // setState(() {
-                //     //   _actualPageNumber = 1;
-                //     //   _allPagesCount = document.pagesCount;
-                //     // });
-                //   },
-                //   onPageChanged: (page) {
-                //     // setState(() {
-                //     //   _actualPageNumber = page;
-                //     // });
-                //   },
-                // ),
-                // Navigator(
-                //   key: _balanceNavigatorKey,
-                //   initialRoute: '/',
-                //   onGenerateRoute: (routeSettings) {
-                //     return MaterialPageRoute(
-                //       builder: (context) {
-                //         switch (routeSettings.name) {
-                //           case '/':
-                //             return BalancePage();
-                //           case '/balance/history':
-                //             return BalanceHistoryPage();
-                //           default:
-                //             return BalancePage();
-                //         }
-                //       },
-                //     );
-                //   },
-                // ),
+                SafeArea(
+                  child: SingleChildScrollView(
+                    child: Image.network(Constants.INSTRUCTION_URL),
+                  ),
+                ),
                 Navigator(
                   key: _menuNavigatorKey,
                   initialRoute: homeNotifier.initialPageRoute,
@@ -230,28 +176,44 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-            // floatingActionButton: FloatingActionButton(
-            //   child: Icon(Icons.add),
-            //   onPressed: () {},
-            // ),
-            bottomNavigationBar: BottomNavigationBar(
-//                backgroundColor: const Color(0xFFE9EAEC),
-                selectedItemColor: themeData.primaryColor,
-                unselectedItemColor: const Color(0xFFA1A1A1), // TODO: extract colors to theme
-                type: BottomNavigationBarType.fixed,
-                unselectedFontSize: 10.0,
-                selectedFontSize: 10.0,
-                iconSize: 26.0,
-                currentIndex: homeNotifier.currentPage,
-                onTap: homeNotifier.changePage,
-                items: [
-                  BottomNavigationBarItem(icon: Icon(CustomIcons.home), label: 'Головна'),
-                  BottomNavigationBarItem(icon: Icon(CustomIcons.test), label: 'Дослідження'),
-                  BottomNavigationBarItem(icon: Icon(CustomIcons.chat), label: 'Чат'),
-                  BottomNavigationBarItem(icon: Icon(Icons.info_rounded), label: 'Інформація'),
-                  BottomNavigationBarItem(icon: Icon(CustomIcons.menu), label: 'Меню'),
-                ]),
+            bottomNavigationBar: BottomAppBar(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BottomAppBarButton(
+                      icon: CustomIcons.home,
+                      label: 'Головна',
+                      selected: homeNotifier.currentPage == 0,
+                      onTap: () {
+                        if (homeNotifier.currentPage != 0) {
+                          homeNotifier.changePage(0);
+                        } else {
+                          _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                        }
+                      }),
+                  BottomAppBarButton(
+                      icon: CustomIcons.test,
+                      label: 'Дослідження',
+                      selected: homeNotifier.currentPage == 1,
+                      onTap: () => homeNotifier.changePage(1)),
+                  BottomAppBarButton(
+                      icon: CustomIcons.chat,
+                      label: 'Підтримка',
+                      selected: homeNotifier.currentPage == 2,
+                      onTap: () => homeNotifier.changePage(2)),
+                  BottomAppBarButton(
+                      icon: Icons.info_rounded,
+                      label: 'Інструкція',
+                      selected: homeNotifier.currentPage == 3,
+                      onTap: () => homeNotifier.changePage(3)),
+                  BottomAppBarButton(
+                      icon: CustomIcons.menu,
+                      label: 'Меню',
+                      selected: homeNotifier.currentPage == 4,
+                      onTap: () => homeNotifier.changePage(4)),
+                ],
+              ),
+            ),
           ),
         );
       }),
