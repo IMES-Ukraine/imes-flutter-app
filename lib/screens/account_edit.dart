@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
-import 'package:imes/models/city.dart';
+import 'package:imes/resources/resources.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/loading_lock.dart';
@@ -16,21 +15,10 @@ import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/dialogs/dialogs.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:observable/observable.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart' show Consumer;
 import 'package:hooks_riverpod/hooks_riverpod.dart' hide Consumer;
 
 import 'package:sizer/sizer.dart';
-
-final jsonCitiesAndHospitalsProvider = FutureProvider<dynamic>((ref) async {
-  final data = await rootBundle.loadString('assets/res/city+hospitals.json');
-  return jsonDecode(data);
-});
-
-final citiesAndHospitalsProvider = FutureProvider<List<City>>((ref) async {
-  final json = await ref.watch(jsonCitiesAndHospitalsProvider.future);
-  return (json as List).map((e) => e == null ? null : City.fromJson(e as Map<String, dynamic>))?.toList();
-});
 
 final citiesProvider = FutureProvider<List<String>>((ref) async {
   final cities = await ref.watch(citiesAndHospitalsProvider.future);
@@ -44,6 +32,7 @@ final hospitalsProvider = FutureProvider<List<String>>((ref) async {
 
 final cityProvider = StateProvider<String>((ref) => null);
 final hospitalProvider = StateProvider<String>((ref) => null);
+final doctorProvider = StateProvider<String>((ref) => null);
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
@@ -85,8 +74,6 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.specification);
             final qualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.qualification);
-            final positionController =
-                useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
             final licenseController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.licenseNumber);
             final additionalQualificationController =
@@ -104,6 +91,11 @@ class AccountEditPage extends HookWidget {
             final cityController = useTextEditingController(text: userNotifier.user?.specializedInformation?.city);
             final hospitalController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
+
+            final doctor = useProvider(doctorProvider);
+            final doctorItems = useProvider(doctorsProvider.future);
+            final positionController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
 
             final isLoading = useState<bool>(false);
             return Stack(
@@ -362,15 +354,32 @@ class AccountEditPage extends HookWidget {
                                 }),
                                 const SizedBox(height: 8.0),
                                 Divider(),
-                                TextField(
-                                  controller: positionController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'Посада',
-                                    labelStyle: TextStyle(fontSize: 10.0.sp),
-                                    contentPadding: EdgeInsets.zero,
+                                TypeAheadField(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                    autofocus: true,
+                                    controller: positionController,
+                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        border: UnderlineInputBorder(),
+                                        contentPadding: EdgeInsets.zero,
+                                        labelText: 'Посада',
+                                        labelStyle: TextStyle(fontSize: 10.0.sp)),
                                   ),
-                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                  suggestionsCallback: (pattern) async {
+                                    final items = await doctorItems;
+                                    return items.where((c) => c.contains(pattern)).toList();
+                                  },
+                                  itemBuilder: (context, suggestion) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(2.0.w),
+                                      child: Text(suggestion, style: TextStyle(fontSize: 10.0.sp)),
+                                    );
+                                  },
+                                  onSuggestionSelected: (suggestion) {
+                                    doctor.state = suggestion;
+                                    positionController.text = suggestion;
+                                  },
                                 ),
                                 SizedBox(height: 1.0.h),
                                 Divider(),
