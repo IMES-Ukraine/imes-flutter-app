@@ -2,62 +2,53 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
+import 'package:imes/models/city.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
-import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/loading_lock.dart';
 import 'package:imes/widgets/base/octo_circle_avatar.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
+import 'package:imes/widgets/dialogs/dialogs.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:observable/observable.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart' show Consumer;
+import 'package:hooks_riverpod/hooks_riverpod.dart' hide Consumer;
+
+import 'package:sizer/sizer.dart';
+
+final jsonCitiesAndHospitalsProvider = FutureProvider<dynamic>((ref) async {
+  final data = await rootBundle.loadString('assets/res/city+hospitals.json');
+  return jsonDecode(data);
+});
+
+final citiesAndHospitalsProvider = FutureProvider<List<City>>((ref) async {
+  final json = await ref.watch(jsonCitiesAndHospitalsProvider.future);
+  return (json as List).map((e) => e == null ? null : City.fromJson(e as Map<String, dynamic>))?.toList();
+});
+
+final citiesProvider = FutureProvider<List<String>>((ref) async {
+  final cities = await ref.watch(citiesAndHospitalsProvider.future);
+  return cities.map((c) => c.name).toList();
+});
+
+final hospitalsProvider = FutureProvider<List<String>>((ref) async {
+  final hospitals = await ref.watch(citiesAndHospitalsProvider.future);
+  return hospitals.firstWhere((c) => c.name == ref.watch(cityProvider).state).items.map((c) => c.name).toList();
+});
+
+final cityProvider = StateProvider<String>((ref) => null);
+final hospitalProvider = StateProvider<String>((ref) => null);
 
 class AccountEditPage extends HookWidget {
   static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
 
   final workingDaysInitial = {0: [], 1: [], 2: []};
-
-  Future loadCities(BuildContext context) async {
-    final data = await DefaultAssetBundle.of(context).loadString('assets/res/cities.json');
-    final jsonData = jsonDecode(data);
-    return (jsonData as List)
-        .map(
-          (v) => DropdownMenuItem<String>(
-            value: v['name'],
-            child: Text(
-              v['name'],
-              style: TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        )
-        .toList();
-  }
-
-  Future loadHospitals(BuildContext context) async {
-    final data = await DefaultAssetBundle.of(context).loadString('assets/res/hospitals.json');
-    final jsonData = jsonDecode(data);
-    return (jsonData as List)
-        .map(
-          (v) => DropdownMenuItem<String>(
-            value: v['name'],
-            child: Text(
-              v['name'],
-              style: TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        )
-        .toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +65,6 @@ class AccountEditPage extends HookWidget {
                       ? 1
                       : 2,
             );
-
-            final city = useState<String>();
-            final hospital = useState<String>();
 
             final workingDays = userNotifier.user?.specializedInformation?.schedule?.isNotEmpty ?? false
                 ? userNotifier.user.specializedInformation.schedule
@@ -97,21 +85,25 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.specification);
             final qualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.qualification);
-            // final workPlaceController =
-            //     useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
             final positionController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.position);
             final licenseController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.licenseNumber);
-            // final studyPeriodController =
-            //     useTextEditingController(text: userNotifier.user?.specializedInformation?.studyPeriod);
             final additionalQualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.additionalQualification);
             final micIdController = useTextEditingController(text: userNotifier.user?.specializedInformation?.micId);
 
             final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInformation?.card);
-            // final cardExpController = useTextEditingController(text: userNotifier.user?.financialInformation?.exp);
-            // final cardCCVController = useTextEditingController(text: userNotifier.user?.financialInformation?.ccv);
+
+            final city = useProvider(cityProvider);
+            final hospital = useProvider(hospitalProvider);
+
+            final cityItems = useProvider(citiesProvider.future);
+            final hospitalItems = useProvider(hospitalsProvider.future);
+
+            final cityController = useTextEditingController(text: userNotifier.user?.specializedInformation?.city);
+            final hospitalController =
+                useTextEditingController(text: userNotifier.user?.specializedInformation?.workplace);
 
             final isLoading = useState<bool>(false);
             return Stack(
@@ -119,51 +111,14 @@ class AccountEditPage extends HookWidget {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 16.0),
+                      SizedBox(height: 2.0.h),
                       Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                          margin: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           child: Row(children: [
                             InkResponse(
                               onTap: () async {
-                                var path = await showDialog(
-                                    context: context,
-                                    builder: (context) => CustomAlertDialog(
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                    child: CustomFlatButton(
-                                                        text: 'КАМЕРА',
-                                                        color: Theme.of(context).primaryColor,
-                                                        onPressed: () async {
-                                                          final image = await ImagePicker().getImage(
-                                                              source: ImageSource.camera,
-                                                              maxWidth: 800,
-                                                              maxHeight: 600);
-                                                          Navigator.of(context).pop(image?.path);
-                                                        }),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                    child: CustomFlatButton(
-                                                        text: 'ГАЛЕРЕЯ',
-                                                        color: Theme.of(context).primaryColor,
-                                                        onPressed: () async {
-                                                          final image = await ImagePicker().getImage(
-                                                              source: ImageSource.gallery,
-                                                              maxWidth: 800,
-                                                              maxHeight: 600);
-                                                          Navigator.of(context).pop(image?.path);
-                                                        }),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ));
+                                var path = await showCameraGalleryChooseDialog(context);
+                                ;
                                 isLoading.value = true;
                                 userNotifier.uploadProfilePicture(path).then((_) {
                                   print(userNotifier.user.basicInformation);
@@ -186,7 +141,7 @@ class AccountEditPage extends HookWidget {
                                 });
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(2.0.h),
                                 child: OctoCircleAvatar(
                                   url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
                                 ),
@@ -194,33 +149,33 @@ class AccountEditPage extends HookWidget {
                             ),
                             Expanded(
                                 child: Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
+                              padding: EdgeInsets.only(right: 4.0.w),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 TextField(
                                   controller: nameController,
                                   decoration: InputDecoration(
                                     isDense: true,
                                     hintText: 'Ім\’я Прізвище',
-                                    hintStyle: TextStyle(fontSize: 12.0),
+                                    hintStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0),
+                                  style: TextStyle(fontSize: 10.0.sp),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Row(
                                   children: [
-                                    Icon(Icons.phone, color: Theme.of(context).primaryColor, size: 16.0),
-                                    const SizedBox(width: 4.0),
+                                    Icon(Icons.phone, color: Theme.of(context).primaryColor, size: 2.0.h),
+                                    SizedBox(width: 1.0.w),
                                     Expanded(
                                       child: TextField(
                                         controller: phoneController,
                                         decoration: InputDecoration(
                                           isDense: true,
                                           hintText: 'Телефон',
-                                          hintStyle: TextStyle(fontSize: 12.0),
+                                          hintStyle: TextStyle(fontSize: 10.0.sp),
                                           contentPadding: EdgeInsets.zero,
                                         ),
-                                        style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                        style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ],
@@ -228,18 +183,18 @@ class AccountEditPage extends HookWidget {
                                 const SizedBox(height: 4.0),
                                 Row(
                                   children: [
-                                    Icon(Icons.mail_outline, color: Theme.of(context).primaryColor, size: 16.0),
-                                    const SizedBox(width: 4.0),
+                                    Icon(Icons.mail_outline, color: Theme.of(context).primaryColor, size: 2.0.h),
+                                    SizedBox(width: 1.0.w),
                                     Expanded(
                                       child: TextField(
                                         controller: postController,
                                         decoration: InputDecoration(
                                           isDense: true,
                                           hintText: 'Пошта',
-                                          hintStyle: TextStyle(fontSize: 12.0),
+                                          hintStyle: TextStyle(fontSize: 10.0.sp),
                                           contentPadding: EdgeInsets.zero,
                                         ),
-                                        style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                        style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ],
@@ -249,19 +204,16 @@ class AccountEditPage extends HookWidget {
                           ])),
                       if (step.value == 0)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          padding: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           child: RaisedGradientButton(
-                            child: Text(
-                              'ДАЛІ',
-                              style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
-                            ),
+                            child: Text('ДАЛІ', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
                             onPressed: () {
                               step.value = 1;
                             },
                           ),
                         ),
                       Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                        margin: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                         clipBehavior: Clip.antiAlias,
                         child: IgnorePointer(
                           ignoring: step.value == 0,
@@ -275,76 +227,93 @@ class AccountEditPage extends HookWidget {
                                     fontWeight: FontWeight.bold,
                                   )),
                               initiallyExpanded: true,
-                              childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+                              childrenPadding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 1.0.h),
                               expandedCrossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                FutureBuilder(
-                                  future: loadCities(context),
-                                  builder: (context, snapshot) {
-                                    return DropdownButton<String>(
-                                      isExpanded: true,
-                                      hint: Text('Місто',
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                      items: snapshot.data ?? [],
-                                      value: city.value,
-                                      onChanged: (value) {
-                                        city.value = value;
-                                      },
+                                TypeAheadField(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                    autofocus: true,
+                                    controller: cityController,
+                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        border: UnderlineInputBorder(),
+                                        contentPadding: EdgeInsets.zero,
+                                        labelText: 'Місто',
+                                        labelStyle: TextStyle(fontSize: 10.0.sp)),
+                                  ),
+                                  suggestionsCallback: (pattern) async {
+                                    final items = await cityItems;
+                                    return items.where((c) => c.contains(pattern)).toList();
+                                  },
+                                  itemBuilder: (context, suggestion) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(2.0.w),
+                                      child: Text(suggestion, style: TextStyle(fontSize: 10.0.sp)),
                                     );
                                   },
+                                  onSuggestionSelected: (suggestion) {
+                                    city.state = suggestion;
+                                    cityController.text = suggestion;
+                                  },
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
-                                FutureBuilder(
-                                  future: loadHospitals(context),
-                                  builder: (context, snapshot) {
-                                    return DropdownButton<String>(
-                                      isExpanded: true,
-                                      itemHeight: 150.0,
-                                      hint: Text('Місце роботи',
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                      items: snapshot.data ?? [],
-                                      value: hospital.value,
-                                      onChanged: (value) {
-                                        hospital.value = value;
-                                      },
+                                TypeAheadField(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                    autofocus: true,
+                                    controller: hospitalController,
+                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        border: UnderlineInputBorder(),
+                                        contentPadding: EdgeInsets.zero,
+                                        labelText: 'Місце роботи',
+                                        labelStyle: TextStyle(fontSize: 10.0.sp)),
+                                  ),
+                                  suggestionsCallback: (pattern) async {
+                                    final items = await hospitalItems;
+                                    return items.where((c) => c.contains(pattern)).toList();
+                                  },
+                                  itemBuilder: (context, suggestion) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(2.0.w),
+                                      child: Text(suggestion, style: TextStyle(fontSize: 10.0.sp)),
                                     );
                                   },
+                                  onSuggestionSelected: (suggestion) {
+                                    hospital.state = suggestion;
+                                    hospitalController.text = suggestion;
+                                  },
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
                                 TextField(
                                   controller: specificationController,
                                   decoration: InputDecoration(
                                     isDense: true,
                                     labelText: 'Спеціалізація',
-                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
                                 TextField(
                                   controller: qualificationController,
                                   decoration: InputDecoration(
                                     isDense: true,
                                     labelText: 'Рівень кваліфікації',
-                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
-                                Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                                const SizedBox(height: 8.0),
+                                Text('Графік роботи', style: TextStyle(fontSize: 10.0.sp, color: Color(0xFFA1A1A1))),
+                                SizedBox(height: 1.0.h),
                                 HookBuilder(builder: (context) {
                                   return Column(
                                     children: List.generate(3, (index) {
@@ -364,6 +333,7 @@ class AccountEditPage extends HookWidget {
                                                   },
                                                   child: Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
                                                       style: TextStyle(
+                                                          fontSize: 10.0.sp,
                                                           color: workingDays[index].value.contains(i)
                                                               ? Colors.black
                                                               : Color(0xFFBDBDBD))),
@@ -375,8 +345,6 @@ class AccountEditPage extends HookWidget {
                                               controller: workingDaysControllers[index],
                                               decoration: InputDecoration(
                                                 isDense: true,
-                                                // labelText: 'Місце роботи',
-                                                // labelStyle: TextStyle(fontSize: 12.0),
                                                 contentPadding: EdgeInsets.zero,
                                               ),
                                               keyboardType: TextInputType.number,
@@ -384,7 +352,7 @@ class AccountEditPage extends HookWidget {
                                                 MaskTextInputFormatter(
                                                     mask: '##:## - ##:##', filter: {'#': RegExp(r'[0-9]')})
                                               ],
-                                              style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                              style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                             ),
                                           ),
                                         ],
@@ -399,27 +367,28 @@ class AccountEditPage extends HookWidget {
                                   decoration: InputDecoration(
                                     isDense: true,
                                     labelText: 'Посада',
-                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
                                 TextField(
                                   controller: licenseController,
                                   decoration: InputDecoration(
                                     isDense: true,
                                     labelText: 'Номер ліцензії лікаря',
-                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
-                                Text('Документ про освіту', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                                const SizedBox(height: 8.0),
+                                Text('Документ про освіту',
+                                    style: TextStyle(fontSize: 10.0.sp, color: Color(0xFFA1A1A1))),
+                                SizedBox(height: 1.0.h),
                                 InkWell(
                                   onTap: () async {
                                     final result = await ImagePicker()
@@ -448,23 +417,23 @@ class AccountEditPage extends HookWidget {
                                   },
                                   child: Row(
                                     children: [
-                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 20.0),
-                                      const SizedBox(width: 8.0),
+                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 3.0.h),
+                                      SizedBox(width: 1.0.h),
                                       Text(
                                           userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
                                               'Завантажити',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(context).primaryColor,
-                                              fontSize: 12.0)),
+                                              fontSize: 10.0.sp)),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
                                 Text('Паспорт громадянини України',
-                                    style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                                const SizedBox(height: 8.0),
+                                    style: TextStyle(fontSize: 10.0.sp, color: Color(0xFFA1A1A1))),
+                                SizedBox(height: 1.0.h),
                                 InkWell(
                                   onTap: () async {
                                     final result = await ImagePicker()
@@ -493,62 +462,31 @@ class AccountEditPage extends HookWidget {
                                   },
                                   child: Row(
                                     children: [
-                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 20.0),
-                                      const SizedBox(width: 8.0),
+                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 3.0.h),
+                                      SizedBox(width: 1.0.h),
                                       Text(
                                           userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
                                               'Завантажити',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Theme.of(context).primaryColor,
-                                              fontSize: 12.0)),
+                                              fontSize: 10.0.sp)),
                                     ],
                                   ),
                                 ),
-                                // const SizedBox(height: 8.0),
-                                // Divider(),
-                                // TextField(
-                                //   controller: studyPeriodController,
-                                //   decoration: InputDecoration(
-                                //     isDense: true,
-                                //     labelText: 'Дата (період) навчання',
-                                //     hintText: '__.__.____ - __.__.____',
-                                //     labelStyle: TextStyle(fontSize: 12.0),
-                                //     contentPadding: EdgeInsets.zero,
-                                //     border: InputBorder.none,
-                                //   ),
-                                //   keyboardType: TextInputType.number,
-                                //   inputFormatters: [
-                                //     MaskTextInputFormatter(
-                                //         mask: '##.##.#### - ##.##.####', filter: {'#': RegExp(r'[0-9]')})
-                                //   ],
-                                //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                // ),
-                                // const SizedBox(height: 8.0),
-                                // Divider(),
-                                // TextField(
-                                //   controller: additionalQualificationController,
-                                //   decoration: InputDecoration(
-                                //     isDense: true,
-                                //     labelText: 'Додаткова кваліфікація',
-                                //     labelStyle: TextStyle(fontSize: 12.0),
-                                //     contentPadding: EdgeInsets.zero,
-                                //   ),
-                                //   style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                // ),
-                                const SizedBox(height: 8.0),
+                                SizedBox(height: 1.0.h),
                                 Divider(),
                                 TextField(
                                   controller: micIdController,
                                   decoration: InputDecoration(
                                     isDense: true,
                                     labelText: 'ІПН',
-                                    labelStyle: TextStyle(fontSize: 12.0),
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
                                     contentPadding: EdgeInsets.zero,
                                   ),
-                                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                const SizedBox(height: 16.0),
+                                SizedBox(height: 2.0.h),
                               ],
                             ),
                           ),
@@ -556,19 +494,16 @@ class AccountEditPage extends HookWidget {
                       ),
                       if (step.value == 1)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          padding: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           child: RaisedGradientButton(
-                            child: Text(
-                              'ДАЛІ',
-                              style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
-                            ),
+                            child: Text('ДАЛІ', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
                             onPressed: () {
                               step.value = 2;
                             },
                           ),
                         ),
                       Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                          margin: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           clipBehavior: Clip.antiAlias,
                           child: IgnorePointer(
                             ignoring: step.value == 1,
@@ -582,7 +517,7 @@ class AccountEditPage extends HookWidget {
                                       fontWeight: FontWeight.bold,
                                     )),
                                 initiallyExpanded: true,
-                                childrenPadding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+                                childrenPadding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 1.0.h),
                                 expandedCrossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Divider(),
@@ -591,7 +526,7 @@ class AccountEditPage extends HookWidget {
                                     decoration: InputDecoration(
                                       isDense: true,
                                       labelText: 'Номер картки',
-                                      labelStyle: TextStyle(fontSize: 12.0),
+                                      labelStyle: TextStyle(fontSize: 10.0.sp),
                                       contentPadding: EdgeInsets.zero,
                                     ),
                                     keyboardType: TextInputType.number,
@@ -599,59 +534,19 @@ class AccountEditPage extends HookWidget {
                                       MaskTextInputFormatter(
                                           mask: '#### #### #### ####', filter: {'#': RegExp(r'[0-9]')})
                                     ],
-                                    style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                   ),
-                                  // const SizedBox(height: 8.0),
-                                  // Row(
-                                  //   children: [
-                                  //     Expanded(
-                                  //       child: TextField(
-                                  //         controller: cardExpController,
-                                  //         decoration: InputDecoration(
-                                  //           isDense: true,
-                                  //           labelText: 'Дата',
-                                  //           labelStyle: TextStyle(fontSize: 12.0),
-                                  //           contentPadding: EdgeInsets.zero,
-                                  //         ),
-                                  //         keyboardType: TextInputType.number,
-                                  //         inputFormatters: [
-                                  //           MaskTextInputFormatter(mask: '## / ##', filter: {'#': RegExp(r'[0-9]')})
-                                  //         ],
-                                  //         style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                  //       ),
-                                  //     ),
-                                  //     const SizedBox(width: 200.0),
-                                  //     Expanded(
-                                  //       child: TextField(
-                                  //         controller: cardCCVController,
-                                  //         decoration: InputDecoration(
-                                  //           isDense: true,
-                                  //           labelText: 'CVV',
-                                  //           labelStyle: TextStyle(fontSize: 12.0),
-                                  //           contentPadding: EdgeInsets.zero,
-                                  //         ),
-                                  //         keyboardType: TextInputType.number,
-                                  //         inputFormatters: [
-                                  //           MaskTextInputFormatter(mask: '###', filter: {'#': RegExp(r'[0-9]')})
-                                  //         ],
-                                  //         style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  const SizedBox(height: 16.0),
+                                  SizedBox(height: 2.0.h),
                                 ],
                               ),
                             ),
                           )),
                       if (step.value == 2)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          padding: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           child: RaisedGradientButton(
-                            child: Text(
-                              'ЗАВЕРШИТИ',
-                              style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white),
-                            ),
+                            child:
+                                Text('ЗАВЕРШИТИ', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
                             onPressed: () {
                               final result = <String, dynamic>{};
                               result['basic_information'] = {
@@ -667,23 +562,18 @@ class AccountEditPage extends HookWidget {
                               }
 
                               result['specialized_information'] = {
-                                'city': city.value,
+                                'city': city.state,
                                 'specification': specificationController.text,
                                 'qualification': qualificationController.text,
-                                'workplace': hospital.value,
+                                'workplace': hospital.state,
                                 'position': positionController.text,
                                 'license_number': licenseController.text,
-                                // 'study_period': studyPeriodController.text,
                                 'additional_qualification': additionalQualificationController.text,
                                 'schedule': resultSchedule,
                                 'mic_id': micIdController.text,
                               };
 
-                              result['financial_information'] = {
-                                'card': cardNumberController.text,
-                                // 'exp': cardExpController.text,
-                                // 'ccv': cardCCVController.text,
-                              };
+                              result['financial_information'] = {'card': cardNumberController.text};
 
                               isLoading.value = true;
                               userNotifier.submitProfile(result).then((value) {

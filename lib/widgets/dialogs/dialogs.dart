@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
 
 import 'package:sizer/sizer.dart';
 
-Future<T> showBlogInfoDialog<T>(BuildContext  context) {
+Future<T> showBlogInfoDialog<T>(BuildContext context) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -51,4 +52,43 @@ Future<T> showBlogInfoDialog<T>(BuildContext  context) {
           ),
         );
       });
+}
+
+Future<T> showCameraGalleryChooseDialog<T>(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) => CustomAlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomFlatButton(
+                    text: 'КАМЕРА',
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () async {
+                      final image =
+                          await ImagePicker().getImage(source: ImageSource.camera, maxWidth: 800, maxHeight: 600);
+                      Navigator.of(context).pop(image?.path);
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomFlatButton(
+                    text: 'ГАЛЕРЕЯ',
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () async {
+                      final image =
+                          await ImagePicker().getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
+                      Navigator.of(context).pop(image?.path);
+                    }),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }
