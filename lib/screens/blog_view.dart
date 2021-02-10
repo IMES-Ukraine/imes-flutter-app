@@ -1,8 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:imes/blocs/home_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/repository.dart';
+import 'package:imes/utils/constants.dart';
+import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
@@ -48,13 +56,23 @@ class BlogViewPage extends HookWidget {
       child: Consumer<BlogNotifier>(builder: (context, blogNotifier, _) {
         return Scaffold(
             appBar: AppBar(
-                // actions: [
-                //   IconButton(
-                //     icon: Icon(Icons.favorite),
-                //     onPressed: () {},
-                //   )
-                // ],
-                ),
+              actions: [
+                ValueListenableBuilder(
+                    valueListenable: Hive.box(Constants.FAVORITES_BOX).listenable(),
+                    builder: (context, box, widget) {
+                      return IconButton(
+                        icon: Icon(box.containsKey(_id) ? Icons.favorite : Icons.favorite_border),
+                        onPressed: () {
+                          if (!box.containsKey(_id)) {
+                            box.put(_id, blogNotifier.blog);
+                          } else {
+                            box.delete(_id);
+                          }
+                        },
+                      );
+                    })
+              ],
+            ),
             body: LayoutBuilder(builder: (context, constraints) {
               if (blogNotifier.state == BlogState.ERROR) {
                 return ErrorRetry(onTap: () {
@@ -162,15 +180,83 @@ class BlogViewPage extends HookWidget {
                                             key: ValueKey<String>(e.title),
                                             onVisibilityChanged: (info) {
                                               if (info.size.height == info.visibleBounds.bottom && !hasDoneRead.value) {
+                                                hasDoneRead.value = true;
                                                 Repository()
                                                     .api
                                                     .readBlogBlock(
                                                       blogId: blogNotifier.blog.id,
                                                       blockIndex: blogNotifier.blog.content.indexOf(e),
                                                     )
-                                                    .then((_) {
-                                                  hasDoneRead.value = true;
-                                                }).catchError((error) => print(error));
+                                                    .then((response) {
+                                                  if (response.statusCode == 200) {
+                                                    if (response.body.data.readingStatus != null) {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => CustomAlertDialog(
+                                                          content: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Text(
+                                                                'Ви прочитали статтю!',
+                                                                style: TextStyle(
+                                                                    fontSize: 17.0, fontWeight: FontWeight.bold),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              const SizedBox(height: 16.0),
+                                                              Text(
+                                                                '${response.body.data.readingStatus.pointsEarned} балів',
+                                                                style: TextStyle(
+                                                                  fontSize: 23.0,
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color: Color(0xFF4CF99E),
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              Text(
+                                                                'зараховано на баланс',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color: Color(0xFF4CF99E),
+                                                                ),
+                                                                textAlign: TextAlign.center,
+                                                              ),
+                                                              Divider(indent: 8.0, endIndent: 8.0),
+                                                              Padding(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                                child: CustomFlatButton(
+                                                                    text: 'OK',
+                                                                    color: Theme.of(context).primaryColor,
+                                                                    onPressed: () {
+                                                                      Navigator.of(context).pop();
+                                                                    }),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ).then((_) {
+                                                        context
+                                                            .read<UserNotifier>()
+                                                            .updateUser(response.body.data.user);
+                                                        Navigator.of(context).pop();
+                                                      });
+                                                    }
+                                                  }
+                                                }).catchError((error) {
+                                                  hasDoneRead.value = false;
+                                                  print(error);
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return CustomAlertDialog(
+                                                        content: CustomDialog(
+                                                          icon: Icons.close,
+                                                          color: Theme.of(context).errorColor,
+                                                          text: Utils.getErrorText(error?.body ?? 'unkown_error'),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                });
                                               }
                                             },
                                             child: Padding(

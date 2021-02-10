@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 class BlogListTile extends StatelessWidget {
   const BlogListTile({
     Key key,
+    this.isOpened = false,
     this.isFavourite = false,
     @required this.date,
     @required this.title,
@@ -17,6 +18,7 @@ class BlogListTile extends StatelessWidget {
     this.onFavoriteChanged,
   }) : super(key: key);
 
+  final bool isOpened;
   final bool isFavourite;
   final DateTime date;
   final String title;
@@ -42,8 +44,7 @@ class BlogListTile extends StatelessWidget {
             OctoImage(
               image: CachedNetworkImageProvider(image),
               height: 25.0.h,
-              placeholderBuilder:
-                  OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
+              placeholderBuilder: OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
               imageBuilder: (context, child) => Stack(
                 fit: StackFit.expand,
                 children: [
@@ -82,10 +83,11 @@ class BlogListTile extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.all(2.0.h),
-              child: BonusButton(points: points),
-            ),
+            if (isOpened)
+              Padding(
+                padding: EdgeInsets.all(2.0.h),
+                child: BonusButton(points: points),
+              ),
           ],
         ),
       ),

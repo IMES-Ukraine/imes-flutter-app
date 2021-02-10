@@ -33,10 +33,9 @@ class BlogsPage extends HookWidget {
                           builder: (context, box, widget) {
                             return ListView(
                               children: box.values
-                                  .map<Widget>((v) => ValueListenableBuilder(
-                                      valueListenable: Hive.box(Constants.FAVORITES_BOX).listenable(),
-                                      builder: (context, box, widget) {
-                                        return BlogListTile(
+                                  .map<Widget>((v) => 
+                                        BlogListTile(
+                                          isOpened: !(v.isOpened?.isEmpty ??  true),
                                           date: v.publishedAt,
                                           title: v?.title ?? '',
                                           points: v?.learningBonus ?? 0,
@@ -58,8 +57,8 @@ class BlogsPage extends HookWidget {
                                               Navigator.of(context).pushNamed('/blogs/view', arguments: v.id);
                                             }
                                           },
-                                        );
-                                      }))
+                                        ),
+                                      )
                                   .toList(),
                             );
                           },

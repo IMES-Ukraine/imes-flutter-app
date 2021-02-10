@@ -8,6 +8,8 @@ import 'package:imes/models/blog_response.dart';
 import 'package:imes/models/analytics_response.dart';
 import 'package:imes/models/notifications_response.dart';
 import 'package:imes/models/profile_response.dart';
+import 'package:imes/models/read_blog_block_data.dart';
+import 'package:imes/models/read_blog_block_response.dart';
 import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_answer_data.dart';
 import 'package:imes/models/test_response.dart';
@@ -125,7 +127,7 @@ abstract class RestClient extends ChopperService {
   Future<Response<UploadFileResponse>> uploadProfileImage(@PartFile('file') String path);
 
   @Get(path: '/api/v1/blog/{id}/read/{index}')
-  Future<Response> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
+  Future<Response<ReadBlogBlockResponse>> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
 
   @Get(path: '/api/v1/agreement/{id}')
   Future<Response<TestResponse>> getAgreement(@Path('id') num testId);

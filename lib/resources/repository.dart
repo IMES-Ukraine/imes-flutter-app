@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chopper/chopper.dart';
 import 'package:http/io_client.dart';
+import 'package:imes/models/read_blog_block_response.dart';
 import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
@@ -50,6 +51,7 @@ class Repository {
       SubmitTestResponse: SubmitTestResponse.fromJsonFactory,
       VerifyResponse: VerifyResponse.fromJsonFactory,
       UploadFileResponse: UploadFileResponse.fromJsonFactory,
+      ReadBlogBlockResponse: ReadBlogBlockResponse.fromJsonFactory,
     });
     final httpClient = HttpClient();
     httpClient.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
