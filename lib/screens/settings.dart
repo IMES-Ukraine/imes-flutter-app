@@ -7,7 +7,6 @@ import 'package:imes/hooks/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
-import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 
 class SettingsPage extends StatefulHookWidget {
@@ -20,11 +19,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final notificationsAllController = useLocalStorageBool('NOTIFICATIONS_ALL');
-    final notificationsNewsController = useLocalStorageBool('NOTIFICATIONS_NEWS');
-    final notificationsTestsController = useLocalStorageBool('NOTIFICATIONS_TESTS');
-    final notificationsBalanceController = useLocalStorageBool('NOTIFICATIONS_BALANCE');
-    final notificationsMessagesController = useLocalStorageBool('NOTIFICATIONS_MESSAGES');
+    final notificationsAllController = useLocalStorageBool('all', defaultValue: true);
+    final notificationsNewsController = useLocalStorageBool('news', defaultValue: true);
+    final notificationsTestsController = useLocalStorageBool('tests', defaultValue: true);
+    final notificationsBalanceController = useLocalStorageBool('balance', defaultValue: true);
+    final notificationsMessagesController = useLocalStorageBool('messages', defaultValue: true);
 
     return Scaffold(
       appBar: AppBar(title: Text('НАЛАШТУВАННЯ', style: TextStyle(fontWeight: FontWeight.w800))),
@@ -77,6 +76,17 @@ class _SettingsPageState extends State<SettingsPage> {
             final notificationsTests = useStream(notificationsTestsController.stream);
             final notificationsBalance = useStream(notificationsBalanceController.stream);
             final notificationsMessages = useStream(notificationsMessagesController.stream);
+
+            useEffect(() {
+              final sub = notificationsAllController.stream.listen((event) {
+                notificationsNewsController.add(event);
+                notificationsTestsController.add(event);
+                notificationsBalanceController.add(event);
+                notificationsMessagesController.add(event);
+              });
+              return sub.cancel;
+            }, const []);
+
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
               child: ExpansionTile(

@@ -15,6 +15,7 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/home_notifier.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -88,6 +89,33 @@ class _HomePageState extends State<HomePage> {
           debugPrint('onResume: $message');
           _redirect(message, homeNotifier);
           return;
+        });
+        SharedPreferences.getInstance().then((prefs) async {
+          final allEnabled = prefs.getBool('all') ?? true;
+          final newsEnabled = prefs.getBool('news') ?? true;
+          final testsEnabled = prefs.getBool('tests') ?? true;
+          final balanceEnabled = prefs.getBool('balance') ?? true;
+          final messagesEnabled = prefs.getBool('messages') ?? true;
+
+          if (allEnabled) {
+            _firebaseMessaging.subscribeToTopic('all');
+          } else {
+            if (newsEnabled) {
+              _firebaseMessaging.subscribeToTopic('news');
+            }
+
+            if (testsEnabled) {
+              _firebaseMessaging.subscribeToTopic('tests');
+            }
+
+            if (balanceEnabled) {
+              _firebaseMessaging.subscribeToTopic('balance');
+            }
+
+            if (messagesEnabled) {
+              _firebaseMessaging.subscribeToTopic('messages');
+            }
+          }
         });
         return homeNotifier;
       },
