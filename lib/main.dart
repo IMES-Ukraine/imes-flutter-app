@@ -83,7 +83,8 @@ void main() async {
         });
       }
     } catch (e) {
-      print(e?.body ?? e.toString);
+      print(e);
+      // print(e?.body ?? e.toString);
     }
   }
 

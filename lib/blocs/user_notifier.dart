@@ -211,6 +211,22 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  Future<void> uploadMicId(String path) async {
+    final response = await Repository().api.uploadMicId(path);
+    if (response.statusCode == 200) {
+      if (user.specializedInformation != null) {
+        _user = user.copyWith(
+          specializedInformation: user.specializedInformation.copyWith(
+            micId: response.body.data,
+          ),
+        );
+      } else {
+        _user = user.copyWith(specializedInformation: UserSpecializedInfo(micId: response.body.data));
+      }
+      notifyListeners();
+    }
+  }
+
   Future<void> uploadProfilePicture(String path) async {
     final response = await Repository().api.uploadProfileImage(path);
     if (response.statusCode == 200) {

@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                             vertical: 2.0.h, horizontal: 2.0.w),
                                         child: RichText(
                                           text: TextSpan(
-                                            text: 'согласен с условиями ',
+                                            text: 'згоден з умовами ',
                                             style: TextStyle(
                                                 fontSize: 8.0.sp,
                                                 color: Color(
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                                             children: [
                                               TextSpan(
                                                   text:
-                                                      'Политики конфиденциальности',
+                                                      'Політики конфіденційності',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -136,9 +136,9 @@ class _LoginPageState extends State<LoginPage> {
                                                                 .POLICY_URL);
                                                           }
                                                         }),
-                                              TextSpan(text: ' и '),
+                                              TextSpan(text: ' і '),
                                               TextSpan(
-                                                  text: 'Правил пользования',
+                                                  text: 'Умов користування',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,

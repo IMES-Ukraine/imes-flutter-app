@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -6,6 +8,7 @@ import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:imes/utils/file_utils.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/loading_lock.dart';
@@ -77,7 +80,6 @@ class AccountEditPage extends HookWidget {
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.licenseNumber);
             final additionalQualificationController =
                 useTextEditingController(text: userNotifier.user?.specializedInformation?.additionalQualification);
-            final micIdController = useTextEditingController(text: userNotifier.user?.specializedInformation?.micId);
 
             final cardNumberController = useTextEditingController(text: userNotifier.user?.financialInformation?.card);
 
@@ -279,15 +281,32 @@ class AccountEditPage extends HookWidget {
                                 ),
                                 SizedBox(height: 1.0.h),
                                 Divider(),
-                                TextField(
-                                  controller: specificationController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'Спеціалізація',
-                                    labelStyle: TextStyle(fontSize: 10.0.sp),
-                                    contentPadding: EdgeInsets.zero,
+                                TypeAheadField(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                    autofocus: true,
+                                    controller: specificationController,
+                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        border: UnderlineInputBorder(),
+                                        contentPadding: EdgeInsets.zero,
+                                        labelText: 'Спеціалізація',
+                                        labelStyle: TextStyle(fontSize: 10.0.sp)),
                                   ),
-                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
+                                  suggestionsCallback: (pattern) async {
+                                    final items = await doctorItems;
+                                    return items.where((c) => c.contains(pattern)).toList();
+                                  },
+                                  itemBuilder: (context, suggestion) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(2.0.w),
+                                      child: Text(suggestion, style: TextStyle(fontSize: 10.0.sp)),
+                                    );
+                                  },
+                                  onSuggestionSelected: (suggestion) {
+                                    doctor.state = suggestion;
+                                    specificationController.text = suggestion;
+                                  },
                                 ),
                                 SizedBox(height: 1.0.h),
                                 Divider(),
@@ -353,32 +372,15 @@ class AccountEditPage extends HookWidget {
                                 }),
                                 const SizedBox(height: 8.0),
                                 Divider(),
-                                TypeAheadField(
-                                  textFieldConfiguration: TextFieldConfiguration(
-                                    autofocus: true,
-                                    controller: positionController,
-                                    style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
-                                    decoration: InputDecoration(
-                                        isDense: true,
-                                        border: UnderlineInputBorder(),
-                                        contentPadding: EdgeInsets.zero,
-                                        labelText: 'Посада',
-                                        labelStyle: TextStyle(fontSize: 10.0.sp)),
+                                TextField(
+                                  controller: positionController,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    labelText: 'Посада',
+                                    labelStyle: TextStyle(fontSize: 10.0.sp),
+                                    contentPadding: EdgeInsets.zero,
                                   ),
-                                  suggestionsCallback: (pattern) async {
-                                    final items = await doctorItems;
-                                    return items.where((c) => c.contains(pattern)).toList();
-                                  },
-                                  itemBuilder: (context, suggestion) {
-                                    return Padding(
-                                      padding: EdgeInsets.all(2.0.w),
-                                      child: Text(suggestion, style: TextStyle(fontSize: 10.0.sp)),
-                                    );
-                                  },
-                                  onSuggestionSelected: (suggestion) {
-                                    doctor.state = suggestion;
-                                    positionController.text = suggestion;
-                                  },
+                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
                                 SizedBox(height: 1.0.h),
                                 Divider(),
@@ -400,10 +402,11 @@ class AccountEditPage extends HookWidget {
                                 InkWell(
                                   onTap: () async {
                                     final result = await ImagePicker()
-                                        .getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
+                                        .getImage(source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1920);
                                     if (result != null) {
                                       isLoading.value = true;
-                                      userNotifier.uploadEducationDocument(result.path).then((_) {
+                                      final resultFile = await FileUtils.renameBaseFile(result.path, 'edu_doc');
+                                      userNotifier.uploadEducationDocument(resultFile.path).then((_) {
                                         isLoading.value = false;
                                       }).catchError((error) {
                                         isLoading.value = false;
@@ -427,13 +430,15 @@ class AccountEditPage extends HookWidget {
                                     children: [
                                       Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 3.0.h),
                                       SizedBox(width: 1.0.h),
-                                      Text(
-                                          userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
-                                              'Завантажити',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).primaryColor,
-                                              fontSize: 10.0.sp)),
+                                      Expanded(
+                                        child: Text(
+                                            userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
+                                                'Завантажити',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).primaryColor,
+                                                fontSize: 10.0.sp)),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -445,10 +450,11 @@ class AccountEditPage extends HookWidget {
                                 InkWell(
                                   onTap: () async {
                                     final result = await ImagePicker()
-                                        .getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
+                                        .getImage(source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1920);
                                     if (result != null) {
                                       isLoading.value = true;
-                                      userNotifier.uploadPassport(result.path).then((_) {
+                                      final resultFile = await FileUtils.renameBaseFile(result.path, 'passport');
+                                      userNotifier.uploadPassport(resultFile.path).then((_) {
                                         isLoading.value = false;
                                       }).catchError((error) {
                                         isLoading.value = false;
@@ -472,29 +478,67 @@ class AccountEditPage extends HookWidget {
                                     children: [
                                       Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 3.0.h),
                                       SizedBox(width: 1.0.h),
-                                      Text(
-                                          userNotifier.user?.specializedInformation?.educationDocument?.fileName ??
-                                              'Завантажити',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).primaryColor,
-                                              fontSize: 10.0.sp)),
+                                      Expanded(
+                                        child: Text(
+                                            userNotifier.user?.specializedInformation?.passport?.fileName ??
+                                                'Завантажити',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).primaryColor,
+                                                fontSize: 10.0.sp)),
+                                      ),
                                     ],
                                   ),
                                 ),
                                 SizedBox(height: 1.0.h),
                                 Divider(),
-                                TextField(
-                                  controller: micIdController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    labelText: 'ІПН',
-                                    labelStyle: TextStyle(fontSize: 10.0.sp),
-                                    contentPadding: EdgeInsets.zero,
+                                Text('ІПН',
+                                    style: TextStyle(fontSize: 10.0.sp, color: Color(0xFFA1A1A1))),
+                                SizedBox(height: 1.0.h),
+                                InkWell(
+                                  onTap: () async {
+                                    final result = await ImagePicker()
+                                        .getImage(source: ImageSource.gallery, maxWidth: 1080, maxHeight: 1920);
+                                    if (result != null) {
+                                      isLoading.value = true;
+                                      final resultFile = await FileUtils.renameBaseFile(result.path, 'mic');
+                                      userNotifier.uploadMicId(resultFile.path).then((_) {
+                                        isLoading.value = false;
+                                      }).catchError((error) {
+                                        isLoading.value = false;
+                                        print(error);
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomAlertDialog(
+                                              content: CustomDialog(
+                                                icon: Icons.close,
+                                                color: Theme.of(context).errorColor,
+                                                text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.file_upload, color: Theme.of(context).primaryColor, size: 3.0.h),
+                                      SizedBox(width: 1.0.h),
+                                      Expanded(
+                                        child: Text(
+                                            userNotifier.user?.specializedInformation?.micId?.fileName ??
+                                                'Завантажити',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).primaryColor,
+                                                fontSize: 10.0.sp)),
+                                      ),
+                                    ],
                                   ),
-                                  style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w600),
                                 ),
-                                SizedBox(height: 2.0.h),
+                                SizedBox(height: 1.0.h),
                               ],
                             ),
                           ),
@@ -570,15 +614,14 @@ class AccountEditPage extends HookWidget {
                               }
 
                               result['specialized_information'] = {
-                                'city': city.state,
+                                'city': cityController.text,
                                 'specification': specificationController.text,
                                 'qualification': qualificationController.text,
-                                'workplace': hospital.state,
+                                'workplace': hospitalController.text,
                                 'position': positionController.text,
                                 'license_number': licenseController.text,
                                 'additional_qualification': additionalQualificationController.text,
                                 'schedule': resultSchedule,
-                                'mic_id': micIdController.text,
                               };
 
                               result['financial_information'] = {'card': cardNumberController.text};

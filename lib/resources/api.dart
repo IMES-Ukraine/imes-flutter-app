@@ -123,6 +123,10 @@ abstract class RestClient extends ChopperService {
   Future<Response<UploadFileResponse>> uploadPassport(@PartFile('file') String path);
 
   @multipart
+  @Post(path: '/api/v1/profile/image/mic_id')
+  Future<Response<UploadFileResponse>> uploadMicId(@PartFile('file') String path);
+
+  @multipart
   @Post(path: '/api/v1/profile/image/avatar')
   Future<Response<UploadFileResponse>> uploadProfileImage(@PartFile('file') String path);
 
