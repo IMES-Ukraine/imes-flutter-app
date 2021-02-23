@@ -25,6 +25,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -287,7 +288,11 @@ class BlogViewPage extends HookWidget {
                                       padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 64.0),
                                       child: RaisedGradientButton(
                                         child: Text(
-                                          'Читати ще'.toUpperCase(),
+                                          blogNotifier.blog.action.split('|').first == 'article'
+                                              ? 'Читати ще'.toUpperCase()
+                                              : blogNotifier.blog.action.split('|').first == 'test'
+                                                  ? 'Розпочати дослідження'.toUpperCase()
+                                                  : 'Читати ще'.toUpperCase(),
                                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                                         ),
                                         // highlightedBorderColor: Theme.of(context).accentColor,
@@ -328,25 +333,50 @@ class BlogViewPage extends HookWidget {
                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
                                       ),
                                       const SizedBox(width: 16.0),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.asset(Images.facebook),
+                                      InkResponse(
+                                        onTap: () {
+                                          Share.share('https://echo.myftp.org/article/$_id');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image.asset(Images.facebook),
+                                        ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.asset(Images.telegram),
+                                      InkResponse(
+                                        onTap: () {
+                                          Share.share('https://echo.myftp.org/article/$_id');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image.asset(Images.telegram),
+                                        ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.asset(Images.whatsup),
+                                      InkResponse(
+                                        onTap: () {
+                                          Share.share('https://echo.myftp.org/article/$_id');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image.asset(Images.whatsup),
+                                        ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.asset(Images.messenger),
+                                      InkResponse(
+                                        onTap: () {
+                                          Share.share('https://echo.myftp.org/article/$_id');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image.asset(Images.messenger),
+                                        ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image.asset(Images.viber),
+                                      InkResponse(
+                                        onTap: () {
+                                          Share.share('https://echo.myftp.org/article/$_id');
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image.asset(Images.viber),
+                                        ),
                                       ),
                                     ],
                                   ),

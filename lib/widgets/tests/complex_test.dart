@@ -34,6 +34,7 @@ class ComplexTest extends HookWidget {
 
     return CustomScrollView(
       controller: controller,
+      physics: ClampingScrollPhysics(),
       slivers: [
         SliverList(
           delegate: SliverChildListDelegate(
