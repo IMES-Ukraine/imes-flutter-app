@@ -197,30 +197,30 @@ class AccountPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Divider(),
-                    Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                    const SizedBox(height: 8.0),
-                    Column(
-                      children: List.generate(3, (index) {
-                            final s = userNotifier.user?.specializedInformation?.schedule?.elementAt(index);
-                            return Row(
-                              children: [
-                                for (var i = 0; i < days.length; i++)
-                                  Row(
-                                    children: [
-                                      Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
-                                          style: TextStyle(
-                                              color: s?.days?.contains(i) ?? false ? Colors.black : Color(0xFFBDBDBD))),
-                                    ],
-                                  ),
-                                Expanded(
-                                  child: Text(s?.time ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
-                                ),
-                              ],
-                            );
-                          })?.toList() ??
-                          [],
-                    ),
+                    // Divider(),
+                    // Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
+                    // const SizedBox(height: 8.0),
+                    // Column(
+                    //   children: List.generate(3, (index) {
+                    //         final s = userNotifier.user?.specializedInformation?.schedule?.elementAt(index);
+                    //         return Row(
+                    //           children: [
+                    //             for (var i = 0; i < days.length; i++)
+                    //               Row(
+                    //                 children: [
+                    //                   Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
+                    //                       style: TextStyle(
+                    //                           color: s?.days?.contains(i) ?? false ? Colors.black : Color(0xFFBDBDBD))),
+                    //                 ],
+                    //               ),
+                    //             Expanded(
+                    //               child: Text(s?.time ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                    //             ),
+                    //           ],
+                    //         );
+                    //       })?.toList() ??
+                    //       [],
+                    // ),
                     Divider(),
                     Text('ІПН', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                     const SizedBox(height: 8.0),

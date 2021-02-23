@@ -88,6 +88,8 @@ class TestsPage extends StatelessWidget {
                             title: testsNotifier.tests[index]?.title ?? '',
                             bonus: testsNotifier.tests[index]?.bonus ?? 0,
                             image: testsNotifier.tests[index].coverImage?.path ?? '',
+                            answerType: testsNotifier.tests[index].answerType,
+                            testType: testsNotifier.tests[index].testType,
                             onTap: () {
                               showDialog(
                                   context: context,

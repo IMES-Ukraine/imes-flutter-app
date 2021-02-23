@@ -8,8 +8,10 @@ void main() {
     expect(true, File(Images.telegram).existsSync());
     expect(true, File(Images.loginLogo).existsSync());
     expect(true, File(Images.token).existsSync());
-    expect(true, File(Images.twoBars).existsSync());
+    expect(true, File(Images.testLevel3).existsSync());
+    expect(true, File(Images.testLevel2).existsSync());
     expect(true, File(Images.viber).existsSync());
+    expect(true, File(Images.testLevel1).existsSync());
     expect(true, File(Images.bottle).existsSync());
     expect(true, File(Images.history).existsSync());
     expect(true, File(Images.messenger).existsSync());

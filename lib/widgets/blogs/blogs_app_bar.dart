@@ -18,80 +18,79 @@ import 'package:imes/extensions/color.dart';
 
 class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  Size get preferredSize => Size.fromHeight(30.0.h);
+  Size get preferredSize => Size.fromHeight(27.1.h);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
         return Material(
+            type: MaterialType.canvas,
             elevation: Theme.of(context).appBarTheme.elevation,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Material(
-                    color: Colors.white,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(2.0.h),
-                          child: OctoCircleAvatar(
-                            url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
+                Container(
+                  color: Colors.white,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(2.0.h),
+                        child: OctoCircleAvatar(
+                          url: userNotifier.user?.basicInformation?.avatar?.path ?? '',
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 3.0.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userNotifier?.user?.basicInformation?.name ?? 'Ім\'я Прізвище',
+                                style: TextStyle(
+                                  color: Theme.of(context).dividerColor.darken(20),
+                                  fontSize: 11.0.sp,
+                                ),
+                              ),
+                              Text(
+                                userNotifier.user?.specializedInformation?.specification ?? 'Спеціалізація',
+                                style: TextStyle(
+                                  fontSize: 8.0.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).dividerColor.darken(20),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3.0.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          NotificationsButton(),
+                          Padding(
+                            padding: EdgeInsets.all(1.0.h),
+                            child: Row(
                               children: [
-                                Text(
-                                  userNotifier?.user?.basicInformation?.name ?? 'Ім\'я Прізвище',
-                                  style: TextStyle(
-                                    color: Theme.of(context).dividerColor.darken(20),
-                                    fontSize: 11.0.sp,
-                                  ),
-                                ),
-                                Text(
-                                  userNotifier.user?.specializedInformation?.specification ?? 'Спеціалізація',
-                                  style: TextStyle(
-                                    fontSize: 8.0.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context).dividerColor.darken(20),
-                                  ),
-                                ),
+                                Image.asset(Images.token, scale: 2.0),
+                                const SizedBox(width: 8.0),
+                                Text('${userNotifier.user?.balance ?? 0}',
+                                    style: TextStyle(
+                                      fontSize: 16.0.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: (userNotifier.user?.balance ?? 0) > 0
+                                          ? Theme.of(context).dividerColor.darken(20)
+                                          : Theme.of(context).dividerColor,
+                                    )),
                               ],
                             ),
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            NotificationsButton(),
-                            Padding(
-                              padding: EdgeInsets.all(1.0.h),
-                              child: Row(
-                                children: [
-                                  Image.asset(Images.token, scale: 2.0),
-                                  const SizedBox(width: 8.0),
-                                  Text('${userNotifier.user?.balance ?? 0}',
-                                      style: TextStyle(
-                                        fontSize: 16.0.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: (userNotifier.user?.balance ?? 0) > 0
-                                            ? Theme.of(context).dividerColor.darken(20)
-                                            : Theme.of(context).dividerColor,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -101,7 +100,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RaisedGradientButton(
-                              padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
+                              padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
                               child: Row(
                                 children: [
                                   Icon(Icons.account_circle, color: Colors.white),
@@ -116,7 +115,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                               },
                             ),
                             RaisedGradientButton(
-                              padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
+                              padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
                               child: Row(
                                 children: [
                                   Image.asset(Images.token, scale: 1.5),
@@ -133,7 +132,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ],
                         )
                       : RaisedGradientButton(
-                          padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 10.0.w),
+                          padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
                           child: Text('ВЕРИФІКУВАТИ АКАУНТ',
                               style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white)),
                           onPressed: () {
@@ -141,63 +140,88 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           },
                         ),
                 ),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(1.0.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.NEWS);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(1.0.h),
-                          child: AnimatedDefaultTextStyle(
-                            duration: Duration(milliseconds: 200),
-                            style: Provider.of<BlogsNotifier>(context).page == BlogPage.NEWS
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
-                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
-                            child: Text(
-                              'Новини'.toUpperCase(),
+                IntrinsicHeight(
+                  child: Container(
+                    // color: Colors.red,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.NEWS);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 1.0.w, vertical: 1.0.h),
+                            decoration: BoxDecoration(
+                              // color: Colors.green,
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: Provider.of<BlogsNotifier>(context).page == BlogPage.NEWS
+                                        ? Colors.black
+                                        : Colors.transparent),
+                              ),
+                            ),
+                            child: AnimatedDefaultTextStyle(
+                              duration: Duration(milliseconds: 200),
+                              style: Provider.of<BlogsNotifier>(context).page == BlogPage.NEWS
+                                  ? Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
+                                  : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
+                              child: Text('Новини'.toUpperCase()),
                             ),
                           ),
                         ),
-                      ),
-                      VerticalDivider(color: Colors.black),
-                      InkWell(
-                        onTap: () {
-                          Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.INFORMATION);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(1.0.h),
-                          child: AnimatedDefaultTextStyle(
-                            duration: Duration(milliseconds: 200),
-                            style: Provider.of<BlogsNotifier>(context).page == BlogPage.INFORMATION
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
-                                : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
-                            child: Text(
-                              'Інформація'.toUpperCase(),
+                        VerticalDivider(indent: 2.5.h, endIndent: 2.5.h, width: 1.0, thickness: 2.0),
+                        InkWell(
+                          onTap: () {
+                            Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.INFORMATION);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 1.0.w, vertical: 1.0.h),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: Provider.of<BlogsNotifier>(context).page == BlogPage.INFORMATION
+                                        ? Colors.black
+                                        : Colors.transparent),
+                              ),
+                            ),
+                            child: AnimatedDefaultTextStyle(
+                              duration: Duration(milliseconds: 200),
+                              style: Provider.of<BlogsNotifier>(context).page == BlogPage.INFORMATION
+                                  ? Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(fontWeight: FontWeight.w800, fontSize: 13.0.sp)
+                                  : Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 13.0.sp),
+                              child: Text('Інформація'.toUpperCase()),
                             ),
                           ),
                         ),
-                      ),
-                      VerticalDivider(color: Colors.black),
-                      IconButton(
-                        icon: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
-                            ? Icon(Icons.favorite, color: Theme.of(context).accentColor)
-                            : Icon(Icons.favorite_border, color: Theme.of(context).dividerColor),
-                        onPressed: () {
-                          Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.FAVORITES);
-                        },
-                      ),
-                    ],
+                        VerticalDivider(indent: 2.5.h, endIndent: 2.5.h, width: 1.0, thickness: 2.0),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 1.0.w, vertical: 1.0.h),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                  color: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
+                                      ? Colors.black
+                                      : Colors.transparent),
+                            ),
+                          ),
+                          child: InkResponse(
+                            child: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
+                                ? Icon(Icons.favorite, color: Theme.of(context).accentColor)
+                                : Icon(Icons.favorite_border, color: Theme.of(context).dividerColor),
+                            onTap: () {
+                              Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.FAVORITES);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/screens/blogs.dart';
+import 'package:imes/screens/instructions.dart';
 import 'package:imes/screens/menu.dart';
 import 'package:imes/screens/blog_view.dart';
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/test_view.dart';
 import 'package:imes/screens/tests.dart';
-import 'package:imes/utils/constants.dart';
 import 'package:imes/widgets/base/bottom_appbar_button.dart';
 
 import 'package:provider/provider.dart';
@@ -183,11 +183,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 SupportPage(),
-                SafeArea(
-                  child: SingleChildScrollView(
-                    child: Image.network(Constants.INSTRUCTION_URL),
-                  ),
-                ),
+                InstructionsPage(),
                 Navigator(
                   key: _menuNavigatorKey,
                   initialRoute: homeNotifier.initialPageRoute,

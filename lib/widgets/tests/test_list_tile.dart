@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:imes/widgets/base/bars_card.dart';
+import 'package:imes/resources/resources.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 
 class TestListTile extends StatelessWidget {
@@ -10,6 +10,8 @@ class TestListTile extends StatelessWidget {
   final String title;
   final String image;
   final int bonus;
+  final String testType;
+  final String answerType;
   final Function onTap;
 
   const TestListTile({
@@ -18,6 +20,8 @@ class TestListTile extends StatelessWidget {
     @required this.title,
     @required this.image,
     @required this.bonus,
+    @required this.testType,
+    @required this.answerType,
     this.onTap,
   }) : super(key: key);
 
@@ -66,7 +70,18 @@ class TestListTile extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            BarsCard(),
+                            Card(
+                              margin: EdgeInsets.zero,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(9.0),
+                                child: Image.asset(testType == 'complex'
+                                    ? Images.testLevel3
+                                    : answerType == 'text'
+                                        ? Images.testLevel2
+                                        : Images.testLevel1),
+                              ),
+                            ),
                             const SizedBox(width: 24.0),
                             BonusButton(points: bonus),
                           ],

@@ -145,10 +145,6 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
-  void updateEducationDocument(CoverImage doc) {
-    // _user = _user.specializedInformation.educationDocument = doc;
-  }
-
   void updateBalance(int newBalance) {
     _user = _user.copyWith(balance: newBalance);
     notifyListeners();
@@ -195,6 +191,11 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  void clearEducationDocument() {
+    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(educationDocument: null));
+    notifyListeners();
+  }
+
   Future<void> uploadPassport(String path) async {
     final response = await Repository().api.uploadPassport(path);
     if (response.statusCode == 200) {
@@ -211,6 +212,11 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  void clearPassport() {
+    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(passport: null));
+    notifyListeners();
+  }
+
   Future<void> uploadMicId(String path) async {
     final response = await Repository().api.uploadMicId(path);
     if (response.statusCode == 200) {
@@ -225,6 +231,11 @@ class UserNotifier with ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  void clearMicId() {
+    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(micId: null));
+    notifyListeners();
   }
 
   Future<void> uploadProfilePicture(String path) async {

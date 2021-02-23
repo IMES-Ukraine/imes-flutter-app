@@ -26,8 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final MaskTextInputFormatter _phoneFormatter = MaskTextInputFormatter(
-      mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
+  final MaskTextInputFormatter _phoneFormatter =
+      MaskTextInputFormatter(mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
 
   final FocusNode _loginFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -39,8 +39,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (_) => LoginNotifier(),
-        child: Consumer2<LoginNotifier, UserNotifier>(
-            builder: (context, loginNotifier, userNotifier, _) {
+        child: Consumer2<LoginNotifier, UserNotifier>(builder: (context, loginNotifier, userNotifier, _) {
           return SafeArea(
             child: Stack(
               children: <Widget>[
@@ -59,22 +58,17 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Image.asset(Images.loginLogo),
                               ),
                               SizedBox(height: 4.0.h),
-                              Text('Введіть номер',
-                                  style: TextStyle(
-                                      fontSize: 13.0.sp,
-                                      fontWeight: FontWeight.bold)),
+                              Text('Введіть номер', style: TextStyle(fontSize: 13.0.sp, fontWeight: FontWeight.bold)),
                               SizedBox(height: 4.0.h),
                               TextFormField(
                                 focusNode: _loginFocusNode,
                                 controller: _loginController,
                                 keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                    hintText: '+38 (___) ___ __ __'),
+                                decoration: InputDecoration(hintText: '+38 (___) ___ __ __'),
                                 textInputAction: TextInputAction.next,
                                 inputFormatters: [_phoneFormatter],
                                 onFieldSubmitted: (value) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_passwordFocusNode);
+                                  FocusScope.of(context).requestFocus(_passwordFocusNode);
                                 },
                               ),
                               TextFormField(
@@ -83,19 +77,16 @@ class _LoginPageState extends State<LoginPage> {
                                 obscureText: true,
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.done,
-                                decoration:
-                                    InputDecoration(labelText: 'Пароль'),
+                                decoration: InputDecoration(labelText: 'Пароль'),
                                 validator: (value) {
-                                  if (value.trim().isEmpty ||
-                                      value.length < 4) {
+                                  if (value.trim().isEmpty || value.length < 4) {
                                     return 'Пароль не може бути меньш ніж 4 символа';
                                   } else {
                                     return null;
                                   }
                                 },
                                 onFieldSubmitted: (value) {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
+                                  FocusScope.of(context).requestFocus(FocusNode());
                                 },
                               ),
                               Padding(
@@ -103,57 +94,39 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Row(
                                   children: <Widget>[
                                     CustomCheckbox(
-                                      value:
-                                          loginNotifier.termsAndConditionsValue,
-                                      onTap: () =>
-                                          loginNotifier.changeTermsValue(),
+                                      value: loginNotifier.termsAndConditionsValue,
+                                      onTap: () => loginNotifier.changeTermsValue(),
                                     ),
                                     Expanded(
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2.0.h, horizontal: 2.0.w),
+                                        padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 2.0.w),
                                         child: RichText(
                                           text: TextSpan(
                                             text: 'згоден з умовами ',
                                             style: TextStyle(
                                                 fontSize: 8.0.sp,
-                                                color: Color(
-                                                    0xFF828282)), // TODO: extract colors to theme
+                                                color: Color(0xFF828282)), // TODO: extract colors to theme
                                             children: [
                                               TextSpan(
-                                                  text:
-                                                      'Політики конфіденційності',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () async {
-                                                          if (await canLaunch(
-                                                              Constants
-                                                                  .POLICY_URL)) {
-                                                            launch(Constants
-                                                                .POLICY_URL);
-                                                          }
-                                                        }),
+                                                  text: 'Політики конфіденційності',
+                                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = () async {
+                                                      if (await canLaunch(Constants.POLICY_URL)) {
+                                                        launch(Constants.POLICY_URL);
+                                                      }
+                                                    }),
                                               TextSpan(text: ' і '),
                                               TextSpan(
                                                   text: 'Умов користування',
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: themeData
-                                                          .primaryColor),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () async {
-                                                          if (await canLaunch(
-                                                              Constants
-                                                                  .RULES_URL)) {
-                                                            launch(Constants
-                                                                .RULES_URL);
-                                                          }
-                                                        }),
+                                                      fontWeight: FontWeight.bold, color: themeData.primaryColor),
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = () async {
+                                                      if (await canLaunch(Constants.RULES_URL)) {
+                                                        launch(Constants.RULES_URL);
+                                                      }
+                                                    }),
                                             ],
                                           ),
                                         ),
@@ -163,32 +136,25 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 2.0.h, horizontal: 8.0.w),
+                                padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 8.0.w),
                                 child: RaisedGradientButton(
                                   child: Text(
                                     'ПІДТВЕРДИТИ',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12.0.sp),
+                                    style:
+                                        TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12.0.sp),
                                   ),
                                   onPressed: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     if (_formState.currentState.validate()) {
-                                      if (!loginNotifier
-                                          .termsAndConditionsValue) {
+                                      if (!loginNotifier.termsAndConditionsValue) {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
                                               return CustomAlertDialog(
                                                 content: CustomDialog(
                                                     icon: Icons.close,
-                                                    color: Theme.of(context)
-                                                        .errorColor,
-                                                    text:
-                                                        'Приймить умови користування'),
+                                                    color: Theme.of(context).errorColor,
+                                                    text: 'Приймить умови користування'),
                                               );
                                             });
                                       } else {
@@ -206,12 +172,9 @@ class _LoginPageState extends State<LoginPage> {
                                                   return CustomAlertDialog(
                                                     content: CustomDialog(
                                                       icon: Icons.close,
-                                                      color: Theme.of(context)
-                                                          .errorColor,
-                                                      text: Utils.getErrorText(
-                                                          error?.body
-                                                                  ?.toString() ??
-                                                              'unkown_error'),
+                                                      color: Theme.of(context).errorColor,
+                                                      text:
+                                                          Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
                                                     ),
                                                   );
                                                 });
@@ -222,8 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   return CustomAlertDialog(
                                                     content: CustomDialog(
                                                         icon: Icons.close,
-                                                        color: Theme.of(context)
-                                                            .errorColor,
+                                                        color: Theme.of(context).errorColor,
                                                         text: error.toString()),
                                                   );
                                                 });
@@ -243,22 +205,18 @@ class _LoginPageState extends State<LoginPage> {
                         fillOverscroll: false,
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                                                  child: Padding(
+                          child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 4.0.h),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 InkResponse(
                                     onTap: () {
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (  context) =>
-                                                  RegisterPage()));
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage()));
                                     },
-                                    child: Text('Зареєструвати',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).accentColor))),
+                                    child:
+                                        Text('Зареєструвати', style: TextStyle(color: Theme.of(context).accentColor))),
                                 SizedBox(width: 1.0.w),
                                 Text('аккаунт')
                               ],

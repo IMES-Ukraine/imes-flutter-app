@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:imes/helpers/utils.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
 
 import 'package:sizer/sizer.dart';
+
+Future<T> showErrorDialog<T>(BuildContext context, dynamic error) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return CustomAlertDialog(
+        content: CustomDialog(
+          icon: Icons.close,
+          color: Theme.of(context).errorColor,
+          text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+        ),
+      );
+    },
+  );
+}
 
 Future<T> showBlogInfoDialog<T>(BuildContext context) {
   return showDialog(

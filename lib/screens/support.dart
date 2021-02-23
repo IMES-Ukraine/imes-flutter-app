@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:bubble/bubble.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SupportPage extends StatefulWidget {
   @override
@@ -63,8 +65,13 @@ class _SupportPageState extends State<SupportPage> {
                                     ? Color(0xFF10DE50) // TODO: extract colors to theme
                                     : Color(0xFFE5E6EA), // TODO: extract colors to theme
                               ),
-                              child: Text(
-                                snapshot.data?.docs[index]?.data()['content'] ?? '',
+                              child: SelectableLinkify(
+                                text: snapshot.data?.docs[index]?.data()['content'] ?? '',
+                                onOpen: (link) async {
+                                  if (await canLaunch(link.url)) {
+                                    await launch(link.url);
+                                  }
+                                },
                                 style: TextStyle(
                                   color: snapshot.data?.docs[index]?.data()['fromUser'] ?? false
                                       ? Colors.white

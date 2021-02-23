@@ -83,10 +83,14 @@ class BlogListTile extends StatelessWidget {
                 ),
               ],
             ),
-            if (isOpened)
+            if (!isOpened)
               Padding(
                 padding: EdgeInsets.all(2.0.h),
                 child: BonusButton(points: points),
+              )
+            else
+              SizedBox(
+                height: 2.0.h,
               ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:imes/models/test.dart';
-import 'package:imes/widgets/base/bars_card.dart';
+import 'package:imes/resources/resources.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,7 +43,18 @@ class TestCard extends StatelessWidget {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Row(
                                   children: [
-                                    BarsCard(),
+                                    Card(
+                                      margin: EdgeInsets.zero,
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(9.0),
+                                        child: Image.asset(test.testType == 'complext'
+                                            ? Images.testLevel3
+                                            : test.answerType == 'text'
+                                                ? Images.testLevel2
+                                                : Images.testLevel1),
+                                      ),
+                                    ),
                                     const SizedBox(width: 24.0),
                                     BonusButton(points: test.bonus),
                                   ],

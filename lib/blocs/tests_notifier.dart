@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
@@ -50,8 +51,15 @@ class TestsStateNotifier with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      if (e is Response) {
+        if (e.statusCode == 400) {
+          _state = TestsState.LOADED;
+          notifyListeners();
+          return;
+        }
+      }
       _state = TestsState.ERROR;
-      debugPrint(e);
+      debugPrint(e.toString());
       notifyListeners();
     }
   }

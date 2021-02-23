@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -19,29 +21,34 @@ class BonusButton extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      child: Card(
-        margin: EdgeInsets.zero,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Image.asset(Images.token, scale: 2.0),
-              SizedBox(width: 2.0.w),
-              Text(
-                '$points',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: themeData.primaryColor,
-                  fontSize: 15.0.sp,
+      child: Consumer<UserNotifier>(builder: (context, userNotifier, _) {
+        return Card(
+          margin: EdgeInsets.zero,
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Image.asset(Images.token, scale: 2.0),
+                SizedBox(width: 2.0.w),
+                Text(
+                  '$points',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color:
+                        userNotifier.user.basicInformation != null && userNotifier.user.specializedInformation != null
+                            ? themeData.primaryColor
+                            : themeData.dividerColor,
+                    fontSize: 15.0.sp,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
