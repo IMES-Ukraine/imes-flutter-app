@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:imes/blocs/history_notifier.dart';
-import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/withdraw.dart';
 
@@ -60,17 +59,17 @@ class _BalancePageState extends State<BalancePage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 48.0),
                           child: RaisedGradientButton(
-                              child: Text(
-                                'ОБМІНЯТИ БАЛИ',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: userNotifier.user.basicInformation != null &&
-                                      userNotifier.user.specializedInformation != null
-                                  ? () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(builder: (context) => WithdrawPage()));
-                                    }
-                                  : null),
+                            onPressed: userNotifier.user.basicInformation != null &&
+                                    userNotifier.user.specializedInformation != null
+                                ? () {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WithdrawPage()));
+                                  }
+                                : null,
+                            child: Text(
+                              'ОБМІНЯТИ БАЛИ',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
                         Card(
                           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

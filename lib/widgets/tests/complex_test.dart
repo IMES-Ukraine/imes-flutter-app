@@ -160,7 +160,6 @@ class ComplexTest extends HookWidget {
                     return Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: RaisedGradientButton(
-                        child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         onPressed: state.value[test.complex[index].id] != null && index == step.value - 1
                             ? () {
                                 final testNotifier = context.read<TestNotifier>();
@@ -250,6 +249,7 @@ class ComplexTest extends HookWidget {
                                 }
                               }
                             : null,
+                        child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       ),
                     );
                   }),

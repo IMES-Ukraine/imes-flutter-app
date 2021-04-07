@@ -79,10 +79,6 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
                       child: RaisedGradientButton(
-                        child: Text(
-                          'Далі',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
-                        ),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           if (_formState.currentState.validate()) {
@@ -105,6 +101,10 @@ class _SetupPasswordPageState extends State<SetupPasswordPage> {
                             });
                           }
                         },
+                        child: Text(
+                          'Далі',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+                        ),
                       ),
                     ),
                   ],

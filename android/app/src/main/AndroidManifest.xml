@@ -33,15 +33,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
     <meta-data android:name="flutterEmbedding" android:value="2" />
 
-    <provider android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider" android:authorities="pro.imes.flutter_downloader.provider" android:exported="false" android:grantUriPermissions="true">
-      <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
-    </provider>
-
     <provider android:name="androidx.work.impl.WorkManagerInitializer" android:authorities="pro.imes.workmanager-init" android:enabled="false" android:exported="false" tools:node="remove"/>
-
-    <provider android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer" android:authorities="pro.imes.flutter-downloader-init" android:exported="false">
-      <meta-data android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS" android:value="5" />
-    </provider>
 
     <meta-data android:name="vn.hunghd.flutterdownloader.NOTIFICATION_ICON" android:resource="@mipmap/ic_launcher" />
   </application>

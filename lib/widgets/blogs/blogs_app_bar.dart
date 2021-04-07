@@ -101,6 +101,9 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                           children: [
                             RaisedGradientButton(
                               padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountPage()));
+                              },
                               child: Row(
                                 children: [
                                   Icon(Icons.account_circle, color: Colors.white),
@@ -110,12 +113,12 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                                           fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white))
                                 ],
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountPage()));
-                              },
                             ),
                             RaisedGradientButton(
                               padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalancePage()));
+                              },
                               child: Row(
                                 children: [
                                   Image.asset(Images.token, scale: 1.5),
@@ -125,19 +128,16 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                                           fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white))
                                 ],
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalancePage()));
-                              },
                             ),
                           ],
                         )
                       : RaisedGradientButton(
                           padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 10.0.w),
-                          child: Text('ВЕРИФІКУВАТИ АКАУНТ',
-                              style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white)),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => AccountEditPage()));
                           },
+                          child: Text('ВЕРИФІКУВАТИ АКАУНТ',
+                              style: TextStyle(fontSize: 10.0.sp, fontWeight: FontWeight.w800, color: Colors.white)),
                         ),
                 ),
                 IntrinsicHeight(
@@ -212,12 +212,12 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                           child: InkResponse(
-                            child: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
-                                ? Icon(Icons.favorite, color: Theme.of(context).accentColor)
-                                : Icon(Icons.favorite_border, color: Theme.of(context).dividerColor),
                             onTap: () {
                               Provider.of<BlogsNotifier>(context, listen: false).changePage(BlogPage.FAVORITES);
                             },
+                            child: Provider.of<BlogsNotifier>(context).page == BlogPage.FAVORITES
+                                ? Icon(Icons.favorite, color: Theme.of(context).accentColor)
+                                : Icon(Icons.favorite_border, color: Theme.of(context).dividerColor),
                           ),
                         ),
                       ],

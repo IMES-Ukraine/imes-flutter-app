@@ -8,7 +8,6 @@ StreamController<bool> useLocalStorageBool(
   String key, {
   bool defaultValue = false,
 }) {
-  final _firebaseMessaging = FirebaseMessaging();
   final controller = useStreamController<bool>(keys: [key]);
 
   useEffect(
@@ -18,9 +17,9 @@ StreamController<bool> useLocalStorageBool(
         await prefs.setBool(key, data);
         if (key != 'all') {
           if (data) {
-            _firebaseMessaging.subscribeToTopic(key);
+            FirebaseMessaging.instance.subscribeToTopic(key);
           } else {
-            _firebaseMessaging.unsubscribeFromTopic(key);
+            FirebaseMessaging.instance.unsubscribeFromTopic(key);
           }
         }
       });

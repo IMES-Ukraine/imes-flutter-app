@@ -8,7 +8,6 @@ import 'package:imes/models/blog_response.dart';
 import 'package:imes/models/analytics_response.dart';
 import 'package:imes/models/notifications_response.dart';
 import 'package:imes/models/profile_response.dart';
-import 'package:imes/models/read_blog_block_data.dart';
 import 'package:imes/models/read_blog_block_response.dart';
 import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_answer_data.dart';

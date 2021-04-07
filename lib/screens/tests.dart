@@ -197,19 +197,22 @@ class TestsPage extends StatelessWidget {
                                                     Padding(
                                                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                                       child: RaisedGradientButton(
-                                                          child: Text('РОЗПОЧАТИ',
-                                                              style: TextStyle(
-                                                                  color: Colors.white, fontWeight: FontWeight.bold)),
-                                                          onPressed: checkBoxState.value
-                                                              ? () {
-                                                                  Repository()
-                                                                      .api
-                                                                      .postAgreement(testsNotifier.tests[index].id);
-                                                                  Navigator.of(innerContext).pop();
-                                                                  Navigator.of(mainContext).pushNamed('/tests/view',
-                                                                      arguments: testsNotifier.tests[index].id);
-                                                                }
-                                                              : null),
+                                                        onPressed: checkBoxState.value
+                                                            ? () {
+                                                                Repository()
+                                                                    .api
+                                                                    .postAgreement(testsNotifier.tests[index].id);
+                                                                Navigator.of(innerContext).pop();
+                                                                Navigator.of(mainContext).pushNamed('/tests/view',
+                                                                    arguments: testsNotifier.tests[index].id);
+                                                              }
+                                                            : null,
+                                                        child: Text(
+                                                          'РОЗПОЧАТИ',
+                                                          style: TextStyle(
+                                                              color: Colors.white, fontWeight: FontWeight.bold),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),

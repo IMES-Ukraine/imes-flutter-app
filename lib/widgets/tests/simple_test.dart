@@ -99,13 +99,14 @@ class SimpleTest extends HookWidget {
             Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 16.0),
               child: RaisedGradientButton(
-                  child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  onPressed: state.value != null || controller.text.isNotEmpty
-                      ? () {
-                          FocusScope.of(context).unfocus();
-                          submit(context, state, testNotifier, controller, durationTimer);
-                        }
-                      : null),
+                onPressed: state.value != null || controller.text.isNotEmpty
+                    ? () {
+                        FocusScope.of(context).unfocus();
+                        submit(context, state, testNotifier, controller, durationTimer);
+                      }
+                    : null,
+                child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
             ),
           ],
         );

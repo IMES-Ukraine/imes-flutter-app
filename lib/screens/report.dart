@@ -50,7 +50,7 @@ class ReportsPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          FlatButton.icon(
+                          TextButton.icon(
                             onPressed: () async {
                               final image = await picker.getImage(source: ImageSource.gallery);
                               if (image != null) {
@@ -65,7 +65,7 @@ class ReportsPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          FlatButton.icon(
+                          TextButton.icon(
                             onPressed: () async {
                               final image = await picker.getImage(source: ImageSource.camera);
                               if (image != null) {
@@ -116,20 +116,20 @@ class ReportsPage extends StatelessWidget {
                                       underline: const SizedBox(),
                                       items: [
                                         DropdownMenuItem(
-                                          child: Text('25 гр'),
                                           value: 25,
+                                          child: Text('25 гр'),
                                         ),
                                         DropdownMenuItem(
-                                          child: Text('40 гр'),
                                           value: 40,
+                                          child: Text('40 гр'),
                                         ),
                                         DropdownMenuItem(
-                                          child: Text('50 гр'),
                                           value: 50,
+                                          child: Text('50 гр'),
                                         ),
                                         DropdownMenuItem(
-                                          child: Text('90 гр'),
                                           value: 90,
+                                          child: Text('90 гр'),
                                         ),
                                       ],
                                       onChanged: reportsNotifier.chooseAmount,
@@ -146,8 +146,7 @@ class ReportsPage extends StatelessWidget {
                                   child: Image.asset(Images.clock),
                                 ),
                                 Expanded(child: Text('Час')),
-                                FlatButton(
-                                  child: Text(reportsNotifier.timeOfDay.format(context)),
+                                TextButton(
                                   onPressed: () async {
                                     final timeOfDay =
                                         await showTimePicker(context: context, initialTime: TimeOfDay.now());
@@ -155,6 +154,7 @@ class ReportsPage extends StatelessWidget {
                                       reportsNotifier.chooseTime(timeOfDay);
                                     }
                                   },
+                                  child: Text(reportsNotifier.timeOfDay.format(context)),
                                 ),
                               ],
                             ),
@@ -207,14 +207,11 @@ class ReportsPage extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Center(
-                          child: OutlineButton(
-                            child: Text(
-                              'Додати',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Theme.of(context).accentColor),
+                              textStyle: TextStyle(color: Theme.of(context).accentColor),
                             ),
-                            highlightedBorderColor: Theme.of(context).accentColor,
-                            borderSide: BorderSide(color: Theme.of(context).accentColor),
-                            textColor: Theme.of(context).accentColor,
                             onPressed: () {
                               reportsNotifier.uploadImage().then((_) {
                                 showDialog(
@@ -244,6 +241,10 @@ class ReportsPage extends StatelessWidget {
                                     });
                               });
                             },
+                            child: Text(
+                              'Додати',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       )

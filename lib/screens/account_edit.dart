@@ -189,12 +189,12 @@ class AccountEditPage extends HookWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 1.0.h),
                           child: RaisedGradientButton(
-                            child: Text('ДАЛІ', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
                             onPressed: () {
                               if (_basicInfoFormKey.currentState.validate()) {
                                 step.value = 1;
                               }
                             },
+                            child: Text('ДАЛІ', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
                           ),
                         ),
                       Form(

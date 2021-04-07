@@ -3,7 +3,6 @@ import 'package:imes/models/submit_test_data.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/models/test_answer.dart';
 import 'package:imes/models/test_answer_data.dart';
-import 'package:imes/models/user.dart';
 import 'package:imes/resources/repository.dart';
 
 enum TestState {

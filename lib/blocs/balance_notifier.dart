@@ -14,7 +14,9 @@ class BalanceNotifier extends ChangeNotifier {
   BalanceState _state = BalanceState.WITHDRAW;
 
   String _type;
+  // ignore: unused_field
   int _amount;
+  // ignore: unused_field
   String _comment;
 
   BalanceState get state => _state;

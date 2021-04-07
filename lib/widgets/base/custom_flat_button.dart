@@ -14,7 +14,14 @@ class CustomFlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          side: BorderSide(color: color),
+        ),
+      ),
+      onPressed: onPressed,
       child: Text(
         text,
         style: TextStyle(
@@ -22,11 +29,6 @@ class CustomFlatButton extends StatelessWidget {
           color: color,
         ),
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-        side: BorderSide(color: color),
-      ),
-      onPressed: onPressed,
     );
   }
 }

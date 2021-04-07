@@ -9,8 +9,6 @@ import 'package:imes/extensions/color.dart';
 import 'package:sizer/sizer.dart';
 
 class AccountPage extends StatelessWidget {
-  static final days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'НД'];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,29 +116,32 @@ class AccountPage extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     InkWell(
                       onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
-                                child: PhotoView(
-                                  backgroundDecoration: BoxDecoration(color: Colors.transparent),
-                                  tightMode: true,
-                                  imageProvider: NetworkImage(userNotifier.user.specializedInformation.educationDocument.path),
-                                  loadingBuilder: (context, progress) => Center(
-                                    child: Container(
-                                      width: 5.0.h,
-                                      height: 5.0.h,
-                                      child: CircularProgressIndicator(
-                                        value: progress == null
-                                            ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                        if (userNotifier.user.specializedInformation.micId != null) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
+                                  child: PhotoView(
+                                    backgroundDecoration: BoxDecoration(color: Colors.transparent),
+                                    tightMode: true,
+                                    imageProvider:
+                                        NetworkImage(userNotifier.user.specializedInformation.educationDocument.path),
+                                    loadingBuilder: (context, progress) => Center(
+                                      child: Container(
+                                        width: 5.0.h,
+                                        height: 5.0.h,
+                                        child: CircularProgressIndicator(
+                                          value: progress == null
+                                              ? null
+                                              : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            });
+                                );
+                              });
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,29 +161,31 @@ class AccountPage extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     InkWell(
                       onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
-                                child: PhotoView(
-                                  backgroundDecoration: BoxDecoration(color: Colors.transparent),
-                                  tightMode: true,
-                                  imageProvider: NetworkImage(userNotifier.user.specializedInformation.passport.path),
-                                  loadingBuilder: (context, progress) => Center(
-                                    child: Container(
-                                      width: 5.0.h,
-                                      height: 5.0.h,
-                                      child: CircularProgressIndicator(
-                                        value: progress == null
-                                            ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                        if (userNotifier.user.specializedInformation.micId != null) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
+                                  child: PhotoView(
+                                    backgroundDecoration: BoxDecoration(color: Colors.transparent),
+                                    tightMode: true,
+                                    imageProvider: NetworkImage(userNotifier.user.specializedInformation.passport.path),
+                                    loadingBuilder: (context, progress) => Center(
+                                      child: Container(
+                                        width: 5.0.h,
+                                        height: 5.0.h,
+                                        child: CircularProgressIndicator(
+                                          value: progress == null
+                                              ? null
+                                              : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            });
+                                );
+                              });
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,58 +200,36 @@ class AccountPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Divider(),
-                    // Text('Графік роботи', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
-                    // const SizedBox(height: 8.0),
-                    // Column(
-                    //   children: List.generate(3, (index) {
-                    //         final s = userNotifier.user?.specializedInformation?.schedule?.elementAt(index);
-                    //         return Row(
-                    //           children: [
-                    //             for (var i = 0; i < days.length; i++)
-                    //               Row(
-                    //                 children: [
-                    //                   Text('${days[i]}${i != days.length - 1 ? ', ' : ':'}',
-                    //                       style: TextStyle(
-                    //                           color: s?.days?.contains(i) ?? false ? Colors.black : Color(0xFFBDBDBD))),
-                    //                 ],
-                    //               ),
-                    //             Expanded(
-                    //               child: Text(s?.time ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
-                    //             ),
-                    //           ],
-                    //         );
-                    //       })?.toList() ??
-                    //       [],
-                    // ),
                     Divider(),
                     Text('ІПН', style: TextStyle(fontSize: 12.0, color: Color(0xFFA1A1A1))),
                     const SizedBox(height: 8.0),
                     InkWell(
                       onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
-                                child: PhotoView(
-                                  backgroundDecoration: BoxDecoration(color: Colors.transparent),
-                                  tightMode: true,
-                                  imageProvider: NetworkImage(userNotifier.user.specializedInformation.micId.path),
-                                  loadingBuilder: (context, progress) => Center(
-                                    child: Container(
-                                      width: 5.0.h,
-                                      height: 5.0.h,
-                                      child: CircularProgressIndicator(
-                                        value: progress == null
-                                            ? null
-                                            : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                        if (userNotifier.user.specializedInformation.micId != null) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 20.0.h),
+                                  child: PhotoView(
+                                    backgroundDecoration: BoxDecoration(color: Colors.transparent),
+                                    tightMode: true,
+                                    imageProvider: NetworkImage(userNotifier.user.specializedInformation.micId.path),
+                                    loadingBuilder: (context, progress) => Center(
+                                      child: Container(
+                                        width: 5.0.h,
+                                        height: 5.0.h,
+                                        child: CircularProgressIndicator(
+                                          value: progress == null
+                                              ? null
+                                              : progress.cumulativeBytesLoaded / progress.expectedTotalBytes,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            });
+                                );
+                              });
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

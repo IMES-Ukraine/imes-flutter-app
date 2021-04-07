@@ -91,15 +91,16 @@ class _SettingsPageState extends State<SettingsPage> {
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
               child: ExpansionTile(
                 trailing: AnimatedSwitcher(
-                    child: Icon(
-                      state.value ? CustomIcons.minus : CustomIcons.plus,
-                      size: 14.0,
-                      key: ValueKey<bool>(state.value),
-                    ),
-                    transitionBuilder: (Widget child, Animation<double> animation) {
-                      return ScaleTransition(child: child, scale: animation);
-                    },
-                    duration: const Duration(milliseconds: 300)),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return ScaleTransition(scale: animation, child: child);
+                  },
+                  duration: const Duration(milliseconds: 300),
+                  child: Icon(
+                    state.value ? CustomIcons.minus : CustomIcons.plus,
+                    size: 14.0,
+                    key: ValueKey<bool>(state.value),
+                  ),
+                ),
                 onExpansionChanged: (value) {
                   state.value = value;
                 },
@@ -156,15 +157,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 key: _formState,
                 child: ExpansionTile(
                   trailing: AnimatedSwitcher(
-                      child: Icon(
-                        state.value ? CustomIcons.minus : CustomIcons.plus,
-                        size: 14.0,
-                        key: ValueKey<bool>(state.value),
-                      ),
-                      transitionBuilder: (Widget child, Animation<double> animation) {
-                        return ScaleTransition(child: child, scale: animation);
-                      },
-                      duration: const Duration(milliseconds: 300)),
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      state.value ? CustomIcons.minus : CustomIcons.plus,
+                      size: 14.0,
+                      key: ValueKey<bool>(state.value),
+                    ),
+                  ),
                   onExpansionChanged: (value) {
                     state.value = value;
                   },
@@ -233,10 +235,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
                       child: RaisedGradientButton(
-                        child: Text(
-                          'ЗБЕРЕГТИ',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
-                        ),
                         onPressed: () {
                           final userNotifier = context.read<UserNotifier>();
                           FocusScope.of(context).unfocus();
@@ -256,6 +254,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             });
                           }
                         },
+                        child: Text(
+                          'ЗБЕРЕГТИ',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+                        ),
                       ),
                     ),
                   ],

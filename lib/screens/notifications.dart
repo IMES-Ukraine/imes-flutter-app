@@ -7,11 +7,7 @@ import 'package:imes/helpers/custom_icons_icons.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 
-import 'package:imes/screens/support.dart';
-import 'package:imes/screens/blog_view.dart';
-
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:provider/provider.dart';
 

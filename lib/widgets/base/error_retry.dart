@@ -19,15 +19,16 @@ class ErrorRetry extends StatelessWidget {
             color: Theme.of(context).errorColor,
             text: text,
           ),
-          OutlineButton(
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Theme.of(context).accentColor),
+              textStyle: TextStyle(color: Theme.of(context).accentColor),
+            ),
+            onPressed: onTap,
             child: Text(
               'Спробувати ще',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            highlightedBorderColor: Theme.of(context).accentColor,
-            borderSide: BorderSide(color: Theme.of(context).accentColor),
-            textColor: Theme.of(context).accentColor,
-            onPressed: onTap,
           ),
         ],
       ),

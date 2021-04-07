@@ -287,14 +287,6 @@ class BlogViewPage extends HookWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 64.0),
                                       child: RaisedGradientButton(
-                                        child: Text(
-                                          blogNotifier.blog.action.split('|').first == 'article'
-                                              ? 'Читати ще'.toUpperCase()
-                                              : blogNotifier.blog.action.split('|').first == 'test'
-                                                  ? 'Розпочати дослідження'.toUpperCase()
-                                                  : 'Читати ще'.toUpperCase(),
-                                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                                        ),
                                         // highlightedBorderColor: Theme.of(context).accentColor,
                                         // borderSide: BorderSide(color: Theme.of(context).accentColor),
                                         // textColor: Theme.of(context).accentColor,
@@ -315,6 +307,14 @@ class BlogViewPage extends HookWidget {
                                             }
                                           }
                                         },
+                                        child: Text(
+                                          blogNotifier.blog.action.split('|').first == 'article'
+                                              ? 'Читати ще'.toUpperCase()
+                                              : blogNotifier.blog.action.split('|').first == 'test'
+                                                  ? 'Розпочати дослідження'.toUpperCase()
+                                                  : 'Читати ще'.toUpperCase(),
+                                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),

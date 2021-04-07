@@ -13,6 +13,7 @@ class CustomCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return InkResponse(
+      onTap: onTap,
       child: Container(
         width: size.w,
         height: size.w,
@@ -26,7 +27,6 @@ class CustomCheckbox extends StatelessWidget {
               )
             : const SizedBox(),
       ),
-      onTap: onTap,
     );
   }
 }

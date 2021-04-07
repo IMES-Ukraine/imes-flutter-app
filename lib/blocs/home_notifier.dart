@@ -18,6 +18,7 @@ class HomeNotifier with ChangeNotifier {
     // if (index == 3) return;
     if (_page != index) {
       _page = index;
+      _initialPage = initialPage;
       controller.jumpToPage(index);
 //      controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
       notifyListeners();

@@ -10,7 +10,7 @@ import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/loading_lock.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmCodePage extends StatefulHookWidget {
@@ -47,12 +47,25 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                       Text('Код з СМС', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 16.0),
                       PinCodeTextField(
-                        appContext: context,
-                        length: 6,
+                        maxLength: 6,
+                        pinBoxWidth: 30,
+                        pinBoxHeight: 64,
+                        autofocus: true,
+                        highlight: true,
+                        highlightColor: Colors.black,
+                        defaultBorderColor: Colors.transparent,
+                        hasTextBorderColor: Colors.blue,
+                        maskCharacter: '\u25CF',
+                        wrapAlignment: WrapAlignment.spaceAround,
+                        pinTextStyle: TextStyle(fontSize: 22.0),
+                        pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
+                        pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
+                        pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
+                        highlightAnimationBeginColor: Colors.black,
+                        highlightAnimationEndColor: Colors.white12,
                         keyboardType: TextInputType.number,
-                        onChanged: (value) {},
-                        onCompleted: (value) {
-                          userNotifier.verify(widget.phoneNumber, value).then((_) {
+                        onDone: (code) {
+                          userNotifier.verify(widget.phoneNumber, code).then((_) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => SetupPasswordPage(),
@@ -85,6 +98,17 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                   });
                             }
                           });
+                          // isLoading.value = true;
+                          // userNotifier
+                          //     .verify(phoneNumber, text)
+                          //     .then((_) => Navigator.of(context).pushReplacement(
+                          //           MaterialPageRoute(builder: (context) => SetupPasswordPage()),
+                          //         ))
+                          //     .catchError((error) {
+                          //   showErrorDialog(context, error);
+                          // }).whenComplete(() {
+                          //   isLoading.value = false;
+                          // });
                         },
                       ),
                       const SizedBox(height: 16.0),
@@ -95,13 +119,6 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                       ),
                       const SizedBox(height: 16.0),
                       RaisedGradientButton(
-                        child: Text(
-                          'ВІДПРАВИТИ',
-                          style: TextStyle(
-                              color: timerState.value.inSeconds > 0 ? Colors.grey[300] : Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0),
-                        ),
                         onPressed: timerState.value.inSeconds > 0
                             ? null
                             : () {
@@ -135,6 +152,13 @@ class _ConfirmCodePageState extends State<ConfirmCodePage> {
                                   }
                                 });
                               },
+                        child: Text(
+                          'ВІДПРАВИТИ',
+                          style: TextStyle(
+                              color: timerState.value.inSeconds > 0 ? Colors.grey[300] : Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0),
+                        ),
                       ),
                       const SizedBox(height: 16.0),
                       Text(

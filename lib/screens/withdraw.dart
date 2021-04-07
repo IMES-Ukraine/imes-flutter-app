@@ -1,23 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:imes/blocs/history_notifier.dart';
-import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/resources.dart';
 
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
-import 'package:imes/widgets/base/notifications_button.dart';
 
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/balance_notifier.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
-import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 
@@ -27,8 +21,6 @@ class WithdrawPage extends StatefulHookWidget {
 }
 
 class _WithdrawPageState extends State<WithdrawPage> {
-  var _timer;
-
   @override
   Widget build(BuildContext context) {
     final userBalance = context.watch<UserNotifier>().user.balance;
@@ -140,10 +132,10 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 RaisedGradientButton(
                                   radius: 10.0,
                                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                  onPressed: () => sendBalance.value > 20 ? sendBalance.value -= 10 : null,
                                   child: Text('-10',
                                       style:
                                           TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
-                                  onPressed: () => sendBalance.value > 20 ? sendBalance.value -= 10 : null,
                                   // onLongPress: () {
                                   //   _timer = Timer.periodic(const Duration(milliseconds: 30),
                                   //       (timer) => sendBalance.value > 20 ? sendBalance.value -= 10 : timer.cancel());
@@ -187,11 +179,11 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                 RaisedGradientButton(
                                   radius: 10.0,
                                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                  onPressed: () =>
+                                      sendBalance.value < userNotifier.user.balance ? sendBalance.value += 10 : null,
                                   child: Text('+10',
                                       style:
                                           TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
-                                  onPressed: () =>
-                                      sendBalance.value < userNotifier.user.balance ? sendBalance.value += 10 : null,
                                   // onLongPress: () {
                                   //   _timer = Timer.periodic(
                                   //       const Duration(milliseconds: 30),
@@ -211,96 +203,95 @@ class _WithdrawPageState extends State<WithdrawPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 48.0),
                           child: RaisedGradientButton(
-                              child: Text(
-                                'ПЕРЕВЕСТИ БАЛИ',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: sendBalance.value >= 20
-                                  ? () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => CustomAlertDialog(
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      'Підтвердіть',
-                                                      style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(16.0),
-                                                      child:
-                                                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                        Image.asset(Images.token),
-                                                        const SizedBox(width: 16.0),
-                                                        Text(
-                                                          '${sendBalance.value ?? 0}',
-                                                          style: TextStyle(
-                                                            fontSize: 36.0,
-                                                            fontWeight: FontWeight.bold,
-                                                            color: Color(0xFFA1A1A1),
-                                                          ),
+                            onPressed: sendBalance.value >= 20
+                                ? () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => CustomAlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    'Підтвердіть',
+                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                      Image.asset(Images.token),
+                                                      const SizedBox(width: 16.0),
+                                                      Text(
+                                                        '${sendBalance.value ?? 0}',
+                                                        style: TextStyle(
+                                                          fontSize: 36.0,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Color(0xFFA1A1A1),
                                                         ),
-                                                      ]),
-                                                    ),
-                                                    Text(
-                                                      'на карту',
-                                                      style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                    const SizedBox(height: 16.0),
-                                                    Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                          child: CustomFlatButton(
-                                                              text: 'ТАК',
-                                                              color: Theme.of(context).primaryColor,
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                                balanceNotifier
-                                                                    .submit(
-                                                                        amount: sendBalance.value,
-                                                                        type: selectedType.value)
-                                                                    .then((user) {
-                                                                  userNotifier.updateUser(user);
-                                                                }).catchError((error) {
-                                                                  balanceNotifier.resetState();
-                                                                  print(error);
-                                                                  showDialog(
-                                                                    context: context,
-                                                                    builder: (context) {
-                                                                      return CustomAlertDialog(
-                                                                        content: CustomDialog(
-                                                                          icon: Icons.close,
-                                                                          color: Theme.of(context).errorColor,
-                                                                          text: Utils.getErrorText(
-                                                                              error?.body?.toString() ??
-                                                                                  'unkown_error'),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  );
-                                                                });
-                                                              }),
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                          child: CustomFlatButton(
-                                                              text: 'НІ',
-                                                              color: Theme.of(context).errorColor,
-                                                              onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                              }),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ));
-                                    }
-                                  : null),
+                                                      ),
+                                                    ]),
+                                                  ),
+                                                  Text(
+                                                    'на карту',
+                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  const SizedBox(height: 16.0),
+                                                  Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                        child: CustomFlatButton(
+                                                            text: 'ТАК',
+                                                            color: Theme.of(context).primaryColor,
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                              balanceNotifier
+                                                                  .submit(
+                                                                      amount: sendBalance.value,
+                                                                      type: selectedType.value)
+                                                                  .then((user) {
+                                                                userNotifier.updateUser(user);
+                                                              }).catchError((error) {
+                                                                balanceNotifier.resetState();
+                                                                print(error);
+                                                                showDialog(
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    return CustomAlertDialog(
+                                                                      content: CustomDialog(
+                                                                        icon: Icons.close,
+                                                                        color: Theme.of(context).errorColor,
+                                                                        text: Utils.getErrorText(
+                                                                            error?.body?.toString() ?? 'unkown_error'),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              });
+                                                            }),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                        child: CustomFlatButton(
+                                                            text: 'НІ',
+                                                            color: Theme.of(context).errorColor,
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            }),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ));
+                                  }
+                                : null,
+                            child: Text(
+                              'ПЕРЕВЕСТИ БАЛИ',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
                       ],
                     ),

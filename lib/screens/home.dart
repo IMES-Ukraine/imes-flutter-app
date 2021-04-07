@@ -68,27 +68,18 @@ class _HomePageState extends State<HomePage> {
       create: (_) {
         final homeNotifier = HomeNotifier(controller: _pageController);
         final userNotifier = Provider.of<UserNotifier>(context);
-        final _firebaseMessaging = FirebaseMessaging();
-        _firebaseMessaging.requestNotificationPermissions();
-        _firebaseMessaging.configure(onMessage: (message) {
+        FirebaseMessaging.instance.requestPermission();
+        FirebaseMessaging.instance.getInitialMessage().then((message) => _redirect(message, homeNotifier));
+        FirebaseMessaging.onMessage.listen((message) {
           debugPrint('onMessage: $message');
           userNotifier.increaseNotificationsCount();
-          final data = message['data'];
+          final data = message.data;
           if (data != null) {
             final newBalance = int.parse(data['balance']);
             if (newBalance != null) {
               userNotifier.updateBalance(newBalance);
             }
           }
-          return;
-        }, onLaunch: (message) {
-          debugPrint('onLaunch: $message');
-          _redirect(message, homeNotifier);
-          return;
-        }, onResume: (message) {
-          debugPrint('onResume: $message');
-          _redirect(message, homeNotifier);
-          return;
         });
         SharedPreferences.getInstance().then((prefs) async {
           final allEnabled = prefs.getBool('all') ?? true;
@@ -98,22 +89,22 @@ class _HomePageState extends State<HomePage> {
           final messagesEnabled = prefs.getBool('messages') ?? true;
 
           if (allEnabled) {
-            _firebaseMessaging.subscribeToTopic('all');
+            FirebaseMessaging.instance.subscribeToTopic('all');
           } else {
             if (newsEnabled) {
-              _firebaseMessaging.subscribeToTopic('news');
+              FirebaseMessaging.instance.subscribeToTopic('news');
             }
 
             if (testsEnabled) {
-              _firebaseMessaging.subscribeToTopic('tests');
+              FirebaseMessaging.instance.subscribeToTopic('tests');
             }
 
             if (balanceEnabled) {
-              _firebaseMessaging.subscribeToTopic('balance');
+              FirebaseMessaging.instance.subscribeToTopic('balance');
             }
 
             if (messagesEnabled) {
-              _firebaseMessaging.subscribeToTopic('messages');
+              FirebaseMessaging.instance.subscribeToTopic('messages');
             }
           }
         });
@@ -200,42 +191,44 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            bottomNavigationBar: BottomAppBar(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BottomAppBarButton(
-                      icon: CustomIcons.home,
-                      label: 'Головна',
-                      selected: homeNotifier.currentPage == 0,
-                      onTap: () {
-                        if (homeNotifier.currentPage != 0) {
-                          homeNotifier.changePage(0);
-                        } else {
-                          _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-                        }
-                      }),
-                  BottomAppBarButton(
-                      icon: CustomIcons.test,
-                      label: 'Дослідження',
-                      selected: homeNotifier.currentPage == 1,
-                      onTap: () => homeNotifier.changePage(1)),
-                  BottomAppBarButton(
-                      icon: CustomIcons.chat,
-                      label: 'Підтримка',
-                      selected: homeNotifier.currentPage == 2,
-                      onTap: () => homeNotifier.changePage(2)),
-                  BottomAppBarButton(
-                      icon: Icons.info_rounded,
-                      label: 'Інструкція',
-                      selected: homeNotifier.currentPage == 3,
-                      onTap: () => homeNotifier.changePage(3)),
-                  BottomAppBarButton(
-                      icon: CustomIcons.menu,
-                      label: 'Меню',
-                      selected: homeNotifier.currentPage == 4,
-                      onTap: () => homeNotifier.changePage(4)),
-                ],
+            bottomNavigationBar: SafeArea(
+              child: BottomAppBar(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    BottomAppBarButton(
+                        icon: CustomIcons.home,
+                        label: 'Головна',
+                        selected: homeNotifier.currentPage == 0,
+                        onTap: () {
+                          if (homeNotifier.currentPage != 0) {
+                            homeNotifier.changePage(0);
+                          } else {
+                            _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                          }
+                        }),
+                    BottomAppBarButton(
+                        icon: CustomIcons.test,
+                        label: 'Дослідження',
+                        selected: homeNotifier.currentPage == 1,
+                        onTap: () => homeNotifier.changePage(1)),
+                    BottomAppBarButton(
+                        icon: CustomIcons.chat,
+                        label: 'Підтримка',
+                        selected: homeNotifier.currentPage == 2,
+                        onTap: () => homeNotifier.changePage(2)),
+                    BottomAppBarButton(
+                        icon: Icons.info_rounded,
+                        label: 'Інструкція',
+                        selected: homeNotifier.currentPage == 3,
+                        onTap: () => homeNotifier.changePage(3)),
+                    BottomAppBarButton(
+                        icon: CustomIcons.menu,
+                        label: 'Меню',
+                        selected: homeNotifier.currentPage == 4,
+                        onTap: () => homeNotifier.changePage(4)),
+                  ],
+                ),
               ),
             ),
           ),

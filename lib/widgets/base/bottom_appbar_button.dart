@@ -14,6 +14,7 @@ class BottomAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 4.0.w),
         child: Column(
@@ -30,7 +31,6 @@ class BottomAppBarButton extends StatelessWidget {
           ],
         ),
       ),
-      onTap: onTap,
     );
   }
 }

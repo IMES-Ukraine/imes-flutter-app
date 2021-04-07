@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
-import 'package:imes/models/cover_image.dart';
 
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/models/user_basic_info.dart';
@@ -55,10 +54,9 @@ class UserNotifier with ChangeNotifier {
 
       final auth = FirebaseAuth.instance;
       final authResult = await auth.signInWithCustomToken(response.body.user.firebaseToken);
-      final _firebaseMessaging = FirebaseMessaging();
-      final token = await _firebaseMessaging.getToken();
+      final token = await FirebaseMessaging.instance.getToken();
       final result = await Repository().api.submitToken(token: token);
-      _tokenRefreshSubscription = _firebaseMessaging.onTokenRefresh.listen((newToken) {
+      _tokenRefreshSubscription = FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
         Repository().api.submitToken(token: newToken);
       });
 
@@ -110,10 +108,9 @@ class UserNotifier with ChangeNotifier {
 
         final auth = FirebaseAuth.instance;
         final authResult = await auth.signInWithCustomToken(profileResponse.body.data.user.firebaseToken);
-        final _firebaseMessaging = FirebaseMessaging();
-        final token = await _firebaseMessaging.getToken();
+        final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
-        _firebaseMessaging.onTokenRefresh.listen((newToken) {
+        FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
           Repository().api.submitToken(token: newToken);
         });
 
@@ -165,7 +162,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async { 
+  void logout() async {
     _user = null;
     _state = AuthState.NOT_AUTHENTICATED;
     final storage = FlutterSecureStorage();

@@ -34,19 +34,23 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Firebase</string>
+	<string>Needed by permissions handler</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Firebase</string>
+	<string>Needed by permissions handler</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Firebase</string>
+	<string>Needed by permissions handler</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Firebase</string>
+	<string>Needed by permissions handler</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Firebase</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Using for upload documents</string>
+	<string>Needed by permissions handler</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Firebase</string>
+	<string>Needed by permissions handler</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Needed for choose photo of documents</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Needed for take photo of documents</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Needed because of camera usage</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -59,13 +63,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

@@ -130,10 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
                           child: RaisedGradientButton(
-                            child: Text(
-                              'ПІДТВЕРДИТИ',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
-                            ),
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
                               if (_formState.currentState.validate()) {
@@ -200,6 +196,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 });
                               }
                             },
+                            child: Text(
+                              'ПІДТВЕРДИТИ',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+                            ),
                           ),
                         ),
                       ],

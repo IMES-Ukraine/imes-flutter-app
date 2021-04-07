@@ -1,20 +1,17 @@
 import 'package:chopper/chopper.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:imes/blocs/login_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/forgot_password.dart';
 import 'package:imes/screens/register.dart';
-import 'package:imes/utils/constants.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
-import 'package:imes/widgets/base/custom_checkbox.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -91,109 +88,123 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 2.0.w),
-                                child: Row(
-                                  children: <Widget>[
-                                    CustomCheckbox(
-                                      value: loginNotifier.termsAndConditionsValue,
-                                      onTap: () => loginNotifier.changeTermsValue(),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 2.0.w),
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: 'згоден з умовами ',
-                                            style: TextStyle(
-                                                fontSize: 8.0.sp,
-                                                color: Color(0xFF828282)), // TODO: extract colors to theme
-                                            children: [
-                                              TextSpan(
-                                                  text: 'Політики конфіденційності',
-                                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                                  recognizer: TapGestureRecognizer()
-                                                    ..onTap = () async {
-                                                      if (await canLaunch(Constants.POLICY_URL)) {
-                                                        launch(Constants.POLICY_URL);
-                                                      }
-                                                    }),
-                                              TextSpan(text: ' і '),
-                                              TextSpan(
-                                                  text: 'Умов користування',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold, color: themeData.primaryColor),
-                                                  recognizer: TapGestureRecognizer()
-                                                    ..onTap = () async {
-                                                      if (await canLaunch(Constants.RULES_URL)) {
-                                                        launch(Constants.RULES_URL);
-                                                      }
-                                                    }),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                child: InkResponse(
+                                  onTap: () => Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute(builder: (context) => ForgotPasswordPage())),
+                                  child: Text(
+                                    'Забули пароль',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
+                              // Padding(
+                              //   padding: EdgeInsets.symmetric(vertical: 2.0.w),
+                              //   child: Row(
+                              //     children: <Widget>[
+                              //       CustomCheckbox(
+                              //         value: loginNotifier.termsAndConditionsValue,
+                              //         onTap: () => loginNotifier.changeTermsValue(),
+                              //       ),
+                              //       Expanded(
+                              //         child: Padding(
+                              //           padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 2.0.w),
+                              //           child: RichText(
+                              //             text: TextSpan(
+                              //               text: 'згоден з умовами ',
+                              //               style: TextStyle(
+                              //                   fontSize: 8.0.sp,
+                              //                   color: Color(0xFF828282)), // TODO: extract colors to theme
+                              //               children: [
+                              //                 TextSpan(
+                              //                     text: 'Політики конфіденційності',
+                              //                     style: TextStyle(fontWeight: FontWeight.bold),
+                              //                     recognizer: TapGestureRecognizer()
+                              //                       ..onTap = () async {
+                              //                         if (await canLaunch(Constants.POLICY_URL)) {
+                              //                           launch(Constants.POLICY_URL);
+                              //                         }
+                              //                       }),
+                              //                 TextSpan(text: ' і '),
+                              //                 TextSpan(
+                              //                     text: 'Умов користування',
+                              //                     style: TextStyle(
+                              //                         fontWeight: FontWeight.bold, color: themeData.primaryColor),
+                              //                     recognizer: TapGestureRecognizer()
+                              //                       ..onTap = () async {
+                              //                         if (await canLaunch(Constants.RULES_URL)) {
+                              //                           launch(Constants.RULES_URL);
+                              //                         }
+                              //                       }),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 2.0.h, horizontal: 8.0.w),
                                 child: RaisedGradientButton(
+                                  onPressed: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
+                                    if (_formState.currentState.validate()) {
+                                      // if (!loginNotifier.termsAndConditionsValue) {
+                                      //   showDialog(
+                                      //       context: context,
+                                      //       builder: (context) {
+                                      //         return CustomAlertDialog(
+                                      //           content: CustomDialog(
+                                      //               icon: Icons.close,
+                                      //               color: Theme.of(context).errorColor,
+                                      //               text: 'Приймить умови користування'),
+                                      //         );
+                                      //       });
+                                      // } else {
+                                      userNotifier
+                                          .login(
+                                        _phoneFormatter.getUnmaskedText(),
+                                        _passwordController.text,
+                                      )
+                                          .catchError((error) {
+                                        userNotifier.resetState();
+                                        if (error is Response) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return CustomAlertDialog(
+                                                  content: CustomDialog(
+                                                    icon: Icons.close,
+                                                    color: Theme.of(context).errorColor,
+                                                    text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                                  ),
+                                                );
+                                              });
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return CustomAlertDialog(
+                                                  content: CustomDialog(
+                                                      icon: Icons.close,
+                                                      color: Theme.of(context).errorColor,
+                                                      text: error.toString()),
+                                                );
+                                              });
+                                        }
+                                      });
+                                    }
+                                    // }
+                                  },
                                   child: Text(
                                     'ПІДТВЕРДИТИ',
                                     style:
                                         TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12.0.sp),
                                   ),
-                                  onPressed: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    if (_formState.currentState.validate()) {
-                                      if (!loginNotifier.termsAndConditionsValue) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return CustomAlertDialog(
-                                                content: CustomDialog(
-                                                    icon: Icons.close,
-                                                    color: Theme.of(context).errorColor,
-                                                    text: 'Приймить умови користування'),
-                                              );
-                                            });
-                                      } else {
-                                        userNotifier
-                                            .login(
-                                          _phoneFormatter.getUnmaskedText(),
-                                          _passwordController.text,
-                                        )
-                                            .catchError((error) {
-                                          userNotifier.resetState();
-                                          if (error is Response) {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return CustomAlertDialog(
-                                                    content: CustomDialog(
-                                                      icon: Icons.close,
-                                                      color: Theme.of(context).errorColor,
-                                                      text:
-                                                          Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
-                                                    ),
-                                                  );
-                                                });
-                                          } else {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return CustomAlertDialog(
-                                                    content: CustomDialog(
-                                                        icon: Icons.close,
-                                                        color: Theme.of(context).errorColor,
-                                                        text: error.toString()),
-                                                  );
-                                                });
-                                          }
-                                        });
-                                      }
-                                    }
-                                  },
                                 ),
                               ),
                             ],
@@ -211,10 +222,8 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 InkResponse(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage()));
-                                    },
+                                    onTap: () => Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage())),
                                     child:
                                         Text('Зареєструвати', style: TextStyle(color: Theme.of(context).accentColor))),
                                 SizedBox(width: 1.0.w),
