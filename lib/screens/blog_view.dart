@@ -24,10 +24,12 @@ import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+
+import 'package:sizer/sizer.dart';
 
 class BlogViewPage extends HookWidget {
   BlogViewPage(this._id);
@@ -238,7 +240,6 @@ class BlogViewPage extends HookWidget {
                                                         context
                                                             .read<UserNotifier>()
                                                             .updateUser(response.body.data.user);
-                                                        Navigator.of(context).pop();
                                                       });
                                                     }
                                                   }
@@ -261,7 +262,7 @@ class BlogViewPage extends HookWidget {
                                               }
                                             },
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding: EdgeInsets.all(1.0.h),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -270,11 +271,55 @@ class BlogViewPage extends HookWidget {
                                                       e.title,
                                                       style: TextStyle(fontWeight: FontWeight.bold),
                                                     ),
-                                                  const SizedBox(height: 8.0),
+                                                  SizedBox(height: 1.0.h),
                                                   Text(e.content),
                                                 ],
                                               ),
                                             ),
+                                          );
+                                        } else if (e.type == 'insert') {
+                                          return Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              Card(
+                                                clipBehavior: Clip.antiAlias,
+                                                margin: EdgeInsets.symmetric(horizontal: 4.0.w, vertical: 4.0.h),
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                                ),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment.topLeft,
+                                                      end: Alignment.bottomRight,
+                                                      colors: [Color(0xFF00B7FF), Color(0xFF4CF99E)],
+                                                      stops: [0.3, 0.8],
+                                                    ),
+                                                  ),
+                                                  padding: EdgeInsets.all(4.0.h),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(e.title,
+                                                          style: TextStyle(
+                                                              fontSize: 18.0.sp,
+                                                              fontWeight: FontWeight.w800,
+                                                              color: Colors.white)),
+                                                      SizedBox(height: 2.0.h),
+                                                      Text(e.content,
+                                                          style: TextStyle(
+                                                              fontSize: 13.0.sp,
+                                                              fontWeight: FontWeight.w600,
+                                                              color: Colors.white)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 6.0.w),
+                                                child: Text('!', style: TextStyle(fontSize: 68.0.sp, color: Color(0xFF828282)), textAlign: TextAlign.center),
+                                              ),
+                                            ],
                                           );
                                         } else {
                                           return const SizedBox();

@@ -18,8 +18,6 @@ import 'package:imes/models/withdraw_history_response.dart';
 
 part 'api.chopper.dart';
 
-//@ChopperApi(baseUrl: 'http://185.65.244.189')
-// @ChopperApi(baseUrl: 'http://yaris-ls.serveo.net')
 @ChopperApi(baseUrl: 'https://echo.myftp.org')
 abstract class RestClient extends ChopperService {
   static RestClient create([ChopperClient client]) => _$RestClient(client);

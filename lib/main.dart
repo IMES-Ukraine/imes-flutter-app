@@ -44,7 +44,7 @@ void main() async {
       // Optional, for filtering request
       filter: (HttpClientRequest request) {
     final url = '${request.uri}';
-    if (url.startsWith('https://via.placeholder.com') || url.startsWith('https://gravatar.com')) {
+    if (url.startsWith('https://echo.myftp.org/storage/app/uploads')) {
       return false;
     }
     return true;
@@ -74,7 +74,6 @@ void main() async {
         user = response.body.data.user;
         final auth = FirebaseAuth.instance;
         final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
-        // final _firebaseMessaging = FirebaseMessaging();
         final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
@@ -83,7 +82,6 @@ void main() async {
       }
     } catch (e) {
       print(e);
-      // print(e?.body ?? e.toString);
     }
   }
 
@@ -102,46 +100,34 @@ class MyApp extends HookWidget {
       return LayoutBuilder(builder: (context, constraints) {
         return OrientationBuilder(builder: (context, orientation) {
           SizerUtil().init(constraints, orientation);
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              final currentFocus = FocusScope.of(context);
-
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
-            },
-            child: MaterialApp(
-              localizationsDelegates: [
-                // MaterialLocalizationUk(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: [
-                const Locale('uk'),
-//          const Locale('en'),
-              ],
-              theme: ThemeData(
-                fontFamily: 'Montserrat',
-                primaryColor: const Color(0xFF00B7FF),
-                accentColor: const Color(0xFF00D7FF),
-                scaffoldBackgroundColor: const Color(0xFFF7F7F9),
-                errorColor: const Color(0xFFFF5C8E),
-                dividerColor: const Color(0xFFE0E0E0),
-                canvasColor: const Color(0xFFF2F2F2),
-                appBarTheme: AppBarTheme(
-                    color: Colors.white,
-                    elevation: 4.0,
-                    iconTheme: IconThemeData(
-                      color: const Color(0xFF00B7FF),
-                    ),
-                    actionsIconTheme: IconThemeData(
-                      color: const Color(0xFF00B7FF),
-                    )),
-              ),
-              home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
+          return MaterialApp(
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('uk'),
+            ],
+            theme: ThemeData(
+              fontFamily: 'Montserrat',
+              primaryColor: const Color(0xFF00B7FF),
+              accentColor: const Color(0xFF00D7FF),
+              scaffoldBackgroundColor: const Color(0xFFF7F7F9),
+              errorColor: const Color(0xFFFF5C8E),
+              dividerColor: const Color(0xFFE0E0E0),
+              canvasColor: const Color(0xFFF2F2F2),
+              appBarTheme: AppBarTheme(
+                  color: Colors.white,
+                  elevation: 4.0,
+                  iconTheme: IconThemeData(
+                    color: const Color(0xFF00B7FF),
+                  ),
+                  actionsIconTheme: IconThemeData(
+                    color: const Color(0xFF00B7FF),
+                  )),
             ),
+            home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
           );
         });
       });
