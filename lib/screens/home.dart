@@ -69,9 +69,13 @@ class _HomePageState extends State<HomePage> {
         final homeNotifier = HomeNotifier(controller: _pageController);
         final userNotifier = Provider.of<UserNotifier>(context);
         FirebaseMessaging.instance.requestPermission();
-        FirebaseMessaging.instance.getInitialMessage().then((message) => _redirect(message, homeNotifier));
+        FirebaseMessaging.instance.getInitialMessage().then((message) {
+          if (message != null) {
+            _redirect(message, homeNotifier);
+          }
+        });
         FirebaseMessaging.onMessage.listen((message) {
-          debugPrint('onMessage: $message');
+          debugPrint('onMessage: ${message.data}');
           userNotifier.increaseNotificationsCount();
           final data = message.data;
           if (data != null) {
@@ -82,31 +86,31 @@ class _HomePageState extends State<HomePage> {
           }
         });
         SharedPreferences.getInstance().then((prefs) async {
-          final allEnabled = prefs.getBool('all') ?? true;
+          // final allEnabled = prefs.getBool('all') ?? true;
           final newsEnabled = prefs.getBool('news') ?? true;
           final testsEnabled = prefs.getBool('tests') ?? true;
           final balanceEnabled = prefs.getBool('balance') ?? true;
           final messagesEnabled = prefs.getBool('messages') ?? true;
 
-          if (allEnabled) {
-            FirebaseMessaging.instance.subscribeToTopic('all');
-          } else {
-            if (newsEnabled) {
-              FirebaseMessaging.instance.subscribeToTopic('news');
-            }
-
-            if (testsEnabled) {
-              FirebaseMessaging.instance.subscribeToTopic('tests');
-            }
-
-            if (balanceEnabled) {
-              FirebaseMessaging.instance.subscribeToTopic('balance');
-            }
-
-            if (messagesEnabled) {
-              FirebaseMessaging.instance.subscribeToTopic('messages');
-            }
+          // if (allEnabled) {
+          //   FirebaseMessaging.instance.subscribeToTopic('all');
+          // } else {
+          if (newsEnabled) {
+            FirebaseMessaging.instance.subscribeToTopic('news');
           }
+
+          if (testsEnabled) {
+            FirebaseMessaging.instance.subscribeToTopic('tests');
+          }
+
+          if (balanceEnabled) {
+            FirebaseMessaging.instance.subscribeToTopic('balance');
+          }
+
+          if (messagesEnabled) {
+            FirebaseMessaging.instance.subscribeToTopic('messages');
+          }
+          // }
         });
         return homeNotifier;
       },
@@ -136,7 +140,10 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             body: PageView(
               controller: _pageController,
-              onPageChanged: homeNotifier.changePage,
+              onPageChanged: (val) {
+                FocusScope.of(context).unfocus();
+                homeNotifier.changePage(val);
+              },
               physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
                 Navigator(
@@ -173,7 +180,20 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                SupportPage(),
+                Navigator(
+                  // key: _menuNavigatorKey,
+                  initialRoute: homeNotifier.initialPageRoute,
+                  onGenerateRoute: (routeSettings) {
+                    return MaterialPageRoute(builder: (context) {
+                      switch (routeSettings.name) {
+                        case '/':
+                          return SupportPage();
+                        default:
+                          return SupportPage();
+                      }
+                    });
+                  },
+                ),
                 InstructionsPage(),
                 Navigator(
                   key: _menuNavigatorKey,

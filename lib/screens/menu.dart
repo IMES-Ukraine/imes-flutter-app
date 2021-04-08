@@ -85,8 +85,8 @@ class MenuPage extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 text: 'Вийти',
-                onTap: () {
-                  userNotifier.logout();
+                onTap: () async {
+                  await userNotifier.logout();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
                 },
               ),

@@ -10,7 +10,7 @@ class Notification {
   final num userId;
   final String type;
   final String action;
-  final String image;
+  final String image; 
   final NotificationText text;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;

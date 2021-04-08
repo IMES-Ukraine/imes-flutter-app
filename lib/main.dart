@@ -82,6 +82,8 @@ void main() async {
       }
     } catch (e) {
       print(e);
+      final storage = FlutterSecureStorage();
+      await storage.delete(key: '__AUTH_TOKEN_');
     }
   }
 

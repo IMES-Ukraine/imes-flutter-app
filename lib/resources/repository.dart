@@ -36,7 +36,7 @@ class Repository {
     return _instance;
   }
 
-  void create() {
+  Repository._internal() {
     final converter = JsonSerializableConverter({
       BasicResponse: BasicResponse.fromJsonFactory,
       LoginResponse: LoginResponse.fromJsonFactory,
@@ -64,27 +64,29 @@ class Repository {
       client: IOClient(httpClient),
       converter: converter,
       errorConverter: converter,
-      interceptors: [authHeader, tokenExpired],
+      interceptors: [
+        authHeader,
+        // tokenExpired,s
+      ],
     );
-  }
-
-  Repository._internal() {
-    create();
   }
 
   Future<Request> authHeader(Request request) async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: '__AUTH_TOKEN_');
-    return applyHeader(
-      request,
-      'Authorization',
-      'Bearer $token',
-    );
+    if (token != null) {
+      return applyHeader(
+        request,
+        'Authorization',
+        'Bearer $token',
+      );
+    }
+    return request;
   }
 
-  Future<Response> tokenExpired(Response response) async {
-    return response;
-  }
+  // Future<Response> tokenExpired(Response response) async {
+  //   return response;
+  // }
 }
 
 typedef JsonFactory<T> = T Function(Map<String, dynamic> json);

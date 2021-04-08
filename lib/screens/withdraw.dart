@@ -15,6 +15,8 @@ import 'package:imes/widgets/base/raised_gradient_button.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:sizer/sizer.dart';
+
 class WithdrawPage extends StatefulHookWidget {
   @override
   _WithdrawPageState createState() => _WithdrawPageState();
@@ -25,10 +27,10 @@ class _WithdrawPageState extends State<WithdrawPage> {
   Widget build(BuildContext context) {
     final userBalance = context.watch<UserNotifier>().user.balance;
     final selectedType = useState('card');
-    final sendBalance = useState(userBalance);
+    // final sendBalance = useState(userBalance);
     final sendInputController = useTextEditingController.fromValue(TextEditingValue(text: '$userBalance'));
 
-    if (sendBalance.value > userBalance) sendBalance.value = userBalance;
+    // if (sendBalance.value > userBalance) sendBalance.value = userBalance;
 
     return Scaffold(
       appBar: AppBar(title: Text('ОБМІН', style: TextStyle(fontWeight: FontWeight.w800))),
@@ -129,71 +131,62 @@ class _WithdrawPageState extends State<WithdrawPage> {
                             ),
                             children: [
                               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                RaisedGradientButton(
-                                  radius: 10.0,
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-                                  onPressed: () => sendBalance.value > 20 ? sendBalance.value -= 10 : null,
-                                  child: Text('-10',
-                                      style:
-                                          TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
-                                  // onLongPress: () {
-                                  //   _timer = Timer.periodic(const Duration(milliseconds: 30),
-                                  //       (timer) => sendBalance.value > 20 ? sendBalance.value -= 10 : timer.cancel());
-                                  // },
-                                  // onLongPressUp: () {
-                                  //   _timer.cancel();
-                                  // },
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 4.0.w),
+                                  child: RaisedGradientButton(
+                                    radius: 10.0,
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                    onPressed: () {
+                                      var val = int.tryParse(sendInputController.text) ?? 0;
+                                      if (val > 20) val -= 10;
+                                      sendInputController.text = '$val';
+                                    },
+                                    child: Text('-10',
+                                        style: TextStyle(
+                                            fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
+                                  ),
                                 ),
-                                const SizedBox(width: 16.0),
-                                // Expanded(
-                                //   child: TextField(
-                                //     controller: sendInputController,
-                                //     decoration: InputDecoration(
-                                //       border: OutlineInputBorder(
-                                //         borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                                //         borderRadius: BorderRadius.circular(36.0),
-                                //       ),
-                                //       contentPadding: const EdgeInsets.all(4.0),
-                                //     ),
-                                //     style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor),
-                                //     textAlign: TextAlign.center,
-                                //     keyboardType: TextInputType.number,
-                                //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                //   ),
-                                // ),
-                                Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Theme.of(context).primaryColor),
-                                      borderRadius: BorderRadius.circular(50.0),
+                                Expanded(
+                                  child: TextField(
+                                    controller: sendInputController,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                        borderRadius: BorderRadius.circular(36.0),
+                                      ),
+                                      contentPadding: const EdgeInsets.all(4.0),
                                     ),
-                                    child: AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 200),
-                                      reverseDuration: const Duration(milliseconds: 500),
-                                      child: Text(
-                                          '${sendBalance.value < userNotifier.user.balance ? sendBalance.value : userNotifier.user.balance}',
-                                          key: ValueKey<int>(sendBalance.value),
-                                          style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor)),
-                                    )),
-                                const SizedBox(width: 16.0),
-                                RaisedGradientButton(
-                                  radius: 10.0,
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-                                  onPressed: () =>
-                                      sendBalance.value < userNotifier.user.balance ? sendBalance.value += 10 : null,
-                                  child: Text('+10',
-                                      style:
-                                          TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
-                                  // onLongPress: () {
-                                  //   _timer = Timer.periodic(
-                                  //       const Duration(milliseconds: 30),
-                                  //       (timer) => sendBalance.value < userNotifier.user.balance
-                                  //           ? sendBalance.value += 10
-                                  //           : timer.cancel());
-                                  // },
-                                  // onLongPressUp: () {
-                                  //   _timer.cancel();
-                                  // },
+                                    style: TextStyle(fontSize: 18.0, color: Theme.of(context).primaryColor),
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      TextInputFormatter.withFunction((oldValue, newValue) {
+                                        final val = int.tryParse(newValue.text) ?? 0;
+                                        if (val < 20) return TextEditingValue(text: '20');
+                                        if (val > userBalance) {
+                                          return TextEditingValue(text: '$userBalance');
+                                        }
+                                        return newValue;
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 4.0.w),
+                                  child: RaisedGradientButton(
+                                    radius: 10.0,
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+                                    onPressed: () {
+                                      var val = int.tryParse(sendInputController.text) ?? 0;
+                                      if (val < userBalance) val += 10;
+                                      if (val > userBalance) val = userBalance;
+                                      sendInputController.text = '$val';
+                                    },
+                                    child: Text('+10',
+                                        style: TextStyle(
+                                            fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.w500)),
+                                  ),
                                 ),
                               ]),
                               const SizedBox(height: 16.0),
@@ -203,90 +196,88 @@ class _WithdrawPageState extends State<WithdrawPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 48.0),
                           child: RaisedGradientButton(
-                            onPressed: sendBalance.value >= 20
-                                ? () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => CustomAlertDialog(
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    'Підтвердіть',
-                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                    textAlign: TextAlign.center,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => CustomAlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Підтвердіть',
+                                              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(16.0),
+                                              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                Image.asset(Images.token),
+                                                const SizedBox(width: 16.0),
+                                                Text(
+                                                  sendInputController.text,
+                                                  style: TextStyle(
+                                                    fontSize: 36.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xFFA1A1A1),
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(16.0),
-                                                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                      Image.asset(Images.token),
-                                                      const SizedBox(width: 16.0),
-                                                      Text(
-                                                        '${sendBalance.value ?? 0}',
-                                                        style: TextStyle(
-                                                          fontSize: 36.0,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: Color(0xFFA1A1A1),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                  ),
-                                                  Text(
-                                                    'на карту',
-                                                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  const SizedBox(height: 16.0),
-                                                  Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                        child: CustomFlatButton(
-                                                            text: 'ТАК',
-                                                            color: Theme.of(context).primaryColor,
-                                                            onPressed: () {
-                                                              Navigator.of(context).pop();
-                                                              balanceNotifier
-                                                                  .submit(
-                                                                      amount: sendBalance.value,
-                                                                      type: selectedType.value)
-                                                                  .then((user) {
-                                                                userNotifier.updateUser(user);
-                                                              }).catchError((error) {
-                                                                balanceNotifier.resetState();
-                                                                print(error);
-                                                                showDialog(
-                                                                  context: context,
-                                                                  builder: (context) {
-                                                                    return CustomAlertDialog(
-                                                                      content: CustomDialog(
-                                                                        icon: Icons.close,
-                                                                        color: Theme.of(context).errorColor,
-                                                                        text: Utils.getErrorText(
-                                                                            error?.body?.toString() ?? 'unkown_error'),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                );
-                                                              });
-                                                            }),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                        child: CustomFlatButton(
-                                                            text: 'НІ',
-                                                            color: Theme.of(context).errorColor,
-                                                            onPressed: () {
-                                                              Navigator.of(context).pop();
-                                                            }),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ));
-                                  }
-                                : null,
+                                                ),
+                                              ]),
+                                            ),
+                                            Text(
+                                              'на карту',
+                                              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            const SizedBox(height: 16.0),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: CustomFlatButton(
+                                                      text: 'ТАК',
+                                                      color: Theme.of(context).primaryColor,
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        balanceNotifier
+                                                            .submit(
+                                                                amount: int.tryParse(sendInputController.text) ?? 0,
+                                                                type: selectedType.value)
+                                                            .then((user) {
+                                                          userNotifier.updateUser(user);
+                                                        }).catchError((error) {
+                                                          balanceNotifier.resetState();
+                                                          print(error);
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return CustomAlertDialog(
+                                                                content: CustomDialog(
+                                                                  icon: Icons.close,
+                                                                  color: Theme.of(context).errorColor,
+                                                                  text: Utils.getErrorText(
+                                                                      error?.body?.toString() ?? 'unkown_error'),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        });
+                                                      }),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: CustomFlatButton(
+                                                      text: 'НІ',
+                                                      color: Theme.of(context).errorColor,
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      }),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ));
+                            },
                             child: Text(
                               'ПЕРЕВЕСТИ БАЛИ',
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
