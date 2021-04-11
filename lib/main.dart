@@ -29,29 +29,29 @@ import 'package:hooks_riverpod/hooks_riverpod.dart' hide ChangeNotifierProvider,
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:flutter_flipperkit/flutter_flipperkit.dart';
+// import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final flipperClient = FlipperClient.getDefault();
+  // final flipperClient = FlipperClient.getDefault();
 
-  flipperClient.addPlugin(FlipperNetworkPlugin(
-      // If you use http library, you must set it to false and use https://pub.dev/packages/flipperkit_http_interceptor
-      // useHttpOverrides: false,
-      // Optional, for filtering request
-      filter: (HttpClientRequest request) {
-    final url = '${request.uri}';
-    if (url.startsWith('https://echo.myftp.org/storage/app/uploads')) {
-      return false;
-    }
-    return true;
-  }));
+  // flipperClient.addPlugin(FlipperNetworkPlugin(
+  //     // If you use http library, you must set it to false and use https://pub.dev/packages/flipperkit_http_interceptor
+  //     // useHttpOverrides: false,
+  //     // Optional, for filtering request
+  //     filter: (HttpClientRequest request) {
+  //   final url = '${request.uri}';
+  //   if (url.startsWith('https://echo.myftp.org/storage/app/uploads')) {
+  //     return false;
+  //   }
+  //   return true;
+  // }));
 
-  flipperClient.addPlugin(FlipperSharedPreferencesPlugin());
-  flipperClient.start();
+  // flipperClient.addPlugin(FlipperSharedPreferencesPlugin());
+  // flipperClient.start();
 
   await Firebase.initializeApp();
 

@@ -77,15 +77,15 @@ class _SettingsPageState extends State<SettingsPage> {
             final notificationsBalance = useStream(notificationsBalanceController.stream);
             final notificationsMessages = useStream(notificationsMessagesController.stream);
 
-            useEffect(() {
-              final sub = notificationsAllController.stream.listen((event) {
-                notificationsNewsController.add(event);
-                notificationsTestsController.add(event);
-                notificationsBalanceController.add(event);
-                notificationsMessagesController.add(event);
-              });
-              return sub.cancel;
-            }, const []);
+            // useEffect(() {
+            //   final sub = notificationsAllController.stream.listen((event) {
+            //     notificationsNewsController.add(event);
+            //     notificationsTestsController.add(event);
+            //     notificationsBalanceController.add(event);
+            //     notificationsMessagesController.add(event);
+            //   });
+            //   return sub.cancel;
+            // }, const []);
 
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),

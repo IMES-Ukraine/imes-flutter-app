@@ -86,31 +86,34 @@ class _HomePageState extends State<HomePage> {
           }
         });
         SharedPreferences.getInstance().then((prefs) async {
-          // final allEnabled = prefs.getBool('all') ?? true;
+          final allEnabled = prefs.getBool('all') ?? true;
           final newsEnabled = prefs.getBool('news') ?? true;
           final testsEnabled = prefs.getBool('tests') ?? true;
           final balanceEnabled = prefs.getBool('balance') ?? true;
           final messagesEnabled = prefs.getBool('messages') ?? true;
 
-          // if (allEnabled) {
-          //   FirebaseMessaging.instance.subscribeToTopic('all');
-          // } else {
-          if (newsEnabled) {
+          if (allEnabled) {
             FirebaseMessaging.instance.subscribeToTopic('news');
-          }
-
-          if (testsEnabled) {
             FirebaseMessaging.instance.subscribeToTopic('tests');
-          }
-
-          if (balanceEnabled) {
             FirebaseMessaging.instance.subscribeToTopic('balance');
-          }
-
-          if (messagesEnabled) {
             FirebaseMessaging.instance.subscribeToTopic('messages');
+          } else {
+            if (newsEnabled) {
+              FirebaseMessaging.instance.subscribeToTopic('news');
+            }
+
+            if (testsEnabled) {
+              FirebaseMessaging.instance.subscribeToTopic('tests');
+            }
+
+            if (balanceEnabled) {
+              FirebaseMessaging.instance.subscribeToTopic('balance');
+            }
+
+            if (messagesEnabled) {
+              FirebaseMessaging.instance.subscribeToTopic('messages');
+            }
           }
-          // }
         });
         return homeNotifier;
       },

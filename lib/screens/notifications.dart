@@ -4,6 +4,8 @@ import 'package:imes/blocs/home_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/blocs/notifications_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
+import 'package:imes/screens/blog_view.dart';
+import 'package:imes/screens/support.dart';
 
 import 'package:imes/widgets/base/error_retry.dart';
 
@@ -132,40 +134,31 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             ],
                             child: Card(
                               margin: const EdgeInsets.all(16.0),
-                              child: InkWell(
-//                                 onTap: () {
-//                                   if (notificationsNotifier.notifications[index].action?.isNotEmpty ?? false) {
-//                                     if (notificationsNotifier.notifications[index].type == 'NEWS') {
-//                                       final values = notificationsNotifier.notifications[index].action.split(':');
-//                                       if (values.length > 1) {
-//                                         try {
-//                                           final id = num.parse(values[1]);
-// //                                          Navigator.of(context).pushNamed('/blogs/view', arguments: id);
-//                                           Navigator.of(context)
-//                                               .push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
-//                                         } catch (e) {
-//                                           print(e.toString());
-//                                         }
-//                                       }
-//                                     }
+                              child: InkWell( 
+                                onTap: () {
+                                  if (notificationsNotifier.notifications[index].action?.isNotEmpty ?? false) {
+                                    if (notificationsNotifier.notifications[index].type == 'NEWS') {
+                                      final values = notificationsNotifier.notifications[index].action.split(':');
+                                      if (values.length > 1) {
+                                        try {
+                                          final id = num.parse(values[1]);
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
+                                        } catch (e) {
+                                          print(e.toString());
+                                        }
+                                      }
+                                    }
+                                  }
 
-//                                     // if (notificationsNotifier.notifications[index].type == 'MESSAGE') {
-//                                     //   if (canLaunch(notificationsNotifier.notifications[index].action)) {
-//                                     //     launch(notificationsNotifier.notifications[index].action);
-//                                     //   }
-//                                     // }
-//                                   }
+                                  if (notificationsNotifier.notifications[index].type == 'SUPPORT') {
+                                    homeNotifier.changePage(2);
+                                  }
 
-//                                   if (notificationsNotifier.notifications[index].type == 'SUPPORT') {
-//                                     Navigator.of(context).push(
-//                                       MaterialPageRoute(builder: (context) => SupportPage()),
-//                                     );
-//                                   }
-
-//                                   if (notificationsNotifier.notifications[index].type == 'REFILL') {
-//                                     homeNotifier.changePage(3);
-//                                   }
-//                                 },
+                                  if (notificationsNotifier.notifications[index].type == 'REFILL') {
+                                    homeNotifier.changePage(3);
+                                  }
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(

@@ -237,16 +237,17 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                                       text: 'ТАК',
                                                       color: Theme.of(context).primaryColor,
                                                       onPressed: () {
-                                                        Navigator.of(context).pop();
                                                         balanceNotifier
                                                             .submit(
                                                                 amount: int.tryParse(sendInputController.text) ?? 0,
                                                                 type: selectedType.value)
                                                             .then((user) {
                                                           userNotifier.updateUser(user);
+                                                          Navigator.of(context).pop(true);
                                                         }).catchError((error) {
                                                           balanceNotifier.resetState();
                                                           print(error);
+                                                          Navigator.of(context).pop(true);
                                                           showDialog(
                                                             context: context,
                                                             builder: (context) {
@@ -269,14 +270,18 @@ class _WithdrawPageState extends State<WithdrawPage> {
                                                       text: 'НІ',
                                                       color: Theme.of(context).errorColor,
                                                       onPressed: () {
-                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop(false);
                                                       }),
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
-                                      ));
+                                      )).then(((v) {
+                                        showDialog(context: context, builder: (context) {
+                                          return CustomAlertDialog(content: Text('Бали успішно виведено'),);
+                                        });
+                                      }));
                             },
                             child: Text(
                               'ПЕРЕВЕСТИ БАЛИ',

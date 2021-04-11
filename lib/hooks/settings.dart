@@ -9,7 +9,7 @@ StreamController<bool> useLocalStorageBool(
   bool defaultValue = false,
 }) {
   final controller = useStreamController<bool>(keys: [key]);
-
+  
   useEffect(
     () {
       final sub = controller.stream.listen((data) async {
