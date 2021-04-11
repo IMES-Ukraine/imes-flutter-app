@@ -5,6 +5,8 @@ import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:sizer/sizer.dart';
+
 class NotificationsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,25 +14,24 @@ class NotificationsButton extends StatelessWidget {
       return Stack(
         alignment: Alignment.topRight,
         children: <Widget>[
-          Center(
-              child: IconButton(
+          IconButton(
             icon: Icon(
-              Icons.notifications,
-              color: Theme.of(context).dividerColor,
+          Icons.notifications,
+          color: Theme.of(context).dividerColor,
             ),
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => NotificationsPage()),
+          MaterialPageRoute(builder: (context) => NotificationsPage()),
             ),
-          )),
+          ),
           if (userNotifier.notificationsCount > 0)
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(1.0.h),
               child: Container(
-                padding: const EdgeInsets.all(4.0),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
+                padding: EdgeInsets.all(1.0.w),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).errorColor),
                 child: Text(
                   '${userNotifier.notificationsCount}',
-                  style: TextStyle(fontSize: 8.0, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(fontSize: 6.0.sp, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             )

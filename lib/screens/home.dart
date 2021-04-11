@@ -214,44 +214,42 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            bottomNavigationBar: SafeArea(
-              child: BottomAppBar(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BottomAppBarButton(
-                        icon: CustomIcons.home,
-                        label: 'Головна',
-                        selected: homeNotifier.currentPage == 0,
-                        onTap: () {
-                          if (homeNotifier.currentPage != 0) {
-                            homeNotifier.changePage(0);
-                          } else {
-                            _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-                          }
-                        }),
-                    BottomAppBarButton(
-                        icon: CustomIcons.test,
-                        label: 'Дослідження',
-                        selected: homeNotifier.currentPage == 1,
-                        onTap: () => homeNotifier.changePage(1)),
-                    BottomAppBarButton(
-                        icon: CustomIcons.chat,
-                        label: 'Підтримка',
-                        selected: homeNotifier.currentPage == 2,
-                        onTap: () => homeNotifier.changePage(2)),
-                    BottomAppBarButton(
-                        icon: Icons.info_rounded,
-                        label: 'Інструкція',
-                        selected: homeNotifier.currentPage == 3,
-                        onTap: () => homeNotifier.changePage(3)),
-                    BottomAppBarButton(
-                        icon: CustomIcons.menu,
-                        label: 'Меню',
-                        selected: homeNotifier.currentPage == 4,
-                        onTap: () => homeNotifier.changePage(4)),
-                  ],
-                ),
+            bottomNavigationBar: BottomAppBar(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BottomAppBarButton(
+                      icon: CustomIcons.home,
+                      label: 'Головна',
+                      selected: homeNotifier.currentPage == 0,
+                      onTap: () {
+                        if (homeNotifier.currentPage != 0) {
+                          homeNotifier.changePage(0);
+                        } else {
+                          _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                        }
+                      }),
+                  BottomAppBarButton(
+                      icon: CustomIcons.test,
+                      label: 'Дослідження',
+                      selected: homeNotifier.currentPage == 1,
+                      onTap: () => homeNotifier.changePage(1)),
+                  BottomAppBarButton(
+                      icon: CustomIcons.chat,
+                      label: 'Підтримка',
+                      selected: homeNotifier.currentPage == 2,
+                      onTap: () => homeNotifier.changePage(2)),
+                  BottomAppBarButton(
+                      icon: Icons.info_rounded,
+                      label: 'Інструкція',
+                      selected: homeNotifier.currentPage == 3,
+                      onTap: () => homeNotifier.changePage(3)),
+                  BottomAppBarButton(
+                      icon: CustomIcons.menu,
+                      label: 'Меню',
+                      selected: homeNotifier.currentPage == 4,
+                      onTap: () => homeNotifier.changePage(4)),
+                ],
               ),
             ),
           ),

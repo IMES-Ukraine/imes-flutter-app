@@ -5,6 +5,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:imes/blocs/user_notifier.dart';
 
 import 'package:bubble/bubble.dart';
+import 'package:imes/widgets/support/support_app_bar.dart';
 
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +24,7 @@ class _SupportPageState extends State<SupportPage> {
   Widget build(BuildContext context) {
     return Consumer<UserNotifier>(builder: (context, userNotifier, _) {
       return Scaffold(
-        appBar: AppBar(title: Text('Технічна підтримкка')),
+        appBar: SupportAppBar(),
         body: Column(
           children: <Widget>[
             Expanded(

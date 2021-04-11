@@ -4,7 +4,7 @@ import 'package:imes/widgets/base/notifications_button.dart';
 
 import 'package:sizer/sizer.dart';
 
-class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
+class SupportAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
@@ -24,7 +24,7 @@ class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
                 duration: Duration(milliseconds: 200),
                 style: Theme.of(context).textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold, fontSize: 13.0.sp),
                 child: Text(
-                  'Меню'.toUpperCase(),
+                  'Технічна підтримка'.toUpperCase(),
                 ),
               ),
             ),
