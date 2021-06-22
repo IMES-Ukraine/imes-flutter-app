@@ -1,37 +1,29 @@
-import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:imes/models/blog.dart';
-import 'package:imes/models/cover_image.dart';
-import 'package:imes/screens/login.dart';
-import 'package:imes/screens/home.dart';
-
-import 'package:imes/blocs/user_notifier.dart';
-import 'package:imes/helpers/timeago_ua_messages.dart';
-import 'package:imes/utils/constants.dart';
-
-import 'package:provider/provider.dart';
-
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:timeago/timeago.dart' as timeago;
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart'
+    hide ChangeNotifierProvider, Consumer;
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/timeago_ua_messages.dart';
+import 'package:imes/models/blog.dart';
+import 'package:imes/models/cover_image.dart';
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/resources/repository.dart';
-
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart' hide ChangeNotifierProvider, Consumer;
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:imes/screens/home.dart';
+import 'package:imes/screens/login.dart';
+import 'package:imes/utils/constants.dart';
+import 'package:imes/widgets/base/system_ui_overlay_styler.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 import 'package:sizer/sizer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,7 +65,8 @@ void main() async {
         print('authenticated');
         user = response.body.data.user;
         final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(response.body.data.user.firebaseToken);
+        final authResult = await auth
+            .signInWithCustomToken(response.body.data.user.firebaseToken);
         final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
@@ -90,7 +83,10 @@ void main() async {
   runApp(ChangeNotifierProvider(
       create: (_) {
         return UserNotifier(
-            state: token != null && user != null ? AuthState.AUTHENTICATED : AuthState.NOT_AUTHENTICATED, user: user);
+            state: token != null && user != null
+                ? AuthState.AUTHENTICATED
+                : AuthState.NOT_AUTHENTICATED,
+            user: user);
       },
       child: ProviderScope(child: MyApp())));
 }
@@ -129,7 +125,11 @@ class MyApp extends HookWidget {
                     color: const Color(0xFF00B7FF),
                   )),
             ),
-            home: userNotifier.state == AuthState.AUTHENTICATED ? HomePage() : LoginPage(),
+            home: SystemUiOverlayStyler(
+              child: userNotifier.state == AuthState.AUTHENTICATED
+                  ? HomePage()
+                  : LoginPage(),
+            ),
           );
         });
       });

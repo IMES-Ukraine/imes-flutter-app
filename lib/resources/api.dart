@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:chopper/chopper.dart';
 
-import 'package:imes/models/basic_response.dart';
-import 'package:imes/models/login_response.dart';
-import 'package:imes/models/blogs_response.dart';
-import 'package:imes/models/blog_response.dart';
+import 'package:chopper/chopper.dart';
 import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/basic_response.dart';
+import 'package:imes/models/blog_response.dart';
+import 'package:imes/models/blogs_response.dart';
+import 'package:imes/models/login_response.dart';
 import 'package:imes/models/notifications_response.dart';
 import 'package:imes/models/profile_response.dart';
 import 'package:imes/models/read_blog_block_response.dart';
@@ -18,7 +18,7 @@ import 'package:imes/models/withdraw_history_response.dart';
 
 part 'api.chopper.dart';
 
-@ChopperApi(baseUrl: 'https://echo.myftp.org')
+@ChopperApi(baseUrl: 'https://imes.pro')
 // @ChopperApi(baseUrl: 'https://imes.pro/ ')
 abstract class RestClient extends ChopperService {
   static RestClient create([ChopperClient client]) => _$RestClient(client);
@@ -110,26 +110,32 @@ abstract class RestClient extends ChopperService {
   Future<Response<SubmitTestResponse>> submitTests(@Body() TestAnswerData data);
 
   @Post(path: '/api/v1/profile/verify')
-  Future<Response<ProfileResponse>> submitProfile(@Body() Map<String, dynamic> data);
+  Future<Response<ProfileResponse>> submitProfile(
+      @Body() Map<String, dynamic> data);
 
   @multipart
   @Post(path: '/api/v1/profile/image/education_document')
-  Future<Response<UploadFileResponse>> uploadEducationDoc(@PartFile('file') String path);
+  Future<Response<UploadFileResponse>> uploadEducationDoc(
+      @PartFile('file') String path);
 
   @multipart
   @Post(path: '/api/v1/profile/image/passport')
-  Future<Response<UploadFileResponse>> uploadPassport(@PartFile('file') String path);
+  Future<Response<UploadFileResponse>> uploadPassport(
+      @PartFile('file') String path);
 
   @multipart
   @Post(path: '/api/v1/profile/image/mic_id')
-  Future<Response<UploadFileResponse>> uploadMicId(@PartFile('file') String path);
+  Future<Response<UploadFileResponse>> uploadMicId(
+      @PartFile('file') String path);
 
   @multipart
   @Post(path: '/api/v1/profile/image/avatar')
-  Future<Response<UploadFileResponse>> uploadProfileImage(@PartFile('file') String path);
+  Future<Response<UploadFileResponse>> uploadProfileImage(
+      @PartFile('file') String path);
 
   @Get(path: '/api/v1/blog/{id}/read/{index}')
-  Future<Response<ReadBlogBlockResponse>> readBlogBlock({@Path('id') num blogId, @Path('index') num blockIndex});
+  Future<Response<ReadBlogBlockResponse>> readBlogBlock(
+      {@Path('id') num blogId, @Path('index') num blockIndex});
 
   @Get(path: '/api/v1/agreement/{id}')
   Future<Response<TestResponse>> getAgreement(@Path('id') num testId);
