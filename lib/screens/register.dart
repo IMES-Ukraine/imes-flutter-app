@@ -1,25 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:chopper/chopper.dart';
 import 'package:flutter/gestures.dart';
-import 'package:imes/utils/constants.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:imes/blocs/register_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
+import 'package:imes/helpers/utils.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/screens/confirm_code.dart';
-import 'package:imes/widgets/base/loading_lock.dart';
-
-import 'package:provider/provider.dart';
-
-import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/utils/constants.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
-
 import 'package:imes/widgets/base/custom_checkbox.dart';
+import 'package:imes/widgets/base/custom_dialog.dart';
+import 'package:imes/widgets/base/loading_lock.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
-
-import 'package:imes/blocs/user_notifier.dart';
-
-import 'package:imes/helpers/utils.dart';
-
-import 'package:chopper/chopper.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -31,8 +25,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formState = GlobalKey();
   final TextEditingController _loginController = TextEditingController();
   final FocusNode _loginFocusNode = FocusNode();
-  final MaskTextInputFormatter _phoneFormatter =
-      MaskTextInputFormatter(mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
+  final MaskTextInputFormatter _phoneFormatter = MaskTextInputFormatter(
+      mask: '+38 (###) ### ## ##', filter: {'#': RegExp(r'[0-9]')});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +35,8 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (_) => RegisterNotifier(),
-        child: Consumer2<RegisterNotifier, UserNotifier>(builder: (context, registerNotifier, userNotifier, _) {
+        child: Consumer2<RegisterNotifier, UserNotifier>(
+            builder: (context, registerNotifier, userNotifier, _) {
           return SafeArea(
             child: Stack(
               children: <Widget>[
@@ -57,13 +52,16 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Image.asset(Images.loginLogo),
                         ),
                         const SizedBox(height: 16.0),
-                        Text('Введіть номер', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                        Text('Введіть номер',
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 16.0),
                         TextFormField(
                           focusNode: _loginFocusNode,
                           controller: _loginController,
                           keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(hintText: '+38 (___) ___ __ __'),
+                          decoration:
+                              InputDecoration(hintText: '+38 (___) ___ __ __'),
                           textInputAction: TextInputAction.done,
                           inputFormatters: [_phoneFormatter],
                         ),
@@ -73,7 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: <Widget>[
                               CustomCheckbox(
                                 value: registerNotifier.termsAndConditionsValue,
-                                onTap: () => registerNotifier.changeTermsValue(),
+                                onTap: () =>
+                                    registerNotifier.changeTermsValue(),
                               ),
                               Expanded(
                                 child: Padding(
@@ -82,17 +81,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                     text: TextSpan(
                                       text: 'Я згоден з ',
                                       style: TextStyle(
-                                          fontSize: 11.0, color: Color(0xFF828282)), // TODO: extract colors to theme
+                                          fontSize: 11.0,
+                                          color: Color(
+                                              0xFF828282)), // TODO: extract colors to theme
                                       children: [
                                         TextSpan(
                                             text: 'Умовами',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).accentColor,
+                                              color:
+                                                  Theme.of(context).accentColor,
                                             ),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
-                                                if (await canLaunch(Constants.RULES_URL)) {
+                                                if (await canLaunch(
+                                                    Constants.RULES_URL)) {
                                                   launch(Constants.RULES_URL);
                                                 }
                                               }),
@@ -110,7 +113,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: [
                               CustomCheckbox(
                                 value: registerNotifier.doctorValue,
-                                onTap: () => registerNotifier.changeDoctorValue(),
+                                onTap: () =>
+                                    registerNotifier.changeDoctorValue(),
                               ),
                               Expanded(
                                 child: Padding(
@@ -119,7 +123,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     text: TextSpan(
                                       text: 'Я підтверджую, що я лікар ',
                                       style: TextStyle(
-                                          fontSize: 11.0, color: Color(0xFF828282)), // TODO: extract colors to theme
+                                          fontSize: 11.0,
+                                          color: Color(
+                                              0xFF828282)), // TODO: extract colors to theme
                                     ),
                                   ),
                                 ),
@@ -128,7 +134,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 36.0, horizontal: 16.0),
                           child: RaisedGradientButton(
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
@@ -140,8 +147,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                         return CustomAlertDialog(
                                           content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Theme.of(context).errorColor,
-                                              text: 'Приймить умови користування'),
+                                              color:
+                                                  Theme.of(context).errorColor,
+                                              text:
+                                                  'Приймить умови користування'),
                                         );
                                       });
                                   return;
@@ -153,17 +162,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                         return CustomAlertDialog(
                                           content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Theme.of(context).errorColor,
+                                              color:
+                                                  Theme.of(context).errorColor,
                                               text: 'Підтвердіть, що Ви лікар'),
                                         );
                                       });
                                   return;
                                 }
-                                userNotifier.auth(_phoneFormatter.getUnmaskedText()).then((value) {
+                                userNotifier
+                                    .auth(_phoneFormatter
+                                        .getMaskedText()
+                                        .replaceAll(RegExp(r'[^0-9]'), ''))
+                                    .then((value) {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                       builder: (context) => ConfirmCodePage(
-                                        phoneNumber: _phoneFormatter.getUnmaskedText(),
+                                        phoneNumber: _phoneFormatter
+                                            .getMaskedText()
+                                            .replaceAll(RegExp(r'[^0-9]'), ''),
                                       ),
                                     ),
                                   );
@@ -176,8 +192,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
                                               icon: Icons.close,
-                                              color: Theme.of(context).errorColor,
-                                              text: Utils.getErrorText(error?.body?.toString() ?? 'unkown_error'),
+                                              color:
+                                                  Theme.of(context).errorColor,
+                                              text: Utils.getErrorText(
+                                                  error?.body?.toString() ??
+                                                      'unkown_error'),
                                             ),
                                           );
                                         });
@@ -188,7 +207,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                           return CustomAlertDialog(
                                             content: CustomDialog(
                                                 icon: Icons.close,
-                                                color: Theme.of(context).errorColor,
+                                                color: Theme.of(context)
+                                                    .errorColor,
                                                 text: error.toString()),
                                           );
                                         });
@@ -198,7 +218,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             child: Text(
                               'ПІДТВЕРДИТИ',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.0),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
                             ),
                           ),
                         ),
@@ -206,7 +229,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                if (userNotifier.state == AuthState.AUTHENTICATING) LoadingLock()
+                if (userNotifier.state == AuthState.AUTHENTICATING)
+                  LoadingLock()
               ],
             ),
           );

@@ -2,17 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/models/user_basic_info.dart';
 import 'package:imes/models/user_special_info.dart';
-
 import 'package:imes/resources/repository.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 enum AuthState {
   AUTHENTICATED,
@@ -53,10 +50,12 @@ class UserNotifier with ChangeNotifier {
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
 
       final auth = FirebaseAuth.instance;
-      final authResult = await auth.signInWithCustomToken(response.body.user.firebaseToken);
+      final authResult =
+          await auth.signInWithCustomToken(response.body.user.firebaseToken);
       final token = await FirebaseMessaging.instance.getToken();
       final result = await Repository().api.submitToken(token: token);
-      _tokenRefreshSubscription = FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      _tokenRefreshSubscription =
+          FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
         Repository().api.submitToken(token: newToken);
       });
 
@@ -94,9 +93,12 @@ class UserNotifier with ChangeNotifier {
       deviceId = iosInfo.identifierForVendor;
       deviceName = iosInfo.utsname.machine;
     } else {}
-
-    final response =
-        await Repository().auth.verify(phone: phone, code: code, deviceId: deviceId, deviceName: deviceName);
+    final response = await Repository().auth.verify(
+          phone: phone,
+          code: code,
+          deviceId: deviceId,
+          deviceName: deviceName,
+        );
     if (response.statusCode == 200) {
       final storage = FlutterSecureStorage();
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
@@ -107,7 +109,8 @@ class UserNotifier with ChangeNotifier {
         _state = AuthState.AUTHENTICATED;
 
         final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(profileResponse.body.data.user.firebaseToken);
+        final authResult = await auth.signInWithCustomToken(
+            profileResponse.body.data.user.firebaseToken);
         final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
@@ -181,14 +184,18 @@ class UserNotifier with ChangeNotifier {
           ),
         );
       } else {
-        _user = user.copyWith(specializedInformation: UserSpecializedInfo(educationDocument: response.body.data));
+        _user = user.copyWith(
+            specializedInformation:
+                UserSpecializedInfo(educationDocument: response.body.data));
       }
       notifyListeners();
     }
   }
 
   void clearEducationDocument() {
-    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(educationDocument: null));
+    _user = user.copyWith(
+        specializedInformation:
+            user.specializedInformation.copyWith(educationDocument: null));
     notifyListeners();
   }
 
@@ -202,14 +209,18 @@ class UserNotifier with ChangeNotifier {
           ),
         );
       } else {
-        _user = user.copyWith(specializedInformation: UserSpecializedInfo(passport: response.body.data));
+        _user = user.copyWith(
+            specializedInformation:
+                UserSpecializedInfo(passport: response.body.data));
       }
       notifyListeners();
     }
   }
 
   void clearPassport() {
-    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(passport: null));
+    _user = user.copyWith(
+        specializedInformation:
+            user.specializedInformation.copyWith(passport: null));
     notifyListeners();
   }
 
@@ -223,14 +234,18 @@ class UserNotifier with ChangeNotifier {
           ),
         );
       } else {
-        _user = user.copyWith(specializedInformation: UserSpecializedInfo(micId: response.body.data));
+        _user = user.copyWith(
+            specializedInformation:
+                UserSpecializedInfo(micId: response.body.data));
       }
       notifyListeners();
     }
   }
 
   void clearMicId() {
-    _user = user.copyWith(specializedInformation: user.specializedInformation.copyWith(micId: null));
+    _user = user.copyWith(
+        specializedInformation:
+            user.specializedInformation.copyWith(micId: null));
     notifyListeners();
   }
 
@@ -238,9 +253,12 @@ class UserNotifier with ChangeNotifier {
     final response = await Repository().api.uploadProfileImage(path);
     if (response.statusCode == 200) {
       if (_user.basicInformation != null) {
-        _user = _user.copyWith(basicInformation: _user.basicInformation.copyWith(avatar: response.body.data));
+        _user = _user.copyWith(
+            basicInformation:
+                _user.basicInformation.copyWith(avatar: response.body.data));
       } else {
-        _user = _user.copyWith(basicInformation: UserBasicInfo(avatar: response.body.data));
+        _user = _user.copyWith(
+            basicInformation: UserBasicInfo(avatar: response.body.data));
       }
       notifyListeners();
     }
