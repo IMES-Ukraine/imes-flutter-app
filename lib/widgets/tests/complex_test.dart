@@ -8,6 +8,8 @@ import 'package:imes/helpers/utils.dart';
 import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
+import 'package:imes/models/test_answer.dart';
+import 'package:imes/models/test_answer_data.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
@@ -218,13 +220,19 @@ class ComplexTest extends HookWidget {
                                       state.value[test.complex[index].id],
                                       durationTimer.value);
                                 } else {
+                                  final answers = TestAnswerData(
+                                    data: test.complex
+                                        .map((e) => TestAnswer(
+                                              id: e.id,
+                                              variant: state.value[e.id],
+                                            ))
+                                        .toList(),
+                                  );
                                   final userNotifier =
                                       context.read<UserNotifier>();
                                   testNotifier
-                                      .postAnswer(
-                                          test.complex[index].id,
-                                          state.value[test.complex[index].id],
-                                          durationTimer.value)
+                                      .postAnswers(
+                                          answers.data, durationTimer.value)
                                       .then((data) {
                                     if (data.status == 'passed') {
                                       showDialog(
