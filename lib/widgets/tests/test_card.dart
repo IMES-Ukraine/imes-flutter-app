@@ -19,60 +19,65 @@ class TestCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(16.0),
       clipBehavior: Clip.antiAlias,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
       child: Column(
         children: [
           IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: OctoImage(
-                    image: CachedNetworkImageProvider(test.coverImage.path),
-                    placeholderBuilder: OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
-                    imageBuilder: (context, child) => Container(
-                      height: test.hasDescription ? null : 200.0,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          child,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  children: [
-                                    Card(
-                                      margin: EdgeInsets.zero,
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(9.0),
-                                        child: Image.asset(test.testType == 'complext'
-                                            ? Images.testLevel3
-                                            : test.answerType == 'text'
-                                                ? Images.testLevel2
-                                                : Images.testLevel1),
+                if (test?.coverImage?.path?.isNotEmpty == true)
+                  Expanded(
+                    child: OctoImage(
+                      image: CachedNetworkImageProvider(test?.coverImage?.path),
+                      placeholderBuilder: OctoPlaceholder.blurHash(
+                          'LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
+                      imageBuilder: (context, child) => Container(
+                        height: test.hasDescription ? null : 200.0,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            child,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Row(
+                                    children: [
+                                      Card(
+                                        margin: EdgeInsets.zero,
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(9.0),
+                                          child: Image.asset(
+                                              test.testType == 'complext'
+                                                  ? Images.testLevel3
+                                                  : test.answerType == 'text'
+                                                      ? Images.testLevel2
+                                                      : Images.testLevel1),
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 24.0),
-                                    BonusButton(points: test.bonus),
-                                  ],
+                                      const SizedBox(width: 24.0),
+                                      BonusButton(points: test.bonus),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
                   ),
-                ),
                 if (test.hasDescription)
                   Expanded(
                       child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(test.description.data, style: TextStyle(fontSize: 10.0)),
+                    child: Text(test.description.data,
+                        style: TextStyle(fontSize: 10.0)),
                   )),
               ],
             ),
@@ -93,7 +98,8 @@ class TestCard extends StatelessWidget {
                   child: Text(
                     'Вивчити інформацію'.toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

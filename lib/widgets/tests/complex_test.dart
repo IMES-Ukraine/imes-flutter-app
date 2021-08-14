@@ -25,10 +25,14 @@ class ComplexTest extends HookWidget {
 
   final Test test;
 
+  final _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final durationTimer = useCountDownValueNotifier(context, Duration(seconds: test.duration));
-    final state = useValueNotifier(ObservableMap<num, ObservableList<String>>());
+    final durationTimer =
+        useCountDownValueNotifier(context, Duration(seconds: test.duration));
+    final state =
+        useValueNotifier(ObservableMap<num, ObservableList<String>>());
     final controller = useScrollController();
     final step = useState(1);
 
@@ -59,7 +63,8 @@ class ComplexTest extends HookWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (test.complex[index].hasVideo) TestVideoCard(url: test.complex[index].video.data),
+                  if (test.complex[index].hasVideo)
+                    TestVideoCard(url: test.complex[index].video.data),
                   if (test.complex[index].answerType == 'variants')
                     HookBuilder(builder: (_) {
                       useObservable(state);
@@ -68,32 +73,43 @@ class ComplexTest extends HookWidget {
                         state.value[test.complex[index].id] = ObservableList();
                       }
 
-                      final stateNotifier = useValueNotifier(state.value[test.complex[index].id]);
+                      final stateNotifier =
+                          useValueNotifier(state.value[test.complex[index].id]);
                       useObservable(stateNotifier);
                       if (test.complex[index].variants.type == 'text') {
                         return Column(
-                            children: test.complex[index].variants.buttons.map((v) {
+                            children:
+                                test.complex[index].variants.buttons.map((v) {
                           return TestVariantFlatButton(
                             variant: v.variant,
                             title: v.title,
-                            selected: state.value[test.complex[index].id] != null &&
-                                state.value[test.complex[index].id].contains(v.variant),
+                            selected:
+                                state.value[test.complex[index].id] != null &&
+                                    state.value[test.complex[index].id]
+                                        .contains(v.variant),
                             selectedColor: index < step.value - 1
-                                ? test.complex[index].variants.correctAnswer.contains(v.variant)
-                                    ? Color(0xFF4CF99E) // TODO: extract color to theme
+                                ? test.complex[index].variants.correctAnswer
+                                        .contains(v.variant)
+                                    ? Color(
+                                        0xFF4CF99E) // TODO: extract color to theme
                                     : Theme.of(context).errorColor
                                 : null,
                             onTap: index < step.value - 1
                                 ? null
                                 : () {
-                                    if (state.value[test.complex[index].id] == null) {
-                                      state.value[test.complex[index].id] = ObservableList();
+                                    if (state.value[test.complex[index].id] ==
+                                        null) {
+                                      state.value[test.complex[index].id] =
+                                          ObservableList();
                                     }
 
-                                    if (!state.value[test.complex[index].id].contains(v.variant)) {
-                                      state.value[test.complex[index].id].add(v.variant);
+                                    if (!state.value[test.complex[index].id]
+                                        .contains(v.variant)) {
+                                      state.value[test.complex[index].id]
+                                          .add(v.variant);
                                     } else {
-                                      state.value[test.complex[index].id].remove(v.variant);
+                                      state.value[test.complex[index].id]
+                                          .remove(v.variant);
                                     }
                                   },
                           );
@@ -104,32 +120,50 @@ class ComplexTest extends HookWidget {
                           child: Wrap(
                             alignment: WrapAlignment.spaceBetween,
                             crossAxisAlignment: WrapCrossAlignment.center,
-                            children: test.complex[index].variants.buttons.map((v) {
+                            children:
+                                test.complex[index].variants.buttons.map((v) {
                               return ConstrainedBox(
-                                constraints: BoxConstraints(maxWidth: (MediaQuery.of(context).size.width - 24.0) / 2.0),
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        (MediaQuery.of(context).size.width -
+                                                24.0) /
+                                            2.0),
                                 child: TestVariantCardButton(
                                   variant: v.variant,
                                   title: v.title,
                                   descr: v.description,
-                                  imageUrl: v.file.path,
-                                  selected: state.value[test.complex[index].id] != null &&
-                                      state.value[test.complex[index].id].contains(v.variant),
+                                  imageUrl: v.file?.path,
+                                  selected:
+                                      state.value[test.complex[index].id] !=
+                                              null &&
+                                          state.value[test.complex[index].id]
+                                              .contains(v.variant),
                                   selectedColor: index < step.value - 1
-                                      ? test.complex[index].variants.correctAnswer.contains(v.variant)
-                                          ? Color(0xFF4CF99E) // TODO: extract color to theme
+                                      ? test.complex[index].variants
+                                              .correctAnswer
+                                              .contains(v.variant)
+                                          ? Color(
+                                              0xFF4CF99E) // TODO: extract color to theme
                                           : Theme.of(context).errorColor
                                       : null,
                                   onTap: index < step.value - 1
                                       ? null
                                       : () {
-                                          if (state.value[test.complex[index].id] == null) {
-                                            state.value[test.complex[index].id] = ObservableList();
+                                          if (state.value[
+                                                  test.complex[index].id] ==
+                                              null) {
+                                            state.value[test.complex[index]
+                                                .id] = ObservableList();
                                           }
 
-                                          if (!state.value[test.complex[index].id].contains(v.variant)) {
-                                            state.value[test.complex[index].id].add(v.variant);
+                                          if (!state
+                                              .value[test.complex[index].id]
+                                              .contains(v.variant)) {
+                                            state.value[test.complex[index].id]
+                                                .add(v.variant);
                                           } else {
-                                            state.value[test.complex[index].id].remove(v.variant);
+                                            state.value[test.complex[index].id]
+                                                .remove(v.variant);
                                           }
                                         },
                                 ),
@@ -143,8 +177,12 @@ class ComplexTest extends HookWidget {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: TextField(
-                        // controller: controller,
-                        decoration: InputDecoration(border: OutlineInputBorder()),
+                        controller: _textController,
+                        onChanged: (value) {
+                          state.value[test.complex[index].id].add(value);
+                        },
+                        decoration:
+                            InputDecoration(border: OutlineInputBorder()),
                         minLines: 5,
                         maxLines: 5,
                       ),
@@ -155,66 +193,98 @@ class ComplexTest extends HookWidget {
                       state.value[test.complex[index].id] = ObservableList();
                     }
 
-                    final stateNotifier = useValueNotifier(state.value[test.complex[index].id]);
+                    final stateNotifier =
+                        useValueNotifier(state.value[test.complex[index].id]);
                     useObservable(stateNotifier);
                     return Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: RaisedGradientButton(
-                        onPressed: state.value[test.complex[index].id] != null && index == step.value - 1
+                        onPressed: state.value[test.complex[index].id] !=
+                                    null &&
+                                index == step.value - 1
                             ? () {
-                                final testNotifier = context.read<TestNotifier>();
+                                final testNotifier =
+                                    context.read<TestNotifier>();
                                 if (step.value < test.complex.length) {
                                   step.value++;
                                   controller.animateTo(
-                                      controller.position.maxScrollExtent + controller.position.viewportDimension,
-                                      duration: const Duration(milliseconds: 500),
+                                      controller.position.maxScrollExtent +
+                                          controller.position.viewportDimension,
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.easeIn);
                                   testNotifier.postAnswer(
-                                      test.complex[index].id, state.value[test.complex[index].id], durationTimer.value);
+                                      test.complex[index].id,
+                                      state.value[test.complex[index].id],
+                                      durationTimer.value);
                                 } else {
-                                  final userNotifier = context.read<UserNotifier>();
+                                  final userNotifier =
+                                      context.read<UserNotifier>();
                                   testNotifier
-                                      .postAnswer(test.complex[index].id, state.value[test.complex[index].id],
+                                      .postAnswer(
+                                          test.complex[index].id,
+                                          state.value[test.complex[index].id],
                                           durationTimer.value)
                                       .then((data) {
                                     if (data.status == 'passed') {
                                       showDialog(
                                           context: context,
-                                          builder: (context) => CustomAlertDialog(
+                                          builder: (context) =>
+                                              CustomAlertDialog(
                                                 content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Text(
                                                       'Ви пройшли тест!',
-                                                      style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 17.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
-                                                    const SizedBox(height: 16.0),
+                                                    const SizedBox(
+                                                        height: 16.0),
                                                     Text(
                                                       '${data.points} балів',
                                                       style: TextStyle(
                                                         fontSize: 23.0,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Color(0xFF4CF99E),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xFF4CF99E),
                                                       ),
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
                                                     Text(
                                                       'зараховано на баланс',
                                                       style: TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Color(0xFF4CF99E),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Color(0xFF4CF99E),
                                                       ),
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
-                                                    Divider(indent: 8.0, endIndent: 8.0),
+                                                    Divider(
+                                                        indent: 8.0,
+                                                        endIndent: 8.0),
                                                     Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16.0),
                                                       child: CustomFlatButton(
                                                           text: 'OK',
-                                                          color: Theme.of(context).primaryColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
                                                           onPressed: () {
-                                                            Navigator.of(context).pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
                                                           }),
                                                     ),
                                                   ],
@@ -227,9 +297,11 @@ class ComplexTest extends HookWidget {
                                       showDialog(
                                         context: context,
                                         builder: (context) => CustomAlertDialog(
-                                          content: Text('Тест не пройден, попробуйте свои силы в других'),
+                                          content: Text(
+                                              'Тест не пройден, попробуйте свои силы в других'),
                                         ),
-                                      ).then((_) => Navigator.of(context).pop());
+                                      ).then(
+                                          (_) => Navigator.of(context).pop());
                                     }
                                   }).catchError((error) {
                                     print(error);
@@ -240,7 +312,8 @@ class ComplexTest extends HookWidget {
                                           content: CustomDialog(
                                             icon: Icons.close,
                                             color: Theme.of(context).errorColor,
-                                            text: Utils.getErrorText(error?.body ?? 'unkown_error'),
+                                            text: Utils.getErrorText(
+                                                error?.body ?? 'unkown_error'),
                                           ),
                                         );
                                       },
@@ -249,7 +322,10 @@ class ComplexTest extends HookWidget {
                                 }
                               }
                             : null,
-                        child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        child: Text('ВІДПОВІДЬ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
                       ),
                     );
                   }),

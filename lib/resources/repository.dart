@@ -1,26 +1,24 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/io_client.dart';
+import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/basic_response.dart';
+import 'package:imes/models/blog_response.dart';
+import 'package:imes/models/blogs_response.dart';
+import 'package:imes/models/error_response.dart';
+import 'package:imes/models/login_response.dart';
+import 'package:imes/models/notifications_response.dart';
+import 'package:imes/models/profile_response.dart';
 import 'package:imes/models/read_blog_block_response.dart';
 import 'package:imes/models/submit_test_response.dart';
 import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
 import 'package:imes/models/upload_file_response.dart';
 import 'package:imes/models/verify_response.dart';
-import 'package:imes/resources/api.dart';
-
-import 'package:imes/models/basic_response.dart';
-import 'package:imes/models/login_response.dart';
-import 'package:imes/models/blogs_response.dart';
-import 'package:imes/models/blog_response.dart';
-import 'package:imes/models/profile_response.dart';
-import 'package:imes/models/analytics_response.dart';
-import 'package:imes/models/notifications_response.dart';
 import 'package:imes/models/withdraw_history_response.dart';
-import 'package:imes/models/error_response.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:imes/resources/api.dart';
 import 'package:imes/resources/auth.dart';
 
 class Repository {
@@ -54,7 +52,8 @@ class Repository {
       ReadBlogBlockResponse: ReadBlogBlockResponse.fromJsonFactory,
     });
     final httpClient = HttpClient();
-    httpClient.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    httpClient.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
     _client = ChopperClient(
       services: [
         // the generated service
@@ -75,11 +74,12 @@ class Repository {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: '__AUTH_TOKEN_');
     if (token != null) {
-      return applyHeader(
+      final _request = applyHeader(
         request,
         'Authorization',
         'Bearer $token',
       );
+      return _request;
     }
     return request;
   }
@@ -108,7 +108,8 @@ class JsonSerializableConverter extends JsonConverter {
     return jsonFactory(values);
   }
 
-  List<T> _decodeList<T>(List values) => values.where((v) => v != null).map<T>((v) => _decode<T>(v)).toList();
+  List<T> _decodeList<T>(List values) =>
+      values.where((v) => v != null).map<T>((v) => _decode<T>(v)).toList();
 
   dynamic _decode<T>(entity) {
     if (entity is Iterable) return _decodeList<T>(entity);

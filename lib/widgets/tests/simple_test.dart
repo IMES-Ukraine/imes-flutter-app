@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imes/blocs/test_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
+import 'package:imes/hooks/observable.dart';
 import 'package:imes/hooks/test_timer_hook.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
@@ -13,7 +14,6 @@ import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
 import 'package:imes/widgets/tests/test_vide_card.dart';
-import 'package:imes/hooks/observable.dart';
 import 'package:observable/observable.dart';
 import 'package:provider/provider.dart';
 
@@ -24,9 +24,11 @@ class SimpleTest extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final durationTimer = useCountDownValueNotifier(context, Duration(seconds: test.duration));
+    final durationTimer =
+        useCountDownValueNotifier(context, Duration(seconds: test.duration));
     final controller = useTextEditingController();
-    final stateNotifier = useValueNotifier<ObservableList<String>>(ObservableList());
+    final stateNotifier =
+        useValueNotifier<ObservableList<String>>(ObservableList());
     final state = useObservable(stateNotifier);
 
     return SingleChildScrollView(
@@ -35,7 +37,7 @@ class SimpleTest extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TestTitle(title: 'Тест простой', duration: durationTimer),
-            if (test.hasToLearn) TestCard(test: test),
+            if (test?.hasToLearn == true) TestCard(test: test),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text('ВОПРОС',
@@ -60,7 +62,9 @@ class SimpleTest extends HookWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('ОТВЕТ', style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold)),
+                    Text('ОТВЕТ',
+                        style: TextStyle(
+                            fontSize: 17.0, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16.0),
                     ...test.variants.buttons
                         .map(
@@ -92,20 +96,25 @@ class SimpleTest extends HookWidget {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) {
                     FocusScope.of(context).unfocus();
-                    submit(context, state, testNotifier, controller, durationTimer);
+                    submit(context, state, testNotifier, controller,
+                        durationTimer);
                   },
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 16.0),
+              padding:
+                  const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 16.0),
               child: RaisedGradientButton(
                 onPressed: state.value != null || controller.text.isNotEmpty
                     ? () {
                         FocusScope.of(context).unfocus();
-                        submit(context, state, testNotifier, controller, durationTimer);
+                        submit(context, state, testNotifier, controller,
+                            durationTimer);
                       }
                     : null,
-                child: Text('ВІДПОВІДЬ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                child: Text('ВІДПОВІДЬ',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ),
           ],
@@ -124,7 +133,7 @@ class SimpleTest extends HookWidget {
     testNotifier
         .postAnswer(
       test.id,
-      state.value ?? [controller.text],
+      state.value?.isNotEmpty == true ? state.value : [controller.text],
       durationTimer.value,
     )
         .then((data) {
@@ -137,7 +146,8 @@ class SimpleTest extends HookWidget {
                     children: [
                       Text(
                         'Відповідь відправлена на модерацію',
-                        style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 17.0, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16.0),
@@ -171,7 +181,8 @@ class SimpleTest extends HookWidget {
                       children: [
                         Text(
                           'Ви пройшли тест!',
-                          style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 17.0, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16.0),

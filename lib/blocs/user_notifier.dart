@@ -60,6 +60,7 @@ class UserNotifier with ChangeNotifier {
       });
 
       notifyListeners();
+      // 0634999166
     }
   }
 
@@ -170,7 +171,7 @@ class UserNotifier with ChangeNotifier {
     _state = AuthState.NOT_AUTHENTICATED;
     final storage = FlutterSecureStorage();
     await storage.delete(key: '__AUTH_TOKEN_');
-    _tokenRefreshSubscription.cancel();
+    _tokenRefreshSubscription?.cancel();
     notifyListeners();
   }
 
