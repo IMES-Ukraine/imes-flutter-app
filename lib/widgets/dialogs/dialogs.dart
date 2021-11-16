@@ -4,7 +4,7 @@ import 'package:imes/helpers/utils.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
 import 'package:imes/widgets/base/custom_flat_button.dart';
-
+import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:sizer/sizer.dart';
 
 Future<T> showErrorDialog<T>(BuildContext context, dynamic error) {
@@ -22,6 +22,58 @@ Future<T> showErrorDialog<T>(BuildContext context, dynamic error) {
   );
 }
 
+Future<T> showWithdrawalDialog<T>(BuildContext context, int amount) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Обміняти ${amount.toString()} IMIC?',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: RaisedGradientButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    'ТАК',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      height: 19 / 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomFlatButton(
+                    text: 'СКАСУВАТИ',
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    }),
+              ),
+            ],
+          ),
+        );
+      });
+}
+
 Future<T> showBlogInfoDialog<T>(BuildContext context) {
   return showDialog(
       context: context,
@@ -34,11 +86,13 @@ Future<T> showBlogInfoDialog<T>(BuildContext context) {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Увага!',
-                  style: TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
+                  style:
+                      TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 8.0),
-              Icon(Icons.warning, color: Theme.of(context).errorColor, size: 90.0),
+              Icon(Icons.warning,
+                  color: Theme.of(context).errorColor, size: 90.0),
               const SizedBox(height: 16.0),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -86,8 +140,10 @@ Future<T> showCameraGalleryChooseDialog<T>(BuildContext context) {
                     text: 'КАМЕРА',
                     color: Theme.of(context).primaryColor,
                     onPressed: () async {
-                      final image =
-                          await ImagePicker().getImage(source: ImageSource.camera, maxWidth: 800, maxHeight: 600);
+                      final image = await ImagePicker().getImage(
+                          source: ImageSource.camera,
+                          maxWidth: 800,
+                          maxHeight: 600);
                       Navigator.of(context).pop(image?.path);
                     }),
               ),
@@ -97,8 +153,10 @@ Future<T> showCameraGalleryChooseDialog<T>(BuildContext context) {
                     text: 'ГАЛЕРЕЯ',
                     color: Theme.of(context).primaryColor,
                     onPressed: () async {
-                      final image =
-                          await ImagePicker().getImage(source: ImageSource.gallery, maxWidth: 800, maxHeight: 600);
+                      final image = await ImagePicker().getImage(
+                          source: ImageSource.gallery,
+                          maxWidth: 800,
+                          maxHeight: 600);
                       Navigator.of(context).pop(image?.path);
                     }),
               ),

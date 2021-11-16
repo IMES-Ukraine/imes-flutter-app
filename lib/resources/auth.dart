@@ -7,7 +7,8 @@ part 'auth.chopper.dart';
 
 //@ChopperApi(baseUrl: 'http://185.65.244.189')
 // @ChopperApi(baseUrl: 'http://yaris-ls.serveo.net')
-@ChopperApi(baseUrl: 'https://s.imes.pro/service')
+// @ChopperApi(baseUrl: 'https://s.imes.pro/service')
+@ChopperApi(baseUrl: 'http://imes.nextdoorcoders.com')
 abstract class AuthClient extends ChopperService {
   static AuthClient create([ChopperClient client]) => _$AuthClient(client);
 

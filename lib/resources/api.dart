@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:chopper/chopper.dart';
 import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/balance_card.dart';
+import 'package:imes/models/balance_card_history.dart';
+import 'package:imes/models/banner_card.dart';
 import 'package:imes/models/basic_response.dart';
 import 'package:imes/models/blog_response.dart';
 import 'package:imes/models/blogs_response.dart';
@@ -15,18 +18,20 @@ import 'package:imes/models/test_response.dart';
 import 'package:imes/models/tests_response.dart';
 import 'package:imes/models/upload_file_response.dart';
 import 'package:imes/models/withdraw_history_response.dart';
+import 'package:imes/resources/repository.dart';
 
 part 'api.chopper.dart';
 
-@ChopperApi(baseUrl: 'https://imes.pro')
-// @ChopperApi(baseUrl: 'https://imes.pro/ ')
+// @ChopperApi(baseUrl: 'https://imes.pro')
+// @ChopperApi(baseUrl: 'https://laravel-dev-final.imes.pro')
+@ChopperApi(baseUrl: BASE_URL)
 abstract class RestClient extends ChopperService {
   static RestClient create([ChopperClient client]) => _$RestClient(client);
 
   @multipart
   @Post(path: '/api/auth/login')
   Future<Response<LoginResponse>> login(
-    @Field('login') String login,
+    @Field('email') String email,
     @Field('password') String password,
   );
 
@@ -81,12 +86,7 @@ abstract class RestClient extends ChopperService {
   });
 
   @Get(path: '/api/v1/withdraw')
-  Future<Response<WithdrawHistoryResponse>> withdrawHistory(
-      // {
-      //   @Query('page') int page = 0,
-      //   @Query('count') int count = 10,
-      // }
-      );
+  Future<Response<WithdrawHistoryResponse>> withdrawHistory();
 
   @Post(path: '/api/v1/profile/token')
   Future<Response<BasicResponse>> submitToken({
@@ -142,6 +142,31 @@ abstract class RestClient extends ChopperService {
 
   @Post(path: '/api/v1/agreement/{id}')
   Future<Response> postAgreement(@Path('id') num testId);
+
+  ///Получение списка всех доступных карточек с сортировкой по любому из полей
+  @Get(path: '/api/v1/cards')
+  Future<Response<BalanceCardResponse>> getBalanceCards(
+    @Query('sortby') String sortby,
+    @Query('order') String order,
+  );
+
+  ///Вывод подробной информации по отдельной карточке
+  @Get(path: '/api/v1/cards/{id}')
+  Future<Response<BalanceCardItemResponse>> getBalanceCardById(
+      @Path('id') num id);
+
+  ///Вывод информации по баннеру
+  @Get(path: '/api/v1/banners/card')
+  Future<Response<BannerCardResponse>> getBalanceBannerCard();
+
+  ///история обмена
+  @Get(path: '/api/v1/users/cards/{user_id}')
+  Future<Response<List<BalanceCardHistoryItem>>> getBalanceCardsHistory(
+      @Path('user_id') num userId);
+
+  ///логика покупки карточки
+  @Get(path: 'api/v1/cards/buy/{id}')
+  Future<Response<Map<String, dynamic>>> buyBalanceCard(@Path('id') num id);
 
   // @Get(path: '/api/notifications/{id}')
   // Future<Response> getNotification(@Path('id') num id);

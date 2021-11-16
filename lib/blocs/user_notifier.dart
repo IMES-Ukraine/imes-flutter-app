@@ -37,11 +37,13 @@ class UserNotifier with ChangeNotifier {
 
   int get notificationsCount => _notifications;
 
-  Future login(String login, String password) async {
+  Future login(String phone, String password) async {
     _state = AuthState.AUTHENTICATING;
     notifyListeners();
 
-    final response = await Repository().api.login('$login@imes.pro', password);
+    // final response = await Repository().api.login(phone, password);
+    final response =
+        await Repository().api.login('$phone@imes.pro', '$phone@imes.pro');
     if (response.statusCode == 200) {
       _user = response.body.user;
       _state = AuthState.AUTHENTICATED;

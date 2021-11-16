@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FDAllFilesDownloadedMessage</key>
 	<string>All files have been downloaded</string>
 	<key>FDMaximumConcurrentTasks</key>
@@ -37,20 +37,20 @@
 	<string>Needed by permissions handler</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Needed by permissions handler</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Needed for take photo of documents</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Needed by permissions handler</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Needed by permissions handler</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Needed because of camera usage</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Needed by permissions handler</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Needed by permissions handler</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Needed for choose photo of documents</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Needed for take photo of documents</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Needed because of camera usage</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Needed by permissions handler</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -4,6 +4,8 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/io_client.dart';
 import 'package:imes/models/analytics_response.dart';
+import 'package:imes/models/balance_card.dart';
+import 'package:imes/models/banner_card.dart';
 import 'package:imes/models/basic_response.dart';
 import 'package:imes/models/blog_response.dart';
 import 'package:imes/models/blogs_response.dart';
@@ -21,6 +23,8 @@ import 'package:imes/models/withdraw_history_response.dart';
 import 'package:imes/resources/api.dart';
 import 'package:imes/resources/auth.dart';
 
+const BASE_URL = 'http://imes.nextdoorcoders.com';
+
 class Repository {
   static final Repository _instance = Repository._internal();
 
@@ -36,6 +40,9 @@ class Repository {
 
   Repository._internal() {
     final converter = JsonSerializableConverter({
+      BannerCardResponse: BannerCardResponse.fromJsonFactory,
+      BalanceCardResponse: BalanceCardResponse.fromJsonFactory,
+      BalanceCardItemResponse: BalanceCardItemResponse.fromJsonFactory,
       BasicResponse: BasicResponse.fromJsonFactory,
       LoginResponse: LoginResponse.fromJsonFactory,
       BlogsResponse: BlogsResponse.fromJsonFactory,

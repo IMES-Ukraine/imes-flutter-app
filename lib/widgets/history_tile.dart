@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HistoryListTile extends StatelessWidget {
   final int index;
@@ -19,48 +19,65 @@ class HistoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(4.0),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text('${index + 1}'),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(.0),
+    return Material(
+      elevation: 1,
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(4.0),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 32,
+            top: 13,
+            right: 15,
+            bottom: 12,
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
                 child: Text(
-                  date != null ? DateFormat.yMd().format(date) : '',
-                  style: TextStyle(color: Color(0xff828282)),
+                  '$total',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    height: 25 / 18,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Text(
-                type,
-                textAlign: TextAlign.end,
-                style: TextStyle(color: Color(0xff828282)),
+              Expanded(
+                flex: 3,
+                child: Text(
+                  type,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Color(0xff333333),
+                    fontSize: 14,
+                    height: 19 / 14,
+                  ),
+                ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                '$total',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-                textAlign: TextAlign.end,
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(.0),
+                  child: Text(
+                    // date != null ? DateFormat.yMd().format(date) : '',
+                    date != null ? DateFormat('dd.MM.yyyy').format(date) : '',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: Color(0xffa1a1a1),
+                      fontSize: 12,
+                      height: 16 / 12,
+                    ),
+                  ),
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

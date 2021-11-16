@@ -15,7 +15,8 @@ class BlogsResponse {
 
   static const fromJsonFactory = _$BlogsResponseFromJson;
 
-  factory BlogsResponse.fromJson(Map<String, dynamic> json) => _$BlogsResponseFromJson(json);
+  factory BlogsResponse.fromJson(Map<String, dynamic> json) =>
+      _$BlogsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$BlogsResponseToJson(this);
 }

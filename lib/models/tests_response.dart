@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:imes/models/test_page.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'tests_response.g.dart';
 
@@ -14,6 +14,7 @@ class TestsResponse {
 
   static const fromJsonFactory = _$TestsResponseFromJson;
 
-  factory TestsResponse.fromJson(Map<String, dynamic> json) => _$TestsResponseFromJson(json);
+  factory TestsResponse.fromJson(Map<String, dynamic> json) =>
+      _$TestsResponseFromJson(json);
   Map<String, dynamic> toJson() => _$TestsResponseToJson(this);
 }
