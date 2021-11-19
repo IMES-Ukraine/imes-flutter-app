@@ -10,5 +10,6 @@ abstract class UploadFileResponse with _$UploadFileResponse {
 
   static const fromJsonFactory = _$UploadFileResponseFromJson;
 
-  factory UploadFileResponse.fromJson(Map<String, dynamic> json) => _$UploadFileResponseFromJson(json);
+  factory UploadFileResponse.fromJson(Map<String, dynamic> json) =>
+      _$UploadFileResponseFromJson(json);
 }

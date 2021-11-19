@@ -41,9 +41,7 @@ class UserNotifier with ChangeNotifier {
     _state = AuthState.AUTHENTICATING;
     notifyListeners();
 
-    // final response = await Repository().api.login(phone, password);
-    final response =
-        await Repository().api.login('$phone@imes.pro', '$phone@imes.pro');
+    final response = await Repository().api.login('$phone@imes.pro', password);
     if (response.statusCode == 200) {
       _user = response.body.user;
       _state = AuthState.AUTHENTICATED;

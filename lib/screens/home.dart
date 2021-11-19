@@ -1,20 +1,17 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:imes/blocs/home_notifier.dart';
+import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
+import 'package:imes/screens/blog_view.dart';
 import 'package:imes/screens/blogs.dart';
 import 'package:imes/screens/instructions.dart';
 import 'package:imes/screens/menu.dart';
-import 'package:imes/screens/blog_view.dart';
 import 'package:imes/screens/support.dart';
 import 'package:imes/screens/test_view.dart';
 import 'package:imes/screens/tests.dart';
 import 'package:imes/widgets/base/bottom_appbar_button.dart';
-
 import 'package:provider/provider.dart';
-
-import 'package:imes/blocs/user_notifier.dart';
-import 'package:imes/blocs/home_notifier.dart';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,7 +37,8 @@ class _HomePageState extends State<HomePage> {
           final values = data['action'].split(':');
           try {
             final id = num.parse(values[1]);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BlogViewPage(id)));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => BlogViewPage(id)));
           } catch (e) {
             print(e);
           }
@@ -176,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                         case '/':
                           return TestsPage();
                         case '/tests/view':
-                          return TestViewPage(routeSettings.arguments);
+                          return TestViewPage(routeSettings.arguments as int);
                         default:
                           return TestsPage();
                       }
@@ -226,7 +224,9 @@ class _HomePageState extends State<HomePage> {
                         if (homeNotifier.currentPage != 0) {
                           homeNotifier.changePage(0);
                         } else {
-                          _blogsNavigatorKey.currentState.pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                          _blogsNavigatorKey.currentState
+                              .pushNamedAndRemoveUntil(
+                                  '/', ModalRoute.withName('/'));
                         }
                       }),
                   BottomAppBarButton(

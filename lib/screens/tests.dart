@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imes/blocs/tests_notifier.dart';
 import 'package:imes/helpers/custom_icons_icons.dart';
+import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:imes/widgets/base/alert_container.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
@@ -57,12 +58,17 @@ class _Content extends StatelessWidget {
   final TestsStateNotifier testsNotifier;
   final BoxConstraints constraints;
 
+  Future<void> _openTest(BuildContext context, Test test) async {
+    await Navigator.of(context).pushNamed('/tests/view', arguments: test.id);
+    testsNotifier.remove(test);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: testsNotifier.state == TestsState.LOADING
           ? 1
-          : testsNotifier.tests.length + 1,
+          : testsNotifier.tests.length,
       itemBuilder: (context, index) {
         if (testsNotifier.state == TestsState.LOADING) {
           return Center(
@@ -121,8 +127,8 @@ class _Content extends StatelessWidget {
           image: testsNotifier.tests[index].coverImage?.path ?? '',
           answerType: testsNotifier.tests[index].answerType,
           testType: testsNotifier.tests[index].testType,
-          onTap: () {
-            showDialog(
+          onTap: () async {
+            final result = await showDialog(
                 context: context,
                 builder: (context) {
                   return CustomAlertDialog(
@@ -167,119 +173,111 @@ class _Content extends StatelessWidget {
                       ],
                     ),
                   );
-                }).then((value) {
-              if (value) {
-                if (testsNotifier.tests[index]?.agreementAccepted?.isEmpty ??
-                    true) {
-                  Repository()
-                      .api
-                      .getAgreement(testsNotifier.tests[index].id)
-                      .then((response) {
-                    showDialog(
-                        context: context,
-                        builder: (innerContext) {
-                          return HookBuilder(builder: (context) {
-                            final checkBoxState = useState(false);
-                            return CustomAlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Padding(
+                }) as bool;
+            if (result) {
+              if (testsNotifier.tests[index]?.agreementAccepted?.isEmpty ??
+                  true) {
+                final response = await Repository()
+                    .api
+                    .getAgreement(testsNotifier.tests[index].id);
+                showDialog(
+                    context: context,
+                    builder: (innerContext) {
+                      return HookBuilder(builder: (ctx) {
+                        final checkBoxState = useState(false);
+                        return CustomAlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Згода на участь в дослідженні',
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              if (response?.body?.data?.single?.agreement
+                                      ?.isNotEmpty ==
+                                  true) ...[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Color(0xFFA1A1A1)),
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Згода на участь в дослідженні',
-                                      style: TextStyle(
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.bold),
+                                    child: SizedBox(
+                                      height: 250.0,
+                                      child: SingleChildScrollView(
+                                          child: Text(
+                                              response
+                                                  .body.data.single.agreement,
+                                              style:
+                                                  TextStyle(fontSize: 12.0))),
                                     ),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Color(0xFFA1A1A1)),
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SizedBox(
-                                        height: 250.0,
-                                        child: SingleChildScrollView(
-                                            child: Text(
-                                                response
-                                                    .body.data.single.agreement,
-                                                style:
-                                                    TextStyle(fontSize: 12.0))),
-                                      ),
+                                ),
+                              ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  children: [
+                                    CustomCheckbox(
+                                      value: checkBoxState.value,
+                                      onTap: () => checkBoxState.value =
+                                          !checkBoxState.value,
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      children: [
-                                        CustomCheckbox(
-                                          value: checkBoxState.value,
-                                          onTap: () => checkBoxState.value =
-                                              !checkBoxState.value,
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                text:
-                                                    'Я ознайомлений з Умовами данної згоди для участі в дослідженні',
-                                                style: TextStyle(
-                                                    fontSize: 11.0,
-                                                    color: Color(
-                                                        0xFF828282)), // TODO: extract colors to theme
-                                              ),
-                                            ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text:
+                                                'Я ознайомлений з Умовами данної згоди для участі в дослідженні',
+                                            style: TextStyle(
+                                                fontSize: 11.0,
+                                                color: Color(
+                                                    0xFF828282)), // TODO: extract colors to theme
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    child: RaisedGradientButton(
-                                      onPressed: checkBoxState.value
-                                          ? () {
-                                              Repository().api.postAgreement(
-                                                  testsNotifier
-                                                      .tests[index].id);
-                                              Navigator.of(innerContext).pop();
-                                              Navigator.of(context).pushNamed(
-                                                  '/tests/view',
-                                                  arguments: testsNotifier
-                                                      .tests[index].id);
-                                            }
-                                          : null,
-                                      child: Text(
-                                        'РОЗПОЧАТИ',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            );
-                          });
-                        });
-                  });
-                } else {
-                  Navigator.of(context)
-                      .pushNamed('/tests/view',
-                          arguments: testsNotifier.tests[index].id)
-                      .then((_) {
-                    testsNotifier.remove(testsNotifier.tests[index]);
-                  });
-                }
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: RaisedGradientButton(
+                                  onPressed: checkBoxState.value
+                                      ? () async {
+                                          await Repository().api.postAgreement(
+                                              testsNotifier.tests[index].id);
+                                          Navigator.of(innerContext).pop();
+                                          _openTest(context,
+                                              testsNotifier.tests[index]);
+                                        }
+                                      : null,
+                                  child: Text(
+                                    'РОЗПОЧАТИ',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                    });
+              } else {
+                _openTest(context, testsNotifier.tests[index]);
               }
-            });
+            }
           },
         );
       },

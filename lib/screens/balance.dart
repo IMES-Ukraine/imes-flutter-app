@@ -260,25 +260,41 @@ class _BalancePageState extends State<BalancePage> {
                       //   onPressed: () {},
                       //   child: Text('за популярністю'),
                       // ),
-                      ...HistorySorting.values
-                          .map(
-                            (e) => TextButton(
-                              onPressed: () {
-                                historyNotifier.changeSorting(e);
-                              },
-                              child: Text(
-                                e.toLocalizedString,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  height: 16 / 12,
-                                  color: historyNotifier.sorting == e
-                                      ? Constants.brandBlueColor
-                                      : Color(0xff828282),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 36,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...HistorySorting.values
+                                  .map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          historyNotifier.changeSorting(e);
+                                        },
+                                        child: Text(
+                                          e.toLocalizedString,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            height: 16 / 12,
+                                            color: historyNotifier.sorting == e
+                                                ? Constants.brandBlueColor
+                                                : Color(0xff828282),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
                       OutlinedButton(
                         onPressed: () async {
                           historyNotifier.loadCards();
