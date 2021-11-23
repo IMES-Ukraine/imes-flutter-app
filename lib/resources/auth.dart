@@ -12,10 +12,13 @@ part 'auth.chopper.dart';
 abstract class AuthClient extends ChopperService {
   static AuthClient create([ChopperClient client]) => _$AuthClient(client);
 
-  @Post(path: '/api/auth', headers: {'Content-Type': 'application/json'})
+  @Post(
+      path: '/service/api/auth', headers: {'Content-Type': 'application/json'})
   Future<Response> auth(@Field('phone') String phone);
 
-  @Post(path: '/api/verify', headers: {'Content-Type': 'application/json'})
+  @Post(
+      path: '/service/api/verify',
+      headers: {'Content-Type': 'application/json'})
   Future<Response<VerifyResponse>> verify({
     @Field('phone') String phone,
     @Field('code') String code,

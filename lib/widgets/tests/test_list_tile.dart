@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 
@@ -34,9 +35,14 @@ class TestListTile extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
         onTap: onTap,
         child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(image: CachedNetworkImageProvider(image), fit: BoxFit.cover),
-          ),
+          decoration: image?.isNotEmpty == true
+              ? BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider('$BASE_URL$image'),
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : null,
           child: Stack(
             children: [
               BackdropFilter(
@@ -64,7 +70,12 @@ class TestListTile extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Divider(color: Colors.white, thickness: 2.0, height: 2.0, indent: 16.0, endIndent: 16.0),
+                      Divider(
+                          color: Colors.white,
+                          thickness: 2.0,
+                          height: 2.0,
+                          indent: 16.0,
+                          endIndent: 16.0),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(

@@ -157,9 +157,13 @@ class _BalanceItemState extends State<BalanceItem> {
                   final result = await showWithdrawalDialog<bool>(
                       context, widget.card.cost);
                   if (result == true) {
-                    final response =
-                        await Repository().api.buyBalanceCard(_card.id);
-                    Navigator.of(context).pop(result);
+                    try {
+                      final response =
+                          await Repository().api.buyBalanceCard(_card.id);
+                      Navigator.of(context).pop(result);
+                    } catch (e) {
+                      Navigator.of(context).pop(result);
+                    }
                   }
                 },
                 child: Row(

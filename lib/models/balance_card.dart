@@ -5,9 +5,15 @@ part 'balance_card.g.dart';
 
 @JsonSerializable()
 class BalanceCardResponse {
-  const BalanceCardResponse({this.page});
+  const BalanceCardResponse({
+    this.statusCode,
+    this.message,
+    this.data,
+  });
 
-  final BalanceCardPage page;
+  final int statusCode;
+  final String message;
+  final BalanceCardPage data;
 
   static const fromJsonFactory = _$BalanceCardResponseFromJson;
 
@@ -27,14 +33,12 @@ class BalanceCardPage extends Pageable {
     int to,
     int total,
     int lastPage,
-    // int perPage,
   }) : super(
           currentPage: currentPage,
           from: from,
           to: to,
           total: total,
           lastPage: lastPage,
-          //  perPage: perPage,
         );
 
   factory BalanceCardPage.fromJson(Map<String, dynamic> json) =>

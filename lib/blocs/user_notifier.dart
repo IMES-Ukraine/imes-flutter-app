@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:imes/models/profile_data.dart';
 import 'package:imes/models/user.dart' as local;
 import 'package:imes/models/user_basic_info.dart';
 import 'package:imes/models/user_special_info.dart';
@@ -123,8 +124,12 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> setupPwd(String pwd) async {
+  Future<ProfileData> setupPwd(String pwd) async {
     final response = await Repository().api.submitPassword(pwd);
+    if (response.isSuccessful) {
+      return response.body.data;
+    }
+    return null;
   }
 
   void updateUser(local.User user) {

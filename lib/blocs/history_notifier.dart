@@ -61,10 +61,10 @@ class HistoryNotifier with ChangeNotifier {
     try {
       final response =
           await Repository().api.getBalanceCards('', _sorting.asString);
-      if (response.body.page != null) {
-        _cardsTotal = response.body.page.total;
-        _cardsLastPage = response.body.page.lastPage;
-        _cardsItems = response.body.page.data;
+      if (response != null) {
+        _cardsTotal = response.body.data.total;
+        _cardsLastPage = response.body.data.lastPage;
+        _cardsItems = response.body.data.data;
       }
       _state = HistoryState.LOADED;
       notifyListeners();
@@ -79,16 +79,16 @@ class HistoryNotifier with ChangeNotifier {
     notifyListeners();
 
     try {
-      final futures = await Future.wait<Response<dynamic>>([
+      final futures = await Future.wait([
         Repository().api.getBalanceCards('', _sorting.asString),
         Repository().api.getBalanceBannerCard()
       ]);
       final _cardsResponse = futures[0] as Response<BalanceCardResponse>;
       final _bannerResponse = futures[1] as Response<BannerCardResponse>;
-      if (_cardsResponse.body.page != null) {
-        _cardsTotal = _cardsResponse.body.page.total;
-        _cardsLastPage = _cardsResponse.body.page.lastPage;
-        _cardsItems = _cardsResponse.body.page.data;
+      if (_cardsResponse != null) {
+        _cardsTotal = _cardsResponse.body.data.total;
+        _cardsLastPage = _cardsResponse.body.data.lastPage;
+        _cardsItems = _cardsResponse.body.data.data;
       }
       _bannerCard = _bannerResponse.body.data;
       _state = HistoryState.LOADED;

@@ -31,7 +31,7 @@ abstract class RestClient extends ChopperService {
   @multipart
   @Post(path: '/api/auth/login')
   Future<Response<LoginResponse>> login(
-    @Field('email') String email,
+    @Field('username') String username,
     @Field('password') String password,
   );
 

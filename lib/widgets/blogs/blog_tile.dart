@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 import 'package:octo_image/octo_image.dart';
-
 import 'package:sizer/sizer.dart';
 
 class BlogListTile extends StatelessWidget {
@@ -42,9 +42,10 @@ class BlogListTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             OctoImage(
-              image: CachedNetworkImageProvider(image),
+              image: CachedNetworkImageProvider('$BASE_URL$image'),
               height: 25.0.h,
-              placeholderBuilder: OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
+              placeholderBuilder:
+                  OctoPlaceholder.blurHash('LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
               imageBuilder: (context, child) => Stack(
                 fit: StackFit.expand,
                 children: [
