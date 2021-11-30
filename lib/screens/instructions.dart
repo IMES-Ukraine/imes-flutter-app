@@ -9,16 +9,9 @@ class InstructionsPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: SingleChildScrollView(
-          child: Image.network(
+          child: Image.asset(
             Constants.INSTRUCTION_URL,
             fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              }
-
-              return Center(child: CircularProgressIndicator());
-            },
           ),
         ),
       ),

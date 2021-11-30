@@ -175,6 +175,7 @@ class _Content extends StatelessWidget {
                   );
                 }) as bool;
             if (result) {
+              print(result.toString());
               if (testsNotifier.tests[index]?.agreementAccepted?.isEmpty ??
                   true) {
                 final response = await Repository()

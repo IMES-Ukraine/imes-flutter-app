@@ -108,6 +108,7 @@ flutter:
     - assets/3.0x/
     - assets/res/
     - assets/drawable/
+    - assets/guide/
 
   fonts:
     - family: Montserrat

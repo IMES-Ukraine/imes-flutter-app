@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:imes/models/test.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:imes/resources/resources.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 import 'package:octo_image/octo_image.dart';
@@ -30,7 +31,8 @@ class TestCard extends StatelessWidget {
                 if (test?.coverImage?.path?.isNotEmpty == true)
                   Expanded(
                     child: OctoImage(
-                      image: CachedNetworkImageProvider(test?.coverImage?.path),
+                      image: CachedNetworkImageProvider(
+                          '$BASE_URL${test?.coverImage?.path}'),
                       placeholderBuilder: OctoPlaceholder.blurHash(
                           'LKO2?V%2Tw=w]~RBVZRi};RPxuwH'),
                       imageBuilder: (context, child) => Container(

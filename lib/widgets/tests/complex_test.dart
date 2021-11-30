@@ -312,7 +312,7 @@ class ComplexTest extends HookWidget {
                                           (_) => Navigator.of(context).pop());
                                     }
                                   }).catchError((error) {
-                                    print(error);
+                                    print(error.toString());
                                     showDialog(
                                       context: context,
                                       builder: (context) {

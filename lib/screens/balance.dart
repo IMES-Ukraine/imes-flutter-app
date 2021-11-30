@@ -79,132 +79,131 @@ class _BalancePageState extends State<BalancePage> {
                 ),
               ],
             ),
-            body: Consumer2<UserNotifier, HistoryNotifier>(
-                builder: (context, userNotifier, historyNotifier, _) {
-              return SafeArea(
-                child: NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (notification) {
-                    return true;
+            body: SafeArea(
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (notification) {
+                  return true;
+                },
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    userNotifier.updateProfile();
+                    historyNotifier.load();
                   },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      userNotifier.updateProfile();
-                      historyNotifier.load();
-                    },
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(height: 24),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(
-                              '${userNotifier.user.balance ?? 0}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 48.0,
-                                fontWeight: FontWeight.w700,
-                                height: 59 / 48,
-                                color: Color(0xFF333333),
-                              ),
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 24),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            '${userNotifier.user.balance ?? 0}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 48.0,
+                              fontWeight: FontWeight.w700,
+                              height: 59 / 48,
+                              color: Color(0xFF333333),
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(Images.token),
-                              const SizedBox(
-                                width: 10,
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(Images.token),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'IMIC',
+                              style: TextStyle(
+                                color: Constants.brandBlueColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                height: 22 / 18,
                               ),
-                              Text(
-                                'IMIC',
-                                style: TextStyle(
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        if (historyNotifier.state == HistoryState.LOADED) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: AspectRatio(
+                              aspectRatio: 34 / 10,
+                              child: Container(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
                                   color: Constants.brandBlueColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  height: 22 / 18,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
                                 ),
-                              )
-                            ],
+                                child: OctoImage.fromSet(
+                                  height: 100,
+                                  octoSet: OctoSet.blurHash(
+                                    'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                  ),
+                                  image: CachedNetworkImageProvider(
+                                    historyNotifier
+                                                ?.bannerCard?.url?.isNotEmpty ==
+                                            true
+                                        ? historyNotifier.bannerCard.url
+                                        : '''$BASE_URL${historyNotifier?.bannerCard?.image}''',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 20),
-                          if (historyNotifier.state == HistoryState.LOADED) ...[
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: AspectRatio(
-                                aspectRatio: 34 / 10,
-                                child: Container(
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    color: Constants.brandBlueColor,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                  ),
-                                  child: OctoImage.fromSet(
-                                    height: 100,
-                                    octoSet: OctoSet.blurHash(
-                                      'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
-                                    ),
-                                    image: CachedNetworkImageProvider(
-                                      '''$BASE_URL${historyNotifier?.bannerCard?.image}''',
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                          if (historyNotifier.cardsItems.isEmpty == true) ...[
+                            Text(
+                              'Картки відсутні',
+                              style: TextStyle(
+                                color: Color(0xffa1a1a1),
+                                fontSize: 24,
+                                height: 36 / 24,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            if (historyNotifier.cardsItems.isEmpty == true) ...[
-                              Text(
-                                'Картки відсутні',
-                                style: TextStyle(
-                                  color: Color(0xffa1a1a1),
-                                  fontSize: 24,
-                                  height: 36 / 24,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                          ] else ...[
+                            ListView.separated(
+                              itemBuilder: (context, index) {
+                                return _ExchangeCard(
+                                  index: index,
+                                  card: historyNotifier.cardsItems[index],
+                                  onBuy: () {
+                                    historyNotifier.loadCards();
+                                    userNotifier.updateProfile();
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
                               ),
-                            ] else ...[
-                              ListView.separated(
-                                itemBuilder: (context, index) {
-                                  return _ExchangeCard(
-                                    index: index,
-                                    card: historyNotifier.cardsItems[index],
-                                    onBuy: () {
-                                      historyNotifier.loadCards();
-                                      userNotifier.updateProfile();
-                                    },
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 10,
-                                ),
-                                itemCount: historyNotifier.state ==
-                                        HistoryState.LOADING
-                                    ? 1
-                                    : historyNotifier.cardsItems.length,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(
-                                  left: 16,
-                                  right: 16,
-                                  bottom: 16,
-                                ),
-                                physics: const NeverScrollableScrollPhysics(),
+                              itemCount:
+                                  historyNotifier.state == HistoryState.LOADING
+                                      ? 1
+                                      : historyNotifier.cardsItems.length,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.only(
+                                left: 16,
+                                right: 16,
+                                bottom: 16,
                               ),
-                            ]
-                          ],
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
+                          ]
                         ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
+            ),
             endDrawerEnableOpenDragGesture: false,
             onDrawerChanged: (isOpen) {},
             drawer: Drawer(
@@ -379,15 +378,25 @@ class _ExchangeCard extends StatelessWidget {
       elevation: 1,
       child: InkWell(
         onTap: () async {
-          final result = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => BalanceItem(
-                card: card,
+          if (card.description?.isNotEmpty == true) {
+            final result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => BalanceItem(
+                  card: card,
+                ),
               ),
-            ),
-          ) as bool;
-          if (result == true) {
-            onBuy?.call();
+            ) as bool;
+            if (result == true) {
+              onBuy?.call();
+            }
+          } else {
+            final result = await showWithdrawalDialog<bool>(context, card.cost);
+            if (result == true) {
+              try {
+                final response = await Repository().api.buyBalanceCard(card.id);
+                onBuy?.call();
+              } catch (e) {}
+            }
           }
         },
         child: Container(

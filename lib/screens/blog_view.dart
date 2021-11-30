@@ -193,10 +193,7 @@ class BlogViewPage extends HookWidget {
                                                   ),
                                                   image:
                                                       CachedNetworkImageProvider(
-                                                    blogNotifier
-                                                        .blog
-                                                        .featuredImages[index]
-                                                        .path,
+                                                    '$BASE_URL${blogNotifier.blog.featuredImages[index].path}',
                                                   ),
                                                   fit: BoxFit.fitWidth,
                                                 ),
@@ -535,7 +532,8 @@ class _BlogContentItem extends StatelessWidget {
             key: ValueKey<String>(content.title),
             onVisibilityChanged: (info) {
               if (info.size.height == info.visibleBounds.bottom &&
-                  !hasDoneRead.value) {
+                  !hasDoneRead.value &&
+                  blogNotifier.blog.learningBonus > 0) {
                 hasDoneRead.value = true;
                 Repository()
                     .api

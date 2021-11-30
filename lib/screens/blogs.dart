@@ -135,9 +135,9 @@ class BlogsPage extends HookWidget {
                                       },
                                       onTap: () async {
                                         var open = true;
-                                        if (blogsNotifier.blogs[index].isOpened
-                                                ?.isEmpty ??
-                                            true) {
+                                        if (blogsNotifier
+                                                .blogs[index].learningBonus >
+                                            0) {
                                           open =
                                               await showBlogInfoDialog(context);
                                         }
