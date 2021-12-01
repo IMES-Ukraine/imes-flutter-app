@@ -24,7 +24,6 @@ import 'package:octo_image/octo_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -223,10 +222,7 @@ class BlogViewPage extends HookWidget {
                                       ),
                                     ),
                                   if (blogNotifier.blog.content.isNotEmpty ==
-                                          true &&
-                                      blogNotifier.blog?.content?.single
-                                              ?.content?.isNotEmpty ==
-                                          true)
+                                      true)
                                     ...blogNotifier.blog.content
                                         .map((content) => _BlogContentItem(
                                               content: content,
@@ -299,75 +295,78 @@ class BlogViewPage extends HookWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(32.0),
-                              child: Center(
-                                child: FittedBox(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'ПОДЕЛИТЬСЯ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12.0),
-                                      ),
-                                      const SizedBox(width: 16.0),
-                                      InkResponse(
-                                        onTap: () {
-                                          Share.share(
-                                              'https://echo.myftp.org/article/$_id');
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image.asset(Images.facebook),
-                                        ),
-                                      ),
-                                      InkResponse(
-                                        onTap: () {
-                                          Share.share(
-                                              'https://echo.myftp.org/article/$_id');
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image.asset(Images.telegram),
-                                        ),
-                                      ),
-                                      InkResponse(
-                                        onTap: () {
-                                          Share.share(
-                                              'https://echo.myftp.org/article/$_id');
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image.asset(Images.whatsup),
-                                        ),
-                                      ),
-                                      InkResponse(
-                                        onTap: () {
-                                          Share.share(
-                                              'https://echo.myftp.org/article/$_id');
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image.asset(Images.messenger),
-                                        ),
-                                      ),
-                                      InkResponse(
-                                        onTap: () {
-                                          Share.share(
-                                              'https://echo.myftp.org/article/$_id');
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image.asset(Images.viber),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            const SizedBox(
+                              height: 16,
                             ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(32.0),
+                            //   child: Center(
+                            //     child: FittedBox(
+                            //       child: Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           Text(
+                            //             'ПОДЕЛИТЬСЯ',
+                            //             style: TextStyle(
+                            //                 fontWeight: FontWeight.bold,
+                            //                 fontSize: 12.0),
+                            //           ),
+                            //           const SizedBox(width: 16.0),
+                            //           InkResponse(
+                            //             onTap: () {
+                            //               Share.share(
+                            //                   'https://echo.myftp.org/article/$_id');
+                            //             },
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: Image.asset(Images.facebook),
+                            //             ),
+                            //           ),
+                            //           InkResponse(
+                            //             onTap: () {
+                            //               Share.share(
+                            //                   'https://echo.myftp.org/article/$_id');
+                            //             },
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: Image.asset(Images.telegram),
+                            //             ),
+                            //           ),
+                            //           InkResponse(
+                            //             onTap: () {
+                            //               Share.share(
+                            //                   'https://echo.myftp.org/article/$_id');
+                            //             },
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: Image.asset(Images.whatsup),
+                            //             ),
+                            //           ),
+                            //           InkResponse(
+                            //             onTap: () {
+                            //               Share.share(
+                            //                   'https://echo.myftp.org/article/$_id');
+                            //             },
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: Image.asset(Images.messenger),
+                            //             ),
+                            //           ),
+                            //           InkResponse(
+                            //             onTap: () {
+                            //               Share.share(
+                            //                   'https://echo.myftp.org/article/$_id');
+                            //             },
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(4.0),
+                            //               child: Image.asset(Images.viber),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             if (blogNotifier.popular?.isNotEmpty ?? false) ...[
                               Padding(
                                 padding: const EdgeInsets.symmetric(
