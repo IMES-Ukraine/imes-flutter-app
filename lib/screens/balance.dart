@@ -15,6 +15,7 @@ import 'package:imes/utils/constants.dart';
 import 'package:imes/widgets/dialogs/dialogs.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BalancePage extends StatefulWidget {
   @override
@@ -132,27 +133,31 @@ class _BalancePageState extends State<BalancePage> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: AspectRatio(
                               aspectRatio: 34 / 10,
-                              child: Container(
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  color: Constants.brandBlueColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  if (await canLaunch(
+                                      historyNotifier?.bannerCard?.url)) {
+                                    launch(historyNotifier?.bannerCard?.url);
+                                  }
+                                },
+                                child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    color: Constants.brandBlueColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
                                   ),
-                                ),
-                                child: OctoImage.fromSet(
-                                  height: 100,
-                                  octoSet: OctoSet.blurHash(
-                                    'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                  child: OctoImage.fromSet(
+                                    height: 100,
+                                    octoSet: OctoSet.blurHash(
+                                      'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
+                                    ),
+                                    image: CachedNetworkImageProvider(
+                                      '''$BASE_URL${historyNotifier?.bannerCard?.image}''',
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                  image: CachedNetworkImageProvider(
-                                    historyNotifier
-                                                ?.bannerCard?.url?.isNotEmpty ==
-                                            true
-                                        ? historyNotifier.bannerCard.url
-                                        : '''$BASE_URL${historyNotifier?.bannerCard?.image}''',
-                                  ),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
