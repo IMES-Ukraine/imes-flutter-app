@@ -53,6 +53,7 @@ class Repository {
       WithdrawHistoryResponse: WithdrawHistoryResponse.fromJsonFactory,
       TestsResponse: TestsResponse.fromJsonFactory,
       TestResponse: TestResponse.fromJsonFactory,
+      SingleTestResponse: SingleTestResponse.fromJsonFactory,
       SubmitTestResponse: SubmitTestResponse.fromJsonFactory,
       VerifyResponse: VerifyResponse.fromJsonFactory,
       UploadFileResponse: UploadFileResponse.fromJsonFactory,

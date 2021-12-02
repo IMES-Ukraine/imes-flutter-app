@@ -1,7 +1,7 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 enum TestsPage {
   NEWS,
@@ -17,73 +17,60 @@ enum TestsState {
 class TestsStateNotifier with ChangeNotifier {
   TestsStateNotifier({TestsState state = TestsState.LOADING}) : _state = state;
 
-  int _lastPage = 0;
   TestsPage _page = TestsPage.NEWS;
   TestsState _state;
-  List<Test> _tests = [];
   int _total = 0;
 
   int get total => _total;
 
   TestsState get state => _state;
 
-  List<Test> get tests => _tests;
-
   TestsPage get page => _page;
+
+  final _pageSize = 10;
+
+  final PagingController<int, Test> pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void dispose() {
+    pagingController?.dispose();
+    super.dispose();
+  }
+
+  void init() {
+    pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
 
   Future changePage(TestsPage page) async {
     _page = page;
     _state = TestsState.LOADING;
     notifyListeners();
-    return load();
+    return pagingController.refresh();
   }
 
-  Future load() async {
+  Future<void> _fetchPage(int pageKey) async {
     try {
-      final response = await Repository().api.tests(type: page.index + 1);
-      if (response.statusCode == 200) {
-        final testsPage = response.body.data;
-        _tests = testsPage.data;
-        _total = testsPage.total;
-        _lastPage = testsPage.currentPage;
-
-        _state = TestsState.LOADED;
-        notifyListeners();
+      _state = TestsState.LOADING;
+      final response = await Repository().api.tests(
+            type: page.index + 1,
+            page: pageKey,
+            count: _pageSize,
+          );
+      final newItems = response.body.data.data;
+      final isLastPage = response.body.data.data.length < _pageSize;
+      if (isLastPage) {
+        pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + 1;
+        pagingController.appendPage(newItems, nextPageKey);
       }
-    } catch (e) {
-      if (e is Response) {
-        if (e.statusCode == 400) {
-          _state = TestsState.LOADED;
-          notifyListeners();
-          return;
-        }
-      }
-      _state = TestsState.ERROR;
-      debugPrint(e.toString());
-      notifyListeners();
-    }
-  }
-
-  Future loadNext() async {
-//    _state = BlogsState.LOADING;
-//    notifyListeners();
-
-    final response = await Repository().api.tests(page: ++_lastPage);
-    if (response.statusCode == 200) {
-      final testsPage = response.body.data;
-      final tests = _tests.toSet()..addAll(testsPage?.data ?? []);
-      _tests = tests.toList();
-      _total = testsPage.total;
-      _lastPage = testsPage.currentPage;
-
       _state = TestsState.LOADED;
-      notifyListeners();
-    }
-  }
-
-  void remove(Test test) {
-    if (tests.remove(test)) {
-      notifyListeners();
+    } catch (error) {
+      pagingController.error = error;
+      _state = TestsState.ERROR;
     }
   }
 }

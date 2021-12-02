@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
-
 import 'package:imes/models/blog.dart';
-
 import 'package:imes/resources/repository.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 enum BlogsState {
   LOADED,
@@ -19,61 +18,59 @@ enum BlogPage {
 class BlogsNotifier with ChangeNotifier {
   BlogsState _state;
 
-  int _total = 0;
-  int _lastPage = 0;
-  List<Blog> _blogs = [];
   BlogPage _page = BlogPage.NEWS;
 
   BlogsNotifier({BlogsState state = BlogsState.LOADING}) : _state = state;
 
-  int get total => _total;
-
   BlogsState get state => _state;
 
-  List<Blog> get blogs => _blogs;
-
   BlogPage get page => _page;
+
+  final _pageSize = 10;
+
+  final PagingController<int, Blog> pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void dispose() {
+    pagingController?.dispose();
+    super.dispose();
+  }
+
+  void init() {
+    pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      _state = BlogsState.LOADING;
+      final response = await Repository().api.blogs(
+            type: page.index + 1,
+            page: pageKey,
+            count: _pageSize,
+          );
+      final newItems = response.body.data.data;
+      final isLastPage = response.body.data.data.length < _pageSize;
+      if (isLastPage) {
+        pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + 1;
+        pagingController.appendPage(newItems, nextPageKey);
+      }
+      _state = BlogsState.LOADED;
+    } catch (error) {
+      pagingController.error = error;
+      _state = BlogsState.ERROR;
+    }
+  }
 
   Future<void> changePage(BlogPage page) async {
     _page = page;
     _state = BlogsState.LOADING;
     notifyListeners();
-    return load();
-  }
-
-  Future<void> load() async {
-    try {
-      final response = await Repository().api.blogs(type: page.index + 1);
-      if (response.statusCode == 200) {
-        final blogsPage = response.body.data;
-        _blogs = blogsPage.data;
-        _total = blogsPage.total;
-        _lastPage = blogsPage.currentPage;
-
-        _state = BlogsState.LOADED;
-        notifyListeners();
-      }
-    } catch (e) {
-      _state = BlogsState.ERROR;
-      notifyListeners();
-      rethrow;
-    }
-  }
-
-  Future<void> loadNext() async {
-//    _state = BlogsState.LOADING;
-//    notifyListeners();
-
-    final response = await Repository().api.blogs(page: ++_lastPage);
-    if (response.statusCode == 200) {
-      final blogsPage = response.body.data;
-      final blogs = _blogs.toSet()..addAll(blogsPage.data);
-      _blogs = blogs.toList();
-      _total = blogsPage.total;
-      _lastPage = blogsPage.currentPage;
-
-      _state = BlogsState.LOADED;
-      notifyListeners();
-    }
+    pagingController.refresh();
+    _fetchPage(0);
   }
 }

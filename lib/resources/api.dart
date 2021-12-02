@@ -138,7 +138,7 @@ abstract class RestClient extends ChopperService {
       {@Path('id') num blogId, @Path('index') num blockIndex});
 
   @Get(path: '/api/v1/agreement/{id}')
-  Future<Response<TestResponse>> getAgreement(@Path('id') num testId);
+  Future<Response<SingleTestResponse>> getAgreement(@Path('id') num testId);
 
   @Post(path: '/api/v1/agreement/{id}')
   Future<Response> postAgreement(@Path('id') num testId);

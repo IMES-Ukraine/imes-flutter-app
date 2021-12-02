@@ -26,7 +26,7 @@ class TestNotifier with ChangeNotifier {
     try {
       final response = await Repository().api.test(id);
       if (response.statusCode == 200) {
-        _test = response.body.data.single;
+        _test = response.body.data.first;
         _state = TestState.LOADED;
         notifyListeners();
       }
@@ -39,7 +39,8 @@ class TestNotifier with ChangeNotifier {
     return _test?.duration ?? 0;
   }
 
-  Future<SubmitTestData> postAnswer(int testId, List<String> answers, Duration duration) async {
+  Future<SubmitTestData> postAnswer(
+      int testId, List<String> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
             data: [TestAnswer(id: testId, variant: answers)],
@@ -49,7 +50,8 @@ class TestNotifier with ChangeNotifier {
     return response.body.data;
   }
 
-  Future<SubmitTestData> postAnswers(List<TestAnswer> answers, Duration duration) async {
+  Future<SubmitTestData> postAnswers(
+      List<TestAnswer> answers, Duration duration) async {
     final response = await Repository().api.submitTests(
           TestAnswerData(
             data: answers,

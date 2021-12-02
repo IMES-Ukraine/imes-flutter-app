@@ -77,6 +77,8 @@ dependencies:
 
   flutter_svg: ^0.19.3
 
+  infinite_scroll_pagination: ^2.3.0
+
   # flutter_flipperkit: ^0.0.24
 
 dependency_overrides:

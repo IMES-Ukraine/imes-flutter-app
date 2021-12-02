@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imes/blocs/tests_notifier.dart';
-import 'package:imes/helpers/custom_icons_icons.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:imes/widgets/base/alert_container.dart';
@@ -12,14 +11,21 @@ import 'package:imes/widgets/base/error_retry.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/tests/test_list_tile.dart';
 import 'package:imes/widgets/tests/tests_app_bar.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-class TestsPage extends StatelessWidget {
+class TestsPage extends StatefulWidget {
+  @override
+  _TestsPageState createState() => _TestsPageState();
+}
+
+class _TestsPageState extends State<TestsPage> {
+  final _notifier = TestsStateNotifier();
+
   @override
   Widget build(BuildContext mainContext) {
     return ChangeNotifierProvider(
-      create: (_) => TestsStateNotifier()..load(),
-      // lazy: false,
+      create: (_) => _notifier..init(),
       child: Builder(
         builder: (context) => Consumer<TestsStateNotifier>(
           builder: (mainContext, testsNotifier, _) {
@@ -27,10 +33,13 @@ class TestsPage extends StatelessWidget {
               appBar: TestsAppBar(),
               body: testsNotifier.state == TestsState.ERROR
                   ? ErrorRetry(onTap: () {
-                      testsNotifier.load();
+                      testsNotifier.pagingController.refresh();
                     })
                   : RefreshIndicator(
-                      onRefresh: () => testsNotifier.load(),
+                      onRefresh: () async {
+                        testsNotifier.pagingController.refresh();
+                        await Future.delayed(const Duration(seconds: 1));
+                      },
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           return _Content(
@@ -60,73 +69,20 @@ class _Content extends StatelessWidget {
 
   Future<void> _openTest(BuildContext context, Test test) async {
     await Navigator.of(context).pushNamed('/tests/view', arguments: test.id);
-    testsNotifier.remove(test);
+    testsNotifier.pagingController.refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: testsNotifier.state == TestsState.LOADING
-          ? 1
-          : testsNotifier.tests.length,
-      itemBuilder: (context, index) {
-        if (testsNotifier.state == TestsState.LOADING) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-
-        if (index == testsNotifier.tests.length) {
-          if (testsNotifier.tests.isEmpty) {
-            return SizedBox(
-              height: constraints.maxHeight,
-              child: Center(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    CustomIcons.test,
-                    size: 83.0,
-                    color: Color(0xFFE0E0E0),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'Тут скоро\nбудуть дослідження',
-                    style: TextStyle(
-                      color: Color(0xFFE0E0E0),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              )),
-            );
-          }
-
-          if (testsNotifier.tests.length == testsNotifier.total) {
-            return null;
-          }
-
-          testsNotifier.loadNext();
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-
-        return TestListTile(
-          title: testsNotifier.tests[index]?.title ?? '',
-          bonus: testsNotifier.tests[index]?.bonus ?? 0,
-          image: testsNotifier.tests[index].coverImage?.path ?? '',
-          answerType: testsNotifier.tests[index].answerType,
-          testType: testsNotifier.tests[index].testType,
+    return PagedListView<int, Test>(
+      pagingController: testsNotifier.pagingController,
+      builderDelegate: PagedChildBuilderDelegate<Test>(
+        itemBuilder: (context, item, index) => TestListTile(
+          title: item?.title ?? '',
+          bonus: item?.bonus ?? 0,
+          image: item.coverImage?.path ?? '',
+          answerType: item.answerType,
+          testType: item.testType,
           onTap: () async {
             final result = await showDialog(
                 context: context,
@@ -176,11 +132,8 @@ class _Content extends StatelessWidget {
                 }) as bool;
             if (result) {
               print(result.toString());
-              if (testsNotifier.tests[index]?.agreementAccepted?.isEmpty ??
-                  true) {
-                final response = await Repository()
-                    .api
-                    .getAgreement(testsNotifier.tests[index].id);
+              if (item?.agreementAccepted?.isEmpty ?? true) {
+                final response = await Repository().api.getAgreement(item.id);
                 showDialog(
                     context: context,
                     builder: (innerContext) {
@@ -199,8 +152,7 @@ class _Content extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              if (response?.body?.data?.single?.agreement
-                                      ?.isNotEmpty ==
+                              if (response?.body?.data?.agreement?.isNotEmpty ==
                                   true) ...[
                                 Container(
                                   decoration: BoxDecoration(
@@ -213,8 +165,7 @@ class _Content extends StatelessWidget {
                                       height: 250.0,
                                       child: SingleChildScrollView(
                                           child: Text(
-                                              response
-                                                  .body.data.single.agreement,
+                                              response.body.data.agreement,
                                               style:
                                                   TextStyle(fontSize: 12.0))),
                                     ),
@@ -255,18 +206,19 @@ class _Content extends StatelessWidget {
                                 child: RaisedGradientButton(
                                   onPressed: checkBoxState.value
                                       ? () async {
-                                          await Repository().api.postAgreement(
-                                              testsNotifier.tests[index].id);
+                                          await Repository()
+                                              .api
+                                              .postAgreement(item.id);
                                           Navigator.of(innerContext).pop();
-                                          _openTest(context,
-                                              testsNotifier.tests[index]);
+                                          _openTest(context, item);
                                         }
                                       : null,
                                   child: Text(
                                     'РОЗПОЧАТИ',
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -276,12 +228,12 @@ class _Content extends StatelessWidget {
                       });
                     });
               } else {
-                _openTest(context, testsNotifier.tests[index]);
+                _openTest(context, item);
               }
             }
           },
-        );
-      },
+        ),
+      ),
     );
   }
 }
