@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:chopper/chopper.dart';
 import 'package:imes/models/verify_response.dart';
+import 'package:imes/resources/repository.dart';
 
 part 'auth.chopper.dart';
 
-//@ChopperApi(baseUrl: 'http://185.65.244.189')
-// @ChopperApi(baseUrl: 'http://yaris-ls.serveo.net')
-// @ChopperApi(baseUrl: 'https://s.imes.pro/service')
-@ChopperApi(baseUrl: 'http://imes.nextdoorcoders.com')
+@ChopperApi(baseUrl: BASE_URL)
 abstract class AuthClient extends ChopperService {
   static AuthClient create([ChopperClient client]) => _$AuthClient(client);
 

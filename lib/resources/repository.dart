@@ -23,7 +23,7 @@ import 'package:imes/models/withdraw_history_response.dart';
 import 'package:imes/resources/api.dart';
 import 'package:imes/resources/auth.dart';
 
-const BASE_URL = 'http://imes.nextdoorcoders.com';
+const BASE_URL = 'https://imes.nextdoorcoders.com';
 
 class Repository {
   static final Repository _instance = Repository._internal();

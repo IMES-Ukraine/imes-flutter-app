@@ -12,6 +12,7 @@ import 'package:imes/widgets/base/custom_flat_button.dart';
 import 'package:imes/widgets/base/raised_gradient_button.dart';
 import 'package:imes/widgets/tests/test_card.dart';
 import 'package:imes/widgets/tests/test_title.dart';
+import 'package:imes/widgets/tests/test_variant_card_button.dart';
 import 'package:imes/widgets/tests/test_variant_flat_button.dart';
 import 'package:imes/widgets/tests/test_vide_card.dart';
 import 'package:observable/observable.dart';
@@ -56,7 +57,7 @@ class SimpleTest extends HookWidget {
             ),
             Divider(indent: 8.0, endIndent: 8.0),
             if (test.hasVideo) TestVideoCard(url: test.video.data),
-            if (test.answerType == 'variants')
+            if (test.answerType == 'variants' || test.answerType == 'media')
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -68,18 +69,33 @@ class SimpleTest extends HookWidget {
                     const SizedBox(height: 16.0),
                     ...test.variants.buttons
                         .map(
-                          (v) => TestVariantFlatButton(
-                            variant: v.variant,
-                            title: v.title,
-                            selected: state.value.contains(v.variant),
-                            onTap: () {
-                              if (!state.value.contains(v.variant)) {
-                                state.value.add(v.variant);
-                              } else {
-                                state.value.remove(v.variant);
-                              }
-                            },
-                          ),
+                          (v) => v.file != null
+                              ? TestVariantCardButton(
+                                  variant: v.variant,
+                                  title: v.title,
+                                  descr: v.description,
+                                  imageUrl: v.file?.path,
+                                  selected: state.value.contains(v.variant),
+                                  onTap: () {
+                                    if (!state.value.contains(v.variant)) {
+                                      state.value.add(v.variant);
+                                    } else {
+                                      state.value.remove(v.variant);
+                                    }
+                                  },
+                                )
+                              : TestVariantFlatButton(
+                                  variant: v.variant,
+                                  title: v.title,
+                                  selected: state.value.contains(v.variant),
+                                  onTap: () {
+                                    if (!state.value.contains(v.variant)) {
+                                      state.value.add(v.variant);
+                                    } else {
+                                      state.value.remove(v.variant);
+                                    }
+                                  },
+                                ),
                         )
                         .toList(),
                   ],

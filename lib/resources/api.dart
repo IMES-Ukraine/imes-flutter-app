@@ -22,8 +22,6 @@ import 'package:imes/resources/repository.dart';
 
 part 'api.chopper.dart';
 
-// @ChopperApi(baseUrl: 'https://imes.pro')
-// @ChopperApi(baseUrl: 'https://laravel-dev-final.imes.pro')
 @ChopperApi(baseUrl: BASE_URL)
 abstract class RestClient extends ChopperService {
   static RestClient create([ChopperClient client]) => _$RestClient(client);

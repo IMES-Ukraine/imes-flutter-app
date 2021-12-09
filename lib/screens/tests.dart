@@ -132,7 +132,7 @@ class _Content extends StatelessWidget {
                 }) as bool;
             if (result) {
               print(result.toString());
-              if (item?.agreementAccepted?.isEmpty ?? true) {
+              if (item?.agreementAccepted?.isEmpty == true ?? true) {
                 final response = await Repository().api.getAgreement(item.id);
                 showDialog(
                     context: context,
@@ -155,20 +155,17 @@ class _Content extends StatelessWidget {
                               if (response?.body?.data?.agreement?.isNotEmpty ==
                                   true) ...[
                                 Container(
+                                  constraints: BoxConstraints(maxHeight: 250),
                                   decoration: BoxDecoration(
                                       border:
                                           Border.all(color: Color(0xFFA1A1A1)),
                                       borderRadius: BorderRadius.circular(5.0)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: 250.0,
-                                      child: SingleChildScrollView(
-                                          child: Text(
-                                              response.body.data.agreement,
-                                              style:
-                                                  TextStyle(fontSize: 12.0))),
-                                    ),
+                                    child: SingleChildScrollView(
+                                        child: Text(
+                                            response.body.data.agreement,
+                                            style: TextStyle(fontSize: 12.0))),
                                   ),
                                 ),
                               ],

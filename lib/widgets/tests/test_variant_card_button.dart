@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:imes/resources/repository.dart';
 import 'package:octo_image/octo_image.dart';
 
 class TestVariantCardButton extends StatelessWidget {
@@ -30,52 +31,71 @@ class TestVariantCardButton extends StatelessWidget {
       elevation: 2.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
-        side: BorderSide(color: selected ? defaultSelectedColor : Theme.of(context).dividerColor),
+        side: BorderSide(
+            color: selected
+                ? defaultSelectedColor
+                : Theme.of(context).dividerColor),
       ),
-      shadowColor: selected ? defaultSelectedColor : Theme.of(context).dividerColor,
+      shadowColor:
+          selected ? defaultSelectedColor : Theme.of(context).dividerColor,
       child: InkWell(
         onTap: onTap,
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: selected ? defaultSelectedColor : Colors.white,
-                  border: Border.all(color: selected ? defaultSelectedColor : Theme.of(context).dividerColor),
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    variant,
-                    style: TextStyle(
-                      color: selected ? Colors.white : Theme.of(context).dividerColor,
-                      fontWeight: FontWeight.bold,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: selected ? defaultSelectedColor : Colors.white,
+                    border: Border.all(
+                        color: selected
+                            ? defaultSelectedColor
+                            : Theme.of(context).dividerColor),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      variant,
+                      style: TextStyle(
+                        color: selected
+                            ? Colors.white
+                            : Theme.of(context).dividerColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(child: Text(title)),
-            ]),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IntrinsicHeight(
-              child: Row(children: [
-                Expanded(child: Text(descr, style: TextStyle(fontSize: 8.0))),
-                const SizedBox(width: 5.0),
-                Expanded(
-                    child: OctoImage(
-                  height: 50,
-                  image: CachedNetworkImageProvider(imageUrl),
-                  fit: BoxFit.scaleDown,
-                ))
+                const SizedBox(width: 16.0),
+                Expanded(child: Text(title ?? '')),
               ]),
             ),
-          ),
-        ]),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        descr ?? '',
+                        style: TextStyle(fontSize: 8.0),
+                      ),
+                    ),
+                    const SizedBox(width: 5.0),
+                    Expanded(
+                      child: OctoImage(
+                        height: 50,
+                        image: CachedNetworkImageProvider('$BASE_URL$imageUrl'),
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

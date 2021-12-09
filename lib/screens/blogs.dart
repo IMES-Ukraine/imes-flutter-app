@@ -64,7 +64,8 @@ class _BlogsPageState extends State<BlogsPage> {
                                     },
                                     onTap: () async {
                                       var open = true;
-                                      if (item.isOpened?.isEmpty ?? true) {
+                                      if (item.isOpened?.isEmpty == true ??
+                                          item.learningBonus > 0) {
                                         open =
                                             await showBlogInfoDialog(context);
                                       }
@@ -76,40 +77,6 @@ class _BlogsPageState extends State<BlogsPage> {
                                     },
                                   ),
                                 ),
-                              );
-                              return ListView(
-                                children: box.values
-                                    .map<Widget>(
-                                      (v) => BlogListTile(
-                                        isOpened:
-                                            !(v.isOpened?.isEmpty ?? true),
-                                        date: v.publishedAt,
-                                        title: v?.title ?? '',
-                                        points: v?.learningBonus ?? 0,
-                                        image: v?.coverImage?.path ?? '',
-                                        isFavourite: box.containsKey(v.id),
-                                        onFavoriteChanged: (value) async {
-                                          if (value) {
-                                            box.put(v.id, v);
-                                          } else {
-                                            box.delete(v.id);
-                                          }
-                                        },
-                                        onTap: () async {
-                                          var open = true;
-                                          if (v.isOpened?.isEmpty ?? true) {
-                                            open = await showBlogInfoDialog(
-                                                context);
-                                          }
-                                          if (open) {
-                                            Navigator.of(context).pushNamed(
-                                                '/blogs/view',
-                                                arguments: v.id);
-                                          }
-                                        },
-                                      ),
-                                    )
-                                    .toList(),
                               );
                             },
                           )
@@ -139,7 +106,8 @@ class _BlogsPageState extends State<BlogsPage> {
                                     },
                                     onTap: () async {
                                       var open = true;
-                                      if (item.isOpened?.isEmpty ?? true) {
+                                      if (item.isOpened?.isEmpty == true ||
+                                          item.learningBonus > 0) {
                                         open =
                                             await showBlogInfoDialog(context);
                                       }

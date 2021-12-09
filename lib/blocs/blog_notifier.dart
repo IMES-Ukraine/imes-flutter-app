@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
-
 import 'package:imes/models/blog.dart';
-
 import 'package:imes/resources/repository.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 enum BlogState {
@@ -39,6 +36,7 @@ class BlogNotifier with ChangeNotifier {
         }
 
         _state = BlogState.LOADED;
+        Repository().api.blogCallback(_blog.id);
         notifyListeners();
       }
     } catch (e) {

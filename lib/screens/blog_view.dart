@@ -55,30 +55,31 @@ class BlogViewPage extends HookWidget {
       create: (_) => BlogNotifier()..load(_id),
       child: Consumer<BlogNotifier>(builder: (context, blogNotifier, _) {
         return Scaffold(
-            appBar: AppBar(
-              title: Text(blogNotifier.blog?.title ?? ''),
-              centerTitle: true,
-              actions: [
-                ValueListenableBuilder(
-                    valueListenable:
-                        Hive.box(Constants.FAVORITES_BOX).listenable(),
-                    builder: (context, box, widget) {
-                      return IconButton(
-                        icon: Icon(box.containsKey(_id)
-                            ? Icons.favorite
-                            : Icons.favorite_border),
-                        onPressed: () {
-                          if (!box.containsKey(_id)) {
-                            box.put(_id, blogNotifier.blog);
-                          } else {
-                            box.delete(_id);
-                          }
-                        },
-                      );
-                    })
-              ],
-            ),
-            body: LayoutBuilder(builder: (context, constraints) {
+          appBar: AppBar(
+            title: Text(blogNotifier.blog?.title ?? ''),
+            centerTitle: true,
+            actions: [
+              ValueListenableBuilder(
+                  valueListenable:
+                      Hive.box(Constants.FAVORITES_BOX).listenable(),
+                  builder: (context, box, widget) {
+                    return IconButton(
+                      icon: Icon(box.containsKey(_id)
+                          ? Icons.favorite
+                          : Icons.favorite_border),
+                      onPressed: () {
+                        if (!box.containsKey(_id)) {
+                          box.put(_id, blogNotifier.blog);
+                        } else {
+                          box.delete(_id);
+                        }
+                      },
+                    );
+                  })
+            ],
+          ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
               if (blogNotifier.state == BlogState.ERROR) {
                 return ErrorRetry(onTap: () {
                   blogNotifier.load(_id);
@@ -98,69 +99,6 @@ class BlogViewPage extends HookWidget {
                       SliverList(
                         delegate: SliverChildListDelegate(
                           [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                if (blogNotifier.blog.coverImage != null) ...[
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: OctoImage.fromSet(
-                                      octoSet: OctoSet.blurHash(
-                                        'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
-                                      ),
-                                      image: CachedNetworkImageProvider(
-                                          '$BASE_URL${blogNotifier.blog.coverImage.path}'),
-                                    ),
-                                  ),
-                                ],
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    blogNotifier.blog?.title ?? '',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(''),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                        ),
-                                        child: Text(
-                                            blogNotifier.blog?.publishedAt !=
-                                                    null
-                                                ? DateFormat.yMMMMd('uk')
-                                                    .format(blogNotifier
-                                                        .blog.publishedAt)
-                                                : '',
-                                            textAlign: TextAlign.end,
-                                            style: TextStyle(
-                                              color: Color(
-                                                  0xFF828282), // TODO: extract colors to theme
-                                              fontSize: 12.0,
-                                            )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
                             Card(
                               margin: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
@@ -221,10 +159,51 @@ class BlogViewPage extends HookWidget {
                                         ],
                                       ),
                                     ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Text(
+                                      blogNotifier.blog?.title ?? '',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22.0,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(''),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                          ),
+                                          child: Text(
+                                              blogNotifier.blog?.publishedAt !=
+                                                      null
+                                                  ? DateFormat.yMMMMd('uk')
+                                                      .format(blogNotifier
+                                                          .blog.publishedAt)
+                                                  : '',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                color: Color(
+                                                    0xFF828282), // TODO: extract colors to theme
+                                                fontSize: 12.0,
+                                              )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   if (blogNotifier.blog.content.isNotEmpty ==
                                       true)
                                     ...blogNotifier.blog.content
                                         .map((content) => _BlogContentItem(
+                                              key: ValueKey(content.hashCode),
                                               content: content,
                                               blogNotifier: blogNotifier,
                                             ))
@@ -248,11 +227,6 @@ class BlogViewPage extends HookWidget {
                                             if (await canLaunch(
                                                 blogNotifier.blog.action)) {
                                               launch(blogNotifier.blog.action);
-                                              final response =
-                                                  await Repository()
-                                                      .api
-                                                      .blogCallback(
-                                                          blogNotifier.blog.id);
                                             } else {
                                               final navData = blogNotifier
                                                   .blog.action
@@ -505,7 +479,9 @@ class BlogViewPage extends HookWidget {
                   );
                 },
               );
-            }));
+            },
+          ),
+        );
       }),
     );
   }
@@ -528,7 +504,7 @@ class _BlogContentItem extends StatelessWidget {
         final hasDoneRead = useState(false);
         if (content.type == 'text') {
           return VisibilityDetector(
-            key: ValueKey<String>(content.title),
+            key: key,
             onVisibilityChanged: (info) {
               if (info.size.height == info.visibleBounds.bottom &&
                   !hasDoneRead.value &&
@@ -542,7 +518,8 @@ class _BlogContentItem extends StatelessWidget {
                     )
                     .then((response) {
                   if (response.statusCode == 200) {
-                    if (response.body.data.readingStatus != null) {
+                    if (response.body.data.readingStatus != null &&
+                        response.body.data.readingStatus.pointsEarned > 0) {
                       showDialog(
                         context: context,
                         builder: (context) => CustomAlertDialog(
@@ -763,8 +740,8 @@ class _BlogRecommendedItem extends StatelessWidget {
                     octoSet: OctoSet.blurHash(
                       'LKO2?V%2Tw=w]~RBVZRi};RPxuwH',
                     ),
-                    image:
-                        CachedNetworkImageProvider(item.post.coverImage.path),
+                    image: CachedNetworkImageProvider(
+                        '$BASE_URL${item.post.coverImage.path}'),
                   ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
