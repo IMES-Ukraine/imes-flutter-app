@@ -5,10 +5,11 @@ part 'test_options.g.dart';
 @JsonSerializable()
 class TestOptions {
   final String type;
-  final String data;
+  final dynamic data;
 
   TestOptions({this.type, this.data});
 
-  factory TestOptions.fromJson(Map<String, dynamic> json) => _$TestOptionsFromJson(json);
+  factory TestOptions.fromJson(Map<String, dynamic> json) =>
+      _$TestOptionsFromJson(json);
   Map<String, dynamic> toJson() => _$TestOptionsToJson(this);
 }

@@ -29,6 +29,7 @@ class TestNotifier with ChangeNotifier {
         _test = response.body.data.first;
         _state = TestState.LOADED;
         notifyListeners();
+        Repository().api.testCallback(_test.id);
       }
     } catch (e) {
       print(e.toString());

@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:imes/blocs/blog_notifier.dart';
-import 'package:imes/blocs/home_notifier.dart';
 import 'package:imes/blocs/user_notifier.dart';
 import 'package:imes/helpers/utils.dart';
 import 'package:imes/models/blog.dart';
@@ -13,6 +12,7 @@ import 'package:imes/models/blog_content.dart';
 import 'package:imes/models/blog_recommended.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/test_view.dart';
 import 'package:imes/utils/constants.dart';
 import 'package:imes/widgets/base/custom_alert_dialog.dart';
 import 'package:imes/widgets/base/custom_dialog.dart';
@@ -25,7 +25,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class BlogViewPage extends HookWidget {
@@ -214,8 +213,7 @@ class BlogViewPage extends HookWidget {
                                       child: Text(blogNotifier.blog.summary),
                                     )
                                   ],
-                                  if ((blogNotifier.blog?.action?.isNotEmpty ??
-                                      false))
+                                  if (blogNotifier.blog?.testId != null) ...[
                                     Center(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -223,42 +221,18 @@ class BlogViewPage extends HookWidget {
                                           horizontal: 64.0,
                                         ),
                                         child: RaisedGradientButton(
-                                          onPressed: () async {
-                                            if (await canLaunch(
-                                                blogNotifier.blog.action)) {
-                                              launch(blogNotifier.blog.action);
-                                            } else {
-                                              final navData = blogNotifier
-                                                  .blog.action
-                                                  .split('|');
-                                              if (navData.first == 'article') {
-                                                Navigator.of(context).pushNamed(
-                                                    '/blogs/view',
-                                                    arguments:
-                                                        int.parse(navData[1]));
-                                              } else if (navData.first ==
-                                                  'test') {
-                                                Provider.of<HomeNotifier>(
-                                                        context,
-                                                        listen: false)
-                                                    .changePage(
-                                                        1, '/tests/view');
-                                              }
-                                            }
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TestViewPage(
+                                                  blogNotifier.blog.testId,
+                                                ),
+                                              ),
+                                            );
                                           },
                                           child: Text(
-                                            blogNotifier.blog.action
-                                                        .split('|')
-                                                        .first ==
-                                                    'article'
-                                                ? 'Читати ще'.toUpperCase()
-                                                : blogNotifier.blog.action
-                                                            .split('|')
-                                                            .first ==
-                                                        'test'
-                                                    ? 'Розпочати дослідження'
-                                                        .toUpperCase()
-                                                    : 'Читати ще'.toUpperCase(),
+                                            'Розпочати дослідження',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white),
@@ -266,6 +240,59 @@ class BlogViewPage extends HookWidget {
                                         ),
                                       ),
                                     ),
+                                  ],
+                                  // if ((blogNotifier.blog?.action?.isNotEmpty ??
+                                  //     false))
+                                  //   ...[Center(
+                                  //     child: Padding(
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //         vertical: 32.0,
+                                  //         horizontal: 64.0,
+                                  //       ),
+                                  //       child: RaisedGradientButton(
+                                  //         onPressed: () async {
+                                  //           if (await canLaunch(
+                                  //               blogNotifier.blog.action)) {
+                                  //             launch(blogNotifier.blog.action);
+                                  //           } else {
+                                  //             final navData = blogNotifier
+                                  //                 .blog.action
+                                  //                 .split('|');
+                                  //             if (navData.first == 'article') {
+                                  //               Navigator.of(context).pushNamed(
+                                  //                   '/blogs/view',
+                                  //                   arguments:
+                                  //                       int.parse(navData[1]));
+                                  //             } else if (navData.first ==
+                                  //                 'test') {
+                                  //               Provider.of<HomeNotifier>(
+                                  //                       context,
+                                  //                       listen: false)
+                                  //                   .changePage(
+                                  //                       1, '/tests/view');
+                                  //             }
+                                  //           }
+                                  //         },
+                                  //         child: Text(
+                                  //           blogNotifier.blog.action
+                                  //                       .split('|')
+                                  //                       .first ==
+                                  //                   'article'
+                                  //               ? 'Читати ще'.toUpperCase()
+                                  //               : blogNotifier.blog.action
+                                  //                           .split('|')
+                                  //                           .first ==
+                                  //                       'test'
+                                  //                   ? 'Розпочати дослідження'
+                                  //                       .toUpperCase()
+                                  //                   : 'Читати ще'.toUpperCase(),
+                                  //           style: TextStyle(
+                                  //               fontWeight: FontWeight.bold,
+                                  //               color: Colors.white),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),],
                                 ],
                               ),
                             ),

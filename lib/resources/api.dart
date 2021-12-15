@@ -94,6 +94,9 @@ abstract class RestClient extends ChopperService {
   @Get(path: '/api/v1/blog/{id}/callback')
   Future<Response<BasicResponse>> blogCallback(@Path('id') num id);
 
+  @Get(path: '/api/v1/tests/{id}/callback')
+  Future<Response<BasicResponse>> testCallback(@Path('id') num id);
+
   @Get(path: '/api/v1/tests')
   Future<Response<TestsResponse>> tests({
     @Query('page') int page = 0,

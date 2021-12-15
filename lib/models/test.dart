@@ -1,8 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:imes/models/cover_image.dart';
 import 'package:imes/models/featured_image.dart';
 import 'package:imes/models/test_options.dart';
 import 'package:imes/models/test_variants.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'test.g.dart';
 
@@ -30,6 +30,11 @@ class Test {
   final String question;
   final List agreementAccepted;
   final String agreement;
+  @JsonKey(name: 'isOpened')
+  final bool isOpened;
+  @JsonKey(name: 'isAgreementAccepted')
+  final bool isAgreementAccepted;
+  final num researchId;
 
   Test({
     this.id,
@@ -47,15 +52,24 @@ class Test {
     this.question,
     this.agreementAccepted,
     this.agreement,
+    this.isOpened,
+    this.isAgreementAccepted,
+    this.researchId,
   });
 
-  bool get hasToLearn => options.indexWhere((element) => element.type == 'to_learn') != -1;
-  bool get hasDescription => options.indexWhere((element) => element.type == 'description') != -1;
-  bool get hasVideo => options.indexWhere((element) => element.type == 'video') != -1;
+  bool get hasToLearn =>
+      options.indexWhere((element) => element.type == 'to_learn') != -1;
+  bool get hasDescription =>
+      options.indexWhere((element) => element.type == 'description') != -1;
+  bool get hasVideo =>
+      options.indexWhere((element) => element.type == 'video') != -1;
 
-  TestOptions get toLearn => options.singleWhere((element) => element.type == 'to_learn');
-  TestOptions get description => options.singleWhere((element) => element.type == 'description');
-  TestOptions get video => options.singleWhere((element) => element.type == 'video');
+  TestOptions get toLearn =>
+      options.singleWhere((element) => element.type == 'to_learn');
+  TestOptions get description =>
+      options.singleWhere((element) => element.type == 'description');
+  TestOptions get video =>
+      options.singleWhere((element) => element.type == 'video');
 
   factory Test.fromJson(Map<String, dynamic> json) => _$TestFromJson(json);
   Map<String, dynamic> toJson() => _$TestToJson(this);

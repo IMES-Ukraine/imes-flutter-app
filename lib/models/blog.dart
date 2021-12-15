@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:imes/models/cover_image.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 import 'blog_content.dart';
 import 'blog_recommended.dart';
 import 'featured_image.dart';
@@ -31,8 +32,14 @@ class Blog extends HiveObject {
   final int learningBonus;
   @HiveField(4)
   final CoverImage coverImage;
-  @HiveField(5)
-  final List isOpened;
+  @JsonKey(name: 'isOpened')
+  final bool isOpened;
+  @JsonKey(name: 'isAgreementAccepted')
+  final bool isAgreementAccepted;
+  @JsonKey(name: 'isCommercial')
+  final bool isCommercial;
+  final num researchId;
+  final num testId;
 
   Blog({
     this.id,
@@ -52,6 +59,10 @@ class Blog extends HiveObject {
     this.learningBonus,
     this.coverImage,
     this.isOpened,
+    this.isAgreementAccepted,
+    this.isCommercial,
+    this.researchId,
+    this.testId,
   });
 
   @override

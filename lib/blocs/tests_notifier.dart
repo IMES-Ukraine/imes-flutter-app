@@ -59,6 +59,9 @@ class TestsStateNotifier with ChangeNotifier {
             page: pageKey,
             count: _pageSize,
           );
+      debugPrint('START_OF <<<=========== response ==========>>>');
+      debugPrint(response.toString());
+      debugPrint('END_OF   <<<=========== response ==========>>>');
       final newItems = response.body.data.data;
       final isLastPage = response.body.data.data.length < _pageSize;
       if (isLastPage) {

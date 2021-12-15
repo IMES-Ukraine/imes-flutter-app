@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:imes/models/test.dart';
 import 'package:imes/resources/repository.dart';
 import 'package:imes/resources/resources.dart';
+import 'package:imes/screens/blog_view.dart';
 import 'package:imes/widgets/base/bonus_button.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TestCard extends StatelessWidget {
   final Test test;
@@ -88,8 +88,9 @@ class TestCard extends StatelessWidget {
             InkWell(
               onTap: () async {
                 final option = test.toLearn;
-                if (await canLaunch(option.data)) {
-                  launch(option.data);
+                if (option.type == 'to_learn' && option.data != null) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BlogViewPage(option.data as int)));
                 }
               },
               child: Container(

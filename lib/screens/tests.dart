@@ -131,9 +131,9 @@ class _Content extends StatelessWidget {
                   );
                 }) as bool;
             if (result) {
-              print(result.toString());
-              if (item?.agreementAccepted?.isEmpty == true ?? true) {
-                final response = await Repository().api.getAgreement(item.id);
+              if (item?.isAgreementAccepted == false) {
+                final response =
+                    await Repository().api.getAgreement(item.researchId);
                 showDialog(
                     context: context,
                     builder: (innerContext) {
@@ -205,7 +205,7 @@ class _Content extends StatelessWidget {
                                       ? () async {
                                           await Repository()
                                               .api
-                                              .postAgreement(item.id);
+                                              .postAgreement(item.researchId);
                                           Navigator.of(innerContext).pop();
                                           _openTest(context, item);
                                         }
@@ -230,6 +230,9 @@ class _Content extends StatelessWidget {
             }
           },
         ),
+        firstPageErrorIndicatorBuilder: (context) => ErrorRetry(onTap: () {
+          testsNotifier.pagingController.refresh();
+        }),
       ),
     );
   }
