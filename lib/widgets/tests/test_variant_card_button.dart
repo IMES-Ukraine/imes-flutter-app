@@ -75,20 +75,21 @@ class TestVariantCardButton extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: IntrinsicHeight(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        descr ?? '',
-                        style: TextStyle(fontSize: 8.0),
+                    if (descr?.isNotEmpty == true) ...[
+                      Expanded(
+                        child: Text(
+                          descr,
+                          style: TextStyle(fontSize: 8.0),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 5.0),
-                    Expanded(
-                      child: OctoImage(
-                        height: 50,
-                        image: CachedNetworkImageProvider('$BASE_URL$imageUrl'),
-                        fit: BoxFit.scaleDown,
-                      ),
+                      const SizedBox(width: 5.0),
+                    ],
+                    OctoImage(
+                      height: 75,
+                      image: CachedNetworkImageProvider('$BASE_URL$imageUrl'),
+                      fit: BoxFit.scaleDown,
                     ),
                   ],
                 ),

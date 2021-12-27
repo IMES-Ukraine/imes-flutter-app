@@ -197,7 +197,7 @@ class ComplexTest extends HookWidget {
                                   constraints: BoxConstraints(
                                       maxWidth:
                                           (MediaQuery.of(context).size.width -
-                                                  24.0) /
+                                                  32.0) /
                                               2.0),
                                   child: TestVariantCardButton(
                                     variant: v.variant,

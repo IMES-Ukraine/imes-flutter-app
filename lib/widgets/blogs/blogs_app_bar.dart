@@ -109,8 +109,7 @@ class BlogsAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Container(
               padding: EdgeInsets.all(1.0.h),
-              child: userNotifier.user.basicInformation != null &&
-                      userNotifier.user.specializedInformation != null
+              child: userNotifier.user.isVerified == true
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

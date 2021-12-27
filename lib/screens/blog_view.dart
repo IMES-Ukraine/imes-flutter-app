@@ -55,8 +55,6 @@ class BlogViewPage extends HookWidget {
       child: Consumer<BlogNotifier>(builder: (context, blogNotifier, _) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(blogNotifier.blog?.title ?? ''),
-            centerTitle: true,
             actions: [
               ValueListenableBuilder(
                   valueListenable:
@@ -222,7 +220,8 @@ class BlogViewPage extends HookWidget {
                                         ),
                                         child: RaisedGradientButton(
                                           onPressed: () {
-                                            Navigator.of(context).push(
+                                            Navigator.of(context)
+                                                .pushReplacement(
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     TestViewPage(
@@ -536,7 +535,6 @@ class _BlogContentItem extends StatelessWidget {
               if (info.size.height == info.visibleBounds.bottom &&
                   !hasDoneRead.value &&
                   blogNotifier.blog.learningBonus > 0) {
-                hasDoneRead.value = true;
                 Repository()
                     .api
                     .readBlogBlock(
@@ -547,6 +545,7 @@ class _BlogContentItem extends StatelessWidget {
                   if (response.statusCode == 200) {
                     if (response.body.data.readingStatus != null &&
                         response.body.data.readingStatus.pointsEarned > 0) {
+                      hasDoneRead.value = true;
                       showDialog(
                         context: context,
                         builder: (context) => CustomAlertDialog(

@@ -57,51 +57,61 @@ class SimpleTest extends HookWidget {
             ),
             Divider(indent: 8.0, endIndent: 8.0),
             if (test.hasVideo) TestVideoCard(url: test.video.data),
-            if (test.answerType == 'variants' || test.answerType == 'media')
+            if (test.answerType == 'variants' ||
+                test.answerType == 'media') ...[
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text('ОТВЕТ',
+                    style:
+                        TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Text('ОТВЕТ',
-                        style: TextStyle(
-                            fontSize: 17.0, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 16.0),
                     ...test.variants.buttons
                         .map(
-                          (v) => v.file != null
-                              ? TestVariantCardButton(
-                                  variant: v.variant,
-                                  title: v.title,
-                                  descr: v.description,
-                                  imageUrl: v.file?.path,
-                                  selected: state.value.contains(v.variant),
-                                  onTap: () {
-                                    if (!state.value.contains(v.variant)) {
-                                      state.value.add(v.variant);
-                                    } else {
-                                      state.value.remove(v.variant);
-                                    }
-                                  },
-                                )
-                              : TestVariantFlatButton(
-                                  variant: v.variant,
-                                  title: v.title,
-                                  selected: state.value.contains(v.variant),
-                                  onTap: () {
-                                    if (!state.value.contains(v.variant)) {
-                                      state.value.add(v.variant);
-                                    } else {
-                                      state.value.remove(v.variant);
-                                    }
-                                  },
-                                ),
+                          (v) => ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    (MediaQuery.of(context).size.width - 32.0) /
+                                        2.0),
+                            child: v.file != null
+                                ? TestVariantCardButton(
+                                    variant: v.variant,
+                                    title: v.title,
+                                    descr: v.description,
+                                    imageUrl: v.file?.path,
+                                    selected: state.value.contains(v.variant),
+                                    onTap: () {
+                                      if (!state.value.contains(v.variant)) {
+                                        state.value.add(v.variant);
+                                      } else {
+                                        state.value.remove(v.variant);
+                                      }
+                                    },
+                                  )
+                                : TestVariantFlatButton(
+                                    variant: v.variant,
+                                    title: v.title,
+                                    selected: state.value.contains(v.variant),
+                                    onTap: () {
+                                      if (!state.value.contains(v.variant)) {
+                                        state.value.add(v.variant);
+                                      } else {
+                                        state.value.remove(v.variant);
+                                      }
+                                    },
+                                  ),
+                          ),
                         )
                         .toList(),
                   ],
                 ),
               )
-            else if (test.answerType == 'text')
+            ] else if (test.answerType == 'text')
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextField(

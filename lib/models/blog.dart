@@ -40,6 +40,7 @@ class Blog extends HiveObject {
   final bool isCommercial;
   final num researchId;
   final num testId;
+  final String author;
 
   Blog({
     this.id,
@@ -63,6 +64,7 @@ class Blog extends HiveObject {
     this.isCommercial,
     this.researchId,
     this.testId,
+    this.author,
   });
 
   @override

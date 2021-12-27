@@ -14,6 +14,7 @@ abstract class User with _$User {
     String surname,
     String email,
     bool isActivated,
+    bool isVerified,
     String phone,
     String city,
     String work,

@@ -89,7 +89,7 @@ class TestCard extends StatelessWidget {
               onTap: () async {
                 final option = test.toLearn;
                 if (option.type == 'to_learn' && option.data != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => BlogViewPage(option.data as int)));
                 }
               },
