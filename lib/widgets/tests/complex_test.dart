@@ -317,75 +317,134 @@ class ComplexTest extends HookWidget {
                                             answers.data, durationTimer.value)
                                         .then((data) {
                                       if (data.status == 'passed') {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                CustomAlertDialog(
-                                                  content: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        'Ви пройшли тест!',
-                                                        style: TextStyle(
-                                                            fontSize: 17.0,
+                                        if (test.complex
+                                            .where(
+                                                (t) => t.answerType == 'text')
+                                            .isNotEmpty) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  CustomAlertDialog(
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          'Відповідь відправлена на модерацію',
+                                                          style: TextStyle(
+                                                              fontSize: 17.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 16.0),
+                                                        Text(
+                                                          'Бали можуть бути нараховані тільки після модерації',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(16.0),
+                                                          child:
+                                                              CustomFlatButton(
+                                                                  text: 'OK',
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  }),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )).then((_) {
+                                            Navigator.of(context).pop();
+                                          });
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  CustomAlertDialog(
+                                                    content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          'Ви пройшли тест!',
+                                                          style: TextStyle(
+                                                              fontSize: 17.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 16.0),
+                                                        Text(
+                                                          '${data.points} балів',
+                                                          style: TextStyle(
+                                                            fontSize: 23.0,
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 16.0),
-                                                      Text(
-                                                        '${data.points} балів',
-                                                        style: TextStyle(
-                                                          fontSize: 23.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color:
-                                                              Color(0xFF4CF99E),
+                                                                FontWeight.bold,
+                                                            color: Color(
+                                                                0xFF4CF99E),
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      Text(
-                                                        'зараховано на баланс',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color:
-                                                              Color(0xFF4CF99E),
+                                                        Text(
+                                                          'зараховано на баланс',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Color(
+                                                                0xFF4CF99E),
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      Divider(
-                                                          indent: 8.0,
-                                                          endIndent: 8.0),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    16.0),
-                                                        child: CustomFlatButton(
-                                                            text: 'OK',
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            }),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )).then((_) {
-                                          userNotifier.updateUser(data.user);
-                                          Navigator.of(context).pop();
-                                        });
+                                                        Divider(
+                                                            indent: 8.0,
+                                                            endIndent: 8.0),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      16.0),
+                                                          child:
+                                                              CustomFlatButton(
+                                                                  text: 'OK',
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  }),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )).then((_) {
+                                            userNotifier.updateUser(data.user);
+                                            Navigator.of(context).pop();
+                                          });
+                                        }
                                       } else {
                                         showDialog(
                                           context: context,

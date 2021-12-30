@@ -171,7 +171,8 @@ class BlogViewPage extends HookWidget {
                                       Expanded(
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(''),
+                                          child: Text(
+                                              blogNotifier.blog.author ?? ''),
                                         ),
                                       ),
                                       Expanded(
