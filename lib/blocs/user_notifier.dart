@@ -51,8 +51,8 @@ class UserNotifier with ChangeNotifier {
       await storage.write(key: '__AUTH_TOKEN_', value: response.body.token);
 
       final auth = FirebaseAuth.instance;
-      final authResult =
-          await auth.signInWithCustomToken(response.body.user.firebaseToken);
+      // final authResult =
+      //     await auth.signInWithCustomToken(response.body.user.firebaseToken);
       final token = await FirebaseMessaging.instance.getToken();
       final result = await Repository().api.submitToken(token: token);
       _tokenRefreshSubscription =
@@ -111,8 +111,8 @@ class UserNotifier with ChangeNotifier {
         _state = AuthState.AUTHENTICATED;
 
         final auth = FirebaseAuth.instance;
-        final authResult = await auth.signInWithCustomToken(
-            profileResponse.body.data.user.firebaseToken);
+        // final authResult = await auth.signInWithCustomToken(
+        //     profileResponse.body.data.user.firebaseToken);
         final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {

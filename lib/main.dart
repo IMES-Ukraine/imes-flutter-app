@@ -69,8 +69,8 @@ void main() async {
         print('authenticated');
         user = response.body.data.user;
         final auth = FirebaseAuth.instance;
-        final authResult = await auth
-            .signInWithCustomToken(response.body.data.user.firebaseToken);
+        // final authResult = await auth
+        //     .signInWithCustomToken(response.body.data.user.firebaseToken);
         final token = await FirebaseMessaging.instance.getToken();
         final result = await Repository().api.submitToken(token: token);
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
