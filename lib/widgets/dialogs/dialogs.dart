@@ -74,6 +74,48 @@ Future<T> showWithdrawalDialog<T>(BuildContext context, int amount) {
       });
 }
 
+Future<T> showWithdrawalSuccessDialog<T>(BuildContext context, int amount) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Обмін ${amount.toString()} IMIC успішний',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: RaisedGradientButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(
+                    'Завершити',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      height: 19 / 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+}
+
 Future<T> showBlogInfoDialog<T>(BuildContext context) {
   return showDialog(
       context: context,

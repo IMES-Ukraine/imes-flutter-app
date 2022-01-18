@@ -411,93 +411,96 @@ class BlogViewPage extends HookWidget {
                               ),
                               const SizedBox(height: 32.0),
                             ],
-                            Column(children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.chevron_left,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 24.0,
-                                      ),
-                                      onPressed: () {
-                                        _indicatorScrollController.animateTo(
-                                          _indicatorScrollController.offset -
-                                              _indicatorScrollController
-                                                  .position.viewportDimension,
-                                          duration:
-                                              const Duration(milliseconds: 500),
-                                          curve: Curves.easeInOut,
-                                        );
-                                      }),
-                                  Text('Рекомендовано',
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold)),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.chevron_right,
-                                        color: Theme.of(context).primaryColor,
-                                        size: 24.0,
-                                      ),
-                                      onPressed: () {
-                                        _indicatorScrollController.animateTo(
-                                          _indicatorScrollController.offset +
-                                              _indicatorScrollController
-                                                  .position.viewportDimension,
-                                          duration:
-                                              const Duration(milliseconds: 500),
-                                          curve: Curves.easeInOut,
-                                        );
-                                      }),
-                                ],
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                controller: _indicatorScrollController,
-                                physics: PageScrollPhysics(),
-                                child: IntrinsicHeight(
-                                  child: Row(
-                                    children: blogNotifier.blog.recommended
-                                        .where((o) => o.post != null)
-                                        .map<Widget>(
-                                          (item) => _BlogRecommendedItem(
-                                            item: item,
-                                          ),
-                                        )
-                                        .toList(),
+                            if (blogNotifier.blog.recommended?.isNotEmpty ==
+                                true) ...[
+                              Column(children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(
+                                          Icons.chevron_left,
+                                          color: Theme.of(context).primaryColor,
+                                          size: 24.0,
+                                        ),
+                                        onPressed: () {
+                                          _indicatorScrollController.animateTo(
+                                            _indicatorScrollController.offset -
+                                                _indicatorScrollController
+                                                    .position.viewportDimension,
+                                            duration: const Duration(
+                                                milliseconds: 500),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }),
+                                    Text('Рекомендовано',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold)),
+                                    IconButton(
+                                        icon: Icon(
+                                          Icons.chevron_right,
+                                          color: Theme.of(context).primaryColor,
+                                          size: 24.0,
+                                        ),
+                                        onPressed: () {
+                                          _indicatorScrollController.animateTo(
+                                            _indicatorScrollController.offset +
+                                                _indicatorScrollController
+                                                    .position.viewportDimension,
+                                            duration: const Duration(
+                                                milliseconds: 500),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }),
+                                  ],
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _indicatorScrollController,
+                                  physics: PageScrollPhysics(),
+                                  child: IntrinsicHeight(
+                                    child: Row(
+                                      children: blogNotifier.blog.recommended
+                                          .where((o) => o.post != null)
+                                          .map<Widget>(
+                                            (item) => _BlogRecommendedItem(
+                                              item: item,
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  (blogNotifier.blog.recommended.length / 2.0)
-                                      .floor(),
-                                  (index) => Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                      width: 8.0,
-                                      height: 8.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color:
-                                                Theme.of(context).dividerColor),
-                                        color: _indicatorState.value == index
-                                            ? Color(
-                                                0xFFA1A1A1) // TODO: extract colors to theme
-                                            : Color(
-                                                0xFFE0E0E0), // TODO: extract colors to theme
+                                const SizedBox(height: 16.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    (blogNotifier.blog.recommended.length / 2.0)
+                                        .floor(),
+                                    (index) => Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Container(
+                                        width: 8.0,
+                                        height: 8.0,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: Theme.of(context)
+                                                  .dividerColor),
+                                          color: _indicatorState.value == index
+                                              ? Color(
+                                                  0xFFA1A1A1) // TODO: extract colors to theme
+                                              : Color(
+                                                  0xFFE0E0E0), // TODO: extract colors to theme
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ]),
+                              ]),
+                            ],
                             const SizedBox(height: 32.0),
                           ],
                         ),

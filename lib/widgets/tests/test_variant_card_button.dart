@@ -86,10 +86,14 @@ class TestVariantCardButton extends StatelessWidget {
                       ),
                       const SizedBox(width: 5.0),
                     ],
-                    OctoImage(
+                    SizedBox(
                       height: 75,
-                      image: CachedNetworkImageProvider('$BASE_URL$imageUrl'),
-                      fit: BoxFit.scaleDown,
+                      width: 140,
+                      child: OctoImage(
+                        memCacheHeight: 150,
+                        image: CachedNetworkImageProvider('$BASE_URL$imageUrl'),
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ],
                 ),

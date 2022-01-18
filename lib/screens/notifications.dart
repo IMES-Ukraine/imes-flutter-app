@@ -141,25 +141,22 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               margin: const EdgeInsets.all(16.0),
                               child: InkWell(
                                 onTap: () {
-                                  if (notificationsNotifier.notifications[index]
-                                          .action?.isNotEmpty ??
-                                      false) {
+                                  final notification = notificationsNotifier
+                                      .notifications[index];
+                                  if (notification.action?.isNotEmpty == true) {
                                     if (notificationsNotifier
                                             .notifications[index].type ==
-                                        'NEWS') {
-                                      final values = notificationsNotifier
-                                          .notifications[index].action
-                                          .split(':');
-                                      if (values.length > 1) {
-                                        try {
-                                          final id = num.parse(values[1]);
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      BlogViewPage(id)));
-                                        } catch (e) {
-                                          print(e.toString());
-                                        }
+                                        'MESSAGE') {
+                                      print(notification);
+                                      try {
+                                        final id =
+                                            num.parse(notification.action);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BlogViewPage(id)));
+                                      } catch (e) {
+                                        print(e.toString());
                                       }
                                     }
                                   }

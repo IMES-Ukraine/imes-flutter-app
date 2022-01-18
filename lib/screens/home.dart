@@ -185,17 +185,16 @@ class _HomePageState extends State<HomePage> {
                   // key: _menuNavigatorKey,
                   initialRoute: homeNotifier.initialPageRoute,
                   onGenerateRoute: (routeSettings) {
-                    return MaterialPageRoute(builder: (context) {
-                      switch (routeSettings.name) {
-                        case '/':
-                          return SupportPage();
-                        default:
-                          return SupportPage();
-                      }
-                    });
+                    return MaterialPageRoute(
+                        builder: (context) => SupportPage());
                   },
                 ),
-                InstructionsPage(),
+                Navigator(
+                  initialRoute: homeNotifier.initialPageRoute,
+                  onGenerateRoute: (settings) => MaterialPageRoute(
+                    builder: (context) => InstructionsPage(),
+                  ),
+                ),
                 Navigator(
                   key: _menuNavigatorKey,
                   initialRoute: homeNotifier.initialPageRoute,

@@ -180,6 +180,10 @@ class _BalancePageState extends State<BalancePage> {
                                   index: index,
                                   card: historyNotifier.cardsItems[index],
                                   onBuy: () {
+                                    showWithdrawalSuccessDialog(
+                                      context,
+                                      historyNotifier.cardsItems[index].cost,
+                                    );
                                     historyNotifier.loadCards();
                                     userNotifier.updateProfile();
                                   },
@@ -424,31 +428,33 @@ class _ExchangeCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          card.name?.toUpperCase() ?? 'Text'.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            height: 22 / 18,
-                            color: const Color(0xFF333333),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            card.name?.toUpperCase() ?? 'Text'.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              height: 22 / 18,
+                              color: const Color(0xFF333333),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          card.shortDescription ?? 'Subtitle',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            height: 17 / 14,
-                            color: const Color(0xFF979797),
-                          ),
-                        )
-                      ],
+                          const SizedBox(height: 10),
+                          Text(
+                            card.shortDescription ?? 'Subtitle',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              height: 17 / 14,
+                              color: const Color(0xFF979797),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 16),
                     _AmountBox(
                       amount: card.cost,
                       id: card.id,

@@ -127,7 +127,7 @@ class _BalanceItemState extends State<BalanceItem> {
             ],
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(_card.description ?? ''),
+              child: SelectableText(_card.description ?? ''),
             ),
             const SizedBox(height: 106),
           ],

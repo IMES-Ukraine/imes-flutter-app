@@ -82,108 +82,121 @@ class ComplexTest extends HookWidget {
                             state.value[test.complex[index].id]);
                         useObservable(stateNotifier);
                         if (test.complex[index].variants.type == 'text') {
-                          return Column(
+                          return Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
                               children:
                                   test.complex[index].variants.buttons.map((v) {
-                            return v.file != null
-                                ? TestVariantCardButton(
-                                    variant: v.variant,
-                                    title: v.title,
-                                    descr: v.description,
-                                    imageUrl: v.file?.path,
-                                    selected:
-                                        state.value[test.complex[index].id] !=
+                                return v.file != null
+                                    ? ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                            maxWidth: (MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    32.0) /
+                                                2.0),
+                                        child: TestVariantCardButton(
+                                          variant: v.variant,
+                                          title: v.title,
+                                          descr: v.description,
+                                          imageUrl: v.file?.path,
+                                          selected: state.value[
+                                                      test.complex[index].id] !=
+                                                  null &&
+                                              state
+                                                  .value[test.complex[index].id]
+                                                  .contains(v.variant),
+                                          onTap: index < step.value - 1
+                                              ? null
+                                              : () {
+                                                  if (state.value[test
+                                                          .complex[index].id] ==
+                                                      null) {
+                                                    state.value[test
+                                                        .complex[index]
+                                                        .id] = ObservableList();
+                                                  }
+
+                                                  if (!state.value[test
+                                                          .complex[index].id]
+                                                      .contains(v.variant)) {
+                                                    state.value[test
+                                                            .complex[index].id]
+                                                        .add(v.variant);
+                                                  } else {
+                                                    state.value[test
+                                                            .complex[index].id]
+                                                        .remove(v.variant);
+                                                  }
+                                                },
+                                        ),
+                                      )
+                                    : TestVariantFlatButton(
+                                        variant: v.variant,
+                                        title: v.title,
+                                        selected: state.value[
+                                                    test.complex[index].id] !=
                                                 null &&
                                             state.value[test.complex[index].id]
                                                 .contains(v.variant),
-                                    onTap: index < step.value - 1
-                                        ? null
-                                        : () {
-                                            if (state.value[
-                                                    test.complex[index].id] ==
-                                                null) {
-                                              state.value[test.complex[index]
-                                                  .id] = ObservableList();
-                                            }
+                                        onTap: index < step.value - 1
+                                            ? null
+                                            : () {
+                                                if (state.value[test
+                                                        .complex[index].id] ==
+                                                    null) {
+                                                  state.value[test
+                                                      .complex[index]
+                                                      .id] = ObservableList();
+                                                }
 
-                                            if (!state
-                                                .value[test.complex[index].id]
-                                                .contains(v.variant)) {
-                                              state
-                                                  .value[test.complex[index].id]
-                                                  .add(v.variant);
-                                            } else {
-                                              state
-                                                  .value[test.complex[index].id]
-                                                  .remove(v.variant);
-                                            }
-                                          },
-                                  )
-                                : TestVariantFlatButton(
-                                    variant: v.variant,
-                                    title: v.title,
-                                    selected:
-                                        state.value[test.complex[index].id] !=
-                                                null &&
-                                            state.value[test.complex[index].id]
-                                                .contains(v.variant),
-                                    onTap: index < step.value - 1
-                                        ? null
-                                        : () {
-                                            if (state.value[
-                                                    test.complex[index].id] ==
-                                                null) {
-                                              state.value[test.complex[index]
-                                                  .id] = ObservableList();
-                                            }
-
-                                            if (!state
-                                                .value[test.complex[index].id]
-                                                .contains(v.variant)) {
-                                              state
-                                                  .value[test.complex[index].id]
-                                                  .add(v.variant);
-                                            } else {
-                                              state
-                                                  .value[test.complex[index].id]
-                                                  .remove(v.variant);
-                                            }
-                                          },
-                                  );
-                            // return TestVariantFlatButton(
-                            //   variant: v.variant,
-                            //   title: v.title ?? '',
-                            //   selected:
-                            //       state.value[test.complex[index].id] != null &&
-                            //           state.value[test.complex[index].id]
-                            //               .contains(v.variant),
-                            //   selectedColor: index < step.value - 1
-                            //       ? test.complex[index].variants.correctAnswer
-                            //               .contains(v.variant)
-                            //           ? Color(
-                            //               0xFF4CF99E) // TODO: extract color to theme
-                            //           : Theme.of(context).errorColor
-                            //       : null,
-                            //   onTap: index < step.value - 1
-                            //       ? null
-                            //       : () {
-                            //           if (state.value[test.complex[index].id] ==
-                            //               null) {
-                            //             state.value[test.complex[index].id] =
-                            //                 ObservableList();
-                            //           }
-                            //
-                            //           if (!state.value[test.complex[index].id]
-                            //               .contains(v.variant)) {
-                            //             state.value[test.complex[index].id]
-                            //                 .add(v.variant);
-                            //           } else {
-                            //             state.value[test.complex[index].id]
-                            //                 .remove(v.variant);
-                            //           }
-                            //         },
-                            // );
-                          }).toList());
+                                                if (!state.value[
+                                                        test.complex[index].id]
+                                                    .contains(v.variant)) {
+                                                  state.value[test
+                                                          .complex[index].id]
+                                                      .add(v.variant);
+                                                } else {
+                                                  state.value[test
+                                                          .complex[index].id]
+                                                      .remove(v.variant);
+                                                }
+                                              },
+                                      );
+                                // return TestVariantFlatButton(
+                                //   variant: v.variant,
+                                //   title: v.title ?? '',
+                                //   selected:
+                                //       state.value[test.complex[index].id] != null &&
+                                //           state.value[test.complex[index].id]
+                                //               .contains(v.variant),
+                                //   selectedColor: index < step.value - 1
+                                //       ? test.complex[index].variants.correctAnswer
+                                //               .contains(v.variant)
+                                //           ? Color(
+                                //               0xFF4CF99E) // TODO: extract color to theme
+                                //           : Theme.of(context).errorColor
+                                //       : null,
+                                //   onTap: index < step.value - 1
+                                //       ? null
+                                //       : () {
+                                //           if (state.value[test.complex[index].id] ==
+                                //               null) {
+                                //             state.value[test.complex[index].id] =
+                                //                 ObservableList();
+                                //           }
+                                //
+                                //           if (!state.value[test.complex[index].id]
+                                //               .contains(v.variant)) {
+                                //             state.value[test.complex[index].id]
+                                //                 .add(v.variant);
+                                //           } else {
+                                //             state.value[test.complex[index].id]
+                                //                 .remove(v.variant);
+                                //           }
+                                //         },
+                                // );
+                              }).toList());
                         } else {
                           return Padding(
                             padding:
