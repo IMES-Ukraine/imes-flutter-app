@@ -4,6 +4,10 @@ buildscript {
         mavenCentral()
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com/" }
+        maven { url "https://jcenter.bintray.com"}
+        maven { url "https://repo1.maven.org/maven2/" }
     }
 
     dependencies {
@@ -20,6 +24,9 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com/" }
+        maven { url "https://jcenter.bintray.com"}
+        maven { url "https://repo1.maven.org/maven2/" }
         flatDir {
             dirs 'libs'
         }

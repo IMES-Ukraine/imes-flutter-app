@@ -33,7 +33,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
     <meta-data android:name="flutterEmbedding" android:value="2" />
 
-    <provider android:name="androidx.work.impl.WorkManagerInitializer" android:authorities="pro.imes.workmanager-init" android:enabled="false" android:exported="false" tools:node="remove"/>
+<!--    <provider android:name="androidx.work.impl.WorkManagerInitializer" android:authorities="pro.imes.workmanager-init" android:enabled="false" android:exported="false" tools:node="remove"/>-->
 
     <meta-data android:name="vn.hunghd.flutterdownloader.NOTIFICATION_ICON" android:resource="@mipmap/ic_launcher" />
   </application>
